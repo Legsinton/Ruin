@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraTest : MonoBehaviour
 {
@@ -6,20 +7,55 @@ public class CameraTest : MonoBehaviour
     [SerializeField] Vector3 cameraOffset;
     [SerializeField] float smoothSpeed;
     [SerializeField] float rotationSpeed;
-    [SerializeField] float currentAngle;
+    [SerializeField] float distanceToMove;
 
-    void LateUpdate()
+    Vector2 mouseDelta;
+    Vector2 currentRotation;
+    
+
+    void Start()
     {
-        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
-        Quaternion rotation = Quaternion.Euler(0, currentAngle, 0);
+    void Update()
+    {
+        UpdateCameraPosition();
+        UpdateCameraRotation();
+    }
 
-        Vector3 rotatedOffset = rotation * cameraOffset;
+    void UpdateCameraPosition()
+    {
+        mouseDelta = Mouse.current.delta.ReadValue() * rotationSpeed;
 
-        Vector3 newCameraPos = transform.position + rotatedOffset;
+        currentRotation += mouseDelta;
+
+        currentRotation.y = Mathf.Clamp(currentRotation.y, -20, 60);
+
+        Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
+
+        Vector3 newCameraOffset = rotation * cameraOffset;
+
+        Vector3 newCameraPos = transform.position + newCameraOffset;
 
         cameraTransform.position = Vector3.Lerp(cameraTransform.position, newCameraPos, smoothSpeed * Time.deltaTime);
+    }
 
-        cameraTransform.LookAt(transform);
+    void UpdateCameraRotation()
+    {
+        Vector3 directionToPlayer = transform.position - cameraTransform.localPosition;
+
+        Quaternion angleToPlayer = Quaternion.LookRotation(directionToPlayer);
+
+        Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
+
+        cameraTransform.rotation = targetRotation;
+        /*
+        Vector3 moveDirection = directionToPlayer.normalized;
+
+        Vector3 targetCameraPosition = transform.position + moveDirection * distanceToMove;
+
+        cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetCameraPosition, smoothSpeed * Time.deltaTime);*/
     }
 }
