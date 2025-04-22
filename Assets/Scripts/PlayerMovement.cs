@@ -43,8 +43,6 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
-
         if (grounded)
         {
             rb.linearDamping = groundDrag;
@@ -60,20 +58,11 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
-    private void MyInput()
-    {
-        //horizontalInput = Input.GetAxisRaw("Horizontal");
-        //verticalInput = Input.GetAxisRaw("Vertical");
-
-        //horizontalInput = Input.In
-
-    }
-
     private void MovePlayer()
     {
         moveDirection = action.ReadValue<Vector3>();
 
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        rb.transform.Translate(moveDirection.normalized * moveSpeed * Time.deltaTime);
 
         
       
