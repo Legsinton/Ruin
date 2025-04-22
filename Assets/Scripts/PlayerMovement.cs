@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,11 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
 
-    public float moveSpeed;
+    public float currentVelocity;
+
+    public float currentSpeed;
+
+    public float acceleration;
 
     public float groundDrag;
 
@@ -62,7 +67,18 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = action.ReadValue<Vector3>();
 
-        rb.transform.Translate(moveDirection.normalized * moveSpeed * Time.deltaTime);
+        if (moveDirection.magnitude > 0)
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+
+        }
+
+        else
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
+        }
+
+            rb.transform.Translate(moveDirection.normalized * currentVelocity);
 
         
       
