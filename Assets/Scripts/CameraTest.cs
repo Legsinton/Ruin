@@ -3,15 +3,23 @@ using UnityEngine.InputSystem;
 
 public class CameraTest : MonoBehaviour
 {
-    [SerializeField] Transform cameraTransform;
+    [Header("Settings")]
     [SerializeField] Vector3 cameraOffset;
-    [SerializeField] float smoothSpeed;
+    [SerializeField] Vector3 cameraFocusOffset;
+    [SerializeField] float smoothTime;
     [SerializeField] float rotationSpeed;
-    [SerializeField] float distanceToMove;
+    [SerializeField] float cameraDistance;
+    [SerializeField] float wallDistance;
+
+    [Header("Reference")]
+    [SerializeField] Transform cameraTransform;
 
     Vector3 velocity = Vector3.zero;
     Vector2 mouseDelta;
     Vector2 currentRotation;
+
+    bool disableRotateRight = false;
+    bool disableRotateLeft = false;
     
     void Start()
     {
@@ -19,7 +27,7 @@ public class CameraTest : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    void LateUpdate()
     {
         UpdateCameraPosition();
         UpdateCameraRotation();
@@ -27,38 +35,86 @@ public class CameraTest : MonoBehaviour
 
     void UpdateCameraPosition()
     {
-        mouseDelta = Mouse.current.delta.ReadValue() * rotationSpeed;
+        Vector3 lastCameraPos = cameraTransform.position;
+        float lastXRotation = currentRotation.x;
 
-        currentRotation += mouseDelta;
+        mouseDelta = Mouse.current.delta.ReadValue();
+
+        currentRotation += mouseDelta * rotationSpeed;
 
         currentRotation.y = Mathf.Clamp(currentRotation.y, -20, 60);
 
+        if (disableRotateRight)
+        {
+            if (currentRotation.x < lastXRotation)
+            {
+                currentRotation.x = lastXRotation;
+            }
+            else
+            {
+                disableRotateRight = false;
+            }
+        }
+
+        if (disableRotateLeft)
+        {
+            if (currentRotation.x > lastXRotation)
+            {
+                currentRotation.x = lastXRotation;
+            }
+            else
+            {
+                disableRotateLeft = false;
+            }
+        }
+
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
-        Vector3 newCameraOffset = rotation * cameraOffset;
+        Vector3 newCameraOffset = rotation * cameraOffset * cameraDistance;
 
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
-        cameraTransform.position = newCameraPos;
+        Vector3 direction = newCameraPos - lastCameraPos;
+        float distance = direction.magnitude;
 
-        //cameraTransform.position = Vector3.Lerp(cameraTransform.position, newCameraPos, smoothSpeed * Time.deltaTime);
+        if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
+        {
+            newCameraPos = hit2.point + hit2.normal * wallDistance;
+
+            Vector3 hitDirection = hit2.point - lastCameraPos;
+            float dotProduct = Vector3.Dot(hitDirection, cameraTransform.right);
+
+            if (dotProduct > 0)
+            {
+                //Debug.Log("The raycast collided to the RIGHT of the camera.");
+                disableRotateRight = true;
+            }
+            else
+            {
+                //Debug.Log("The raycast collided to the LEFT of the camera.");
+                disableRotateLeft = true;
+            }
+        }
+
+        // Move the camera
+        //cameraTransform.position = newCameraPos;
+
+        // Move the camera smooth
+        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothTime * Time.deltaTime);
     }
 
     void UpdateCameraRotation()
     {
-        Vector3 directionToPlayer = transform.position - cameraTransform.localPosition;
+        Vector3 directionToPlayer = transform.position - cameraTransform.TransformPoint(cameraFocusOffset);
 
         Quaternion angleToPlayer = Quaternion.LookRotation(directionToPlayer);
 
         Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
 
+        // Rotate the camera
         cameraTransform.rotation = targetRotation;
 
-        /*
-        Vector3 moveDirection = directionToPlayer.normalized;
-
-        Vector3 targetCameraPosition = transform.position + moveDirection * distanceToMove;
-
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetCameraPosition, smoothSpeed * Time.deltaTime);*/
+        // Rotate the camera smooth
+        //cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
     }
 }
