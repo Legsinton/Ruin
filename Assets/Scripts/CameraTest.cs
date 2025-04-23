@@ -5,9 +5,10 @@ public class CameraTest : MonoBehaviour
 {
     [SerializeField] Transform cameraTransform;
     [SerializeField] Vector3 cameraOffset;
+    [SerializeField] Vector3 cameraFocusOffset;
     [SerializeField] float smoothSpeed;
     [SerializeField] float rotationSpeed;
-    [SerializeField] float distanceToMove;
+    [SerializeField] float cameraDistance;
 
     Vector3 velocity = Vector3.zero;
     Vector2 mouseDelta;
@@ -35,25 +36,34 @@ public class CameraTest : MonoBehaviour
 
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
-        Vector3 newCameraOffset = rotation * cameraOffset;
+        Vector3 newCameraOffset = rotation * cameraOffset * cameraDistance;
 
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
-        cameraTransform.position = newCameraPos;
+        // Move the camera
+        //cameraTransform.position = newCameraPos;
 
-        //cameraTransform.position = Vector3.Lerp(cameraTransform.position, newCameraPos, smoothSpeed * Time.deltaTime);
+        // Move the camera smooth
+        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothSpeed * Time.deltaTime);
     }
 
     void UpdateCameraRotation()
     {
-        Vector3 directionToPlayer = transform.position - cameraTransform.localPosition;
+        Vector3 directionToPlayer = transform.position - cameraTransform.TransformPoint(cameraFocusOffset);
 
         Quaternion angleToPlayer = Quaternion.LookRotation(directionToPlayer);
 
         Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
 
+        // Rotate the camera
         cameraTransform.rotation = targetRotation;
 
+        // Rotate the camer smooth
+        //cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
+    }
+
+    void ChangeCameraDistance()
+    {
         /*
         Vector3 moveDirection = directionToPlayer.normalized;
 
