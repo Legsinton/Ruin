@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,11 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
 
-    public float moveSpeed;
+    public float currentVelocity;
+
+    public float currentSpeed;
+
+    public float acceleration;
 
     public float groundDrag;
 
@@ -43,8 +48,6 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
-
         if (grounded)
         {
             rb.linearDamping = groundDrag;
@@ -60,20 +63,22 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
-    private void MyInput()
-    {
-        //horizontalInput = Input.GetAxisRaw("Horizontal");
-        //verticalInput = Input.GetAxisRaw("Vertical");
-
-        //horizontalInput = Input.In
-
-    }
-
     private void MovePlayer()
     {
         moveDirection = action.ReadValue<Vector3>();
 
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        if (moveDirection.magnitude > 0)
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+
+        }
+
+        else
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
+        }
+
+            rb.transform.Translate(moveDirection.normalized * currentVelocity);
 
         
       
