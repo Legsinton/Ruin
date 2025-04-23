@@ -20,7 +20,7 @@ public class CameraTest : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    void LateUpdate()
     {
         UpdateCameraPosition();
         UpdateCameraRotation();
