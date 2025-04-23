@@ -3,16 +3,23 @@ using UnityEngine.InputSystem;
 
 public class CameraTest : MonoBehaviour
 {
-    [SerializeField] Transform cameraTransform;
+    [Header("Settings")]
     [SerializeField] Vector3 cameraOffset;
     [SerializeField] Vector3 cameraFocusOffset;
-    [SerializeField] float smoothSpeed;
+    [SerializeField] float smoothTime;
     [SerializeField] float rotationSpeed;
     [SerializeField] float cameraDistance;
+    [SerializeField] float wallDistance;
+
+    [Header("Reference")]
+    [SerializeField] Transform cameraTransform;
 
     Vector3 velocity = Vector3.zero;
     Vector2 mouseDelta;
     Vector2 currentRotation;
+
+    bool disableRotateRight = false;
+    bool disableRotateLeft = false;
     
     void Start()
     {
@@ -28,11 +35,38 @@ public class CameraTest : MonoBehaviour
 
     void UpdateCameraPosition()
     {
-        mouseDelta = Mouse.current.delta.ReadValue() * rotationSpeed;
+        Vector3 lastCameraPos = cameraTransform.position;
+        float lastXRotation = currentRotation.x;
 
-        currentRotation += mouseDelta;
+        mouseDelta = Mouse.current.delta.ReadValue();
+
+        currentRotation += mouseDelta * rotationSpeed;
 
         currentRotation.y = Mathf.Clamp(currentRotation.y, -20, 60);
+
+        if (disableRotateRight)
+        {
+            if (currentRotation.x < lastXRotation)
+            {
+                currentRotation.x = lastXRotation;
+            }
+            else
+            {
+                disableRotateRight = false;
+            }
+        }
+
+        if (disableRotateLeft)
+        {
+            if (currentRotation.x > lastXRotation)
+            {
+                currentRotation.x = lastXRotation;
+            }
+            else
+            {
+                disableRotateLeft = false;
+            }
+        }
 
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
@@ -40,11 +74,33 @@ public class CameraTest : MonoBehaviour
 
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
+        Vector3 direction = newCameraPos - lastCameraPos;
+        float distance = direction.magnitude;
+
+        if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
+        {
+            newCameraPos = hit2.point + hit2.normal * wallDistance;
+
+            Vector3 hitDirection = hit2.point - lastCameraPos;
+            float dotProduct = Vector3.Dot(hitDirection, cameraTransform.right);
+
+            if (dotProduct > 0)
+            {
+                //Debug.Log("The raycast collided to the RIGHT of the camera.");
+                disableRotateRight = true;
+            }
+            else
+            {
+                //Debug.Log("The raycast collided to the LEFT of the camera.");
+                disableRotateLeft = true;
+            }
+        }
+
         // Move the camera
         //cameraTransform.position = newCameraPos;
 
         // Move the camera smooth
-        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothSpeed * Time.deltaTime);
+        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothTime * Time.deltaTime);
     }
 
     void UpdateCameraRotation()
@@ -58,17 +114,7 @@ public class CameraTest : MonoBehaviour
         // Rotate the camera
         cameraTransform.rotation = targetRotation;
 
-        // Rotate the camer smooth
+        // Rotate the camera smooth
         //cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
-    }
-
-    void ChangeCameraDistance()
-    {
-        /*
-        Vector3 moveDirection = directionToPlayer.normalized;
-
-        Vector3 targetCameraPosition = transform.position + moveDirection * distanceToMove;
-
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, targetCameraPosition, smoothSpeed * Time.deltaTime);*/
     }
 }
