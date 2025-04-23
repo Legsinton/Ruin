@@ -334,8 +334,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  groundDrag: 2
+  currentVelocity: 0
+  currentSpeed: 0.2
+  acceleration: 0.4
+  groundDrag: 0.5
   action:
     m_Name: Action
     m_Type: 0

@@ -9,10 +9,10 @@ public class CameraTest : MonoBehaviour
     [SerializeField] float rotationSpeed;
     [SerializeField] float distanceToMove;
 
+    Vector3 velocity = Vector3.zero;
     Vector2 mouseDelta;
     Vector2 currentRotation;
     
-
     void Start()
     {
         Cursor.visible = false;
@@ -39,7 +39,9 @@ public class CameraTest : MonoBehaviour
 
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
-        cameraTransform.position = Vector3.Lerp(cameraTransform.position, newCameraPos, smoothSpeed * Time.deltaTime);
+        cameraTransform.position = newCameraPos;
+
+        //cameraTransform.position = Vector3.Lerp(cameraTransform.position, newCameraPos, smoothSpeed * Time.deltaTime);
     }
 
     void UpdateCameraRotation()
@@ -51,6 +53,7 @@ public class CameraTest : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
 
         cameraTransform.rotation = targetRotation;
+
         /*
         Vector3 moveDirection = directionToPlayer.normalized;
 
