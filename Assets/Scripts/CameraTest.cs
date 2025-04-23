@@ -29,14 +29,15 @@ public class CameraTest : MonoBehaviour
 
     void LateUpdate()
     {
-        UpdateCameraPosition();
         UpdateCameraRotation();
+        UpdateCameraPosition();
     }
 
     void UpdateCameraPosition()
     {
+        // Save last camera position and last mmouse x value
         Vector3 lastCameraPos = cameraTransform.position;
-        float lastXRotation = currentRotation.x;
+        Vector2 lastRotation = currentRotation;
 
         mouseDelta = Mouse.current.delta.ReadValue();
 
@@ -44,23 +45,23 @@ public class CameraTest : MonoBehaviour
 
         currentRotation.y = Mathf.Clamp(currentRotation.y, -20, 60);
 
+        // Check if left or right horizontal rotation is disabled
         if (disableRotateRight)
         {
-            if (currentRotation.x < lastXRotation)
+            if (currentRotation.x < lastRotation.x)
             {
-                currentRotation.x = lastXRotation;
+                currentRotation.x = lastRotation.x;
             }
             else
             {
                 disableRotateRight = false;
             }
         }
-
         if (disableRotateLeft)
         {
-            if (currentRotation.x > lastXRotation)
+            if (currentRotation.x > lastRotation.x)
             {
-                currentRotation.x = lastXRotation;
+                currentRotation.x = lastRotation.x;
             }
             else
             {
@@ -68,6 +69,7 @@ public class CameraTest : MonoBehaviour
             }
         }
 
+        // Calculated the next camera position
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
         Vector3 newCameraOffset = rotation * cameraOffset * cameraDistance;
@@ -77,6 +79,7 @@ public class CameraTest : MonoBehaviour
         Vector3 direction = newCameraPos - lastCameraPos;
         float distance = direction.magnitude;
 
+        // Check if the new position will collide with the camera
         if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
         {
             newCameraPos = hit2.point + hit2.normal * wallDistance;
@@ -86,18 +89,18 @@ public class CameraTest : MonoBehaviour
 
             if (dotProduct > 0)
             {
-                //Debug.Log("The raycast collided to the RIGHT of the camera.");
+                //If the raycast hit the right of the camera
                 disableRotateRight = true;
             }
             else
             {
-                //Debug.Log("The raycast collided to the LEFT of the camera.");
+                //If the raycast hit the left of the camera
                 disableRotateLeft = true;
             }
         }
 
         // Move the camera
-        //cameraTransform.position = newCameraPos;
+        // cameraTransform.position = newCameraPos;
 
         // Move the camera smooth
         cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothTime * Time.deltaTime);
