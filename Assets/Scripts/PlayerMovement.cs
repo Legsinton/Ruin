@@ -78,7 +78,7 @@ public class PlayerControls : MonoBehaviour
         if (isInteracting && targetBlock != null && isPulling)
         {
             // Direction player is moving in
-            Vector3 moveDir = (transform.right * movementX + transform.forward * movementZ).normalized;
+            Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
             rb.mass = 5;
             //rb.linearDamping = 5;
             currentSpeed = 4.2f;
@@ -92,7 +92,7 @@ public class PlayerControls : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 movement = new Vector3(movementZ, 0.0f, -movementX);
+        Vector3 movement = new Vector3(movementX, 0.0f, movementZ);
 
         if (movement.magnitude > 0)
         {
