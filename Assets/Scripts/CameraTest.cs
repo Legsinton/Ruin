@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ public class CameraTest : MonoBehaviour
     [SerializeField] float smoothTime;
     [SerializeField] float rotationSpeed;
     [SerializeField] float cameraDistance;
+    [SerializeField] float minCameraDistance;
     [SerializeField] float wallDistance;
 
     [Header("Reference")]
@@ -20,7 +22,12 @@ public class CameraTest : MonoBehaviour
 
     bool disableRotateRight = false;
     bool disableRotateLeft = false;
-    
+    bool disableRotateUp = false;
+    bool disableRotateDown = false;
+
+    float distanceToplayer;
+    bool movingCamera;
+
     void Start()
     {
         Cursor.visible = false;
@@ -74,6 +81,7 @@ public class CameraTest : MonoBehaviour
             }
         }
 
+
         // Calculated the next camera position
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
@@ -91,6 +99,7 @@ public class CameraTest : MonoBehaviour
 
             Vector3 hitDirection = hit2.point - lastCameraPos;
             float dotProduct = Vector3.Dot(hitDirection, cameraTransform.right);
+            float dotProductUp = Vector3.Dot(hitDirection, cameraTransform.up);
 
             if (dotProduct > 0)
             {
@@ -104,7 +113,25 @@ public class CameraTest : MonoBehaviour
             }
         }
 
-        cameraTransform.position = Vector3.Slerp(cameraTransform.position, newCameraPos, smoothTime * Time.deltaTime);
+        distanceToplayer = Vector3.Distance(cameraTransform.position, transform.position);
+        if (!movingCamera && distanceToplayer < minCameraDistance)
+        {
+            currentRotation.x -= 180;
+
+            rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
+
+            newCameraOffset = rotation * cameraOffset * cameraDistance;
+
+            newCameraPos = transform.position + newCameraOffset;
+
+            movingCamera = true;
+        }
+        if (distanceToplayer > minCameraDistance)
+        {
+            movingCamera = false;
+        }
+
+        cameraTransform.position = Vector3.Slerp(cameraTransform.position, newCameraPos, smoothTime * Time.deltaTime);   
     }
 
     void UpdateCameraRotation()
@@ -118,3 +145,38 @@ public class CameraTest : MonoBehaviour
         cameraTransform.rotation = targetRotation;
     }
 }
+
+/*
+if (disableRotateUp)
+{
+    if (currentRotation.y < lastRotation.y)
+    {
+        currentRotation.y = lastRotation.y;
+    }
+    else
+    {
+        disableRotateUp = false;
+    }
+}
+if (disableRotateDown)
+{
+    if (currentRotation.y > lastRotation.y)
+    {
+        currentRotation.y = lastRotation.y;
+    }
+    else
+    {
+        disableRotateDown = false;
+    }
+}
+
+if (dotProductUp > 0)
+{
+    //If the raycast hit above of the camera
+    disableRotateUp = true;
+}
+else
+{
+    //If the raycast hit below of the camera
+    disableRotateDown = true;
+}*/
