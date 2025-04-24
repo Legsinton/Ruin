@@ -19,11 +19,22 @@ public class DoorEasyScript : MonoBehaviour
 
     void Update()
     {
-        if (playerControls.haveInteracted == 1) 
+        if (playerControls.IsDoor) 
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime); 
 
-        }       
+        }
+
+        OpenDoor();
+    }
+
+    void OpenDoor()
+    {
+        if (!playerControls.IsDoor)
+        {
+            targetPosition = originalPosition - Vector3.down * pressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
     }
 }
