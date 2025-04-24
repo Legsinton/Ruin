@@ -27,10 +27,15 @@ public class CameraTest : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    private void OnLook(InputValue lookValue)
+    {
+        mouseDelta = lookValue.Get<Vector2>();
+    }
+
     void LateUpdate()
     {
-        UpdateCameraRotation();
         UpdateCameraPosition();
+        UpdateCameraRotation();
     }
 
     void UpdateCameraPosition()
@@ -39,7 +44,7 @@ public class CameraTest : MonoBehaviour
         Vector3 lastCameraPos = cameraTransform.position;
         Vector2 lastRotation = currentRotation;
 
-        mouseDelta = Mouse.current.delta.ReadValue();
+        mouseDelta = mouseDelta;
 
         currentRotation += mouseDelta * rotationSpeed;
 
@@ -77,9 +82,9 @@ public class CameraTest : MonoBehaviour
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
         Vector3 direction = newCameraPos - lastCameraPos;
-        float distance = direction.magnitude;
 
         // Check if the new position will collide with the camera
+        float distance = direction.magnitude;
         if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
         {
             newCameraPos = hit2.point + hit2.normal * wallDistance;
@@ -99,11 +104,7 @@ public class CameraTest : MonoBehaviour
             }
         }
 
-        // Move the camera
-        // cameraTransform.position = newCameraPos;
-
-        // Move the camera smooth
-        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothTime * Time.deltaTime);
+        cameraTransform.position = Vector3.Slerp(cameraTransform.position, newCameraPos, smoothTime * Time.deltaTime);
     }
 
     void UpdateCameraRotation()
@@ -114,10 +115,6 @@ public class CameraTest : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
 
-        // Rotate the camera
         cameraTransform.rotation = targetRotation;
-
-        // Rotate the camera smooth
-        //cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
     }
 }
