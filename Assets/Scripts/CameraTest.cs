@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ public class CameraTest : MonoBehaviour
     [SerializeField] float smoothTime;
     [SerializeField] float rotationSpeed;
     [SerializeField] float cameraDistance;
+    [SerializeField] float minCameraDistance;
     [SerializeField] float wallDistance;
 
     [Header("Reference")]
@@ -20,17 +22,27 @@ public class CameraTest : MonoBehaviour
 
     bool disableRotateRight = false;
     bool disableRotateLeft = false;
-    
+    bool disableRotateUp = false;
+    bool disableRotateDown = false;
+
+    float distanceToplayer;
+    bool movingCamera;
+
     void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    private void OnLook(InputValue lookValue)
+    {
+        mouseDelta = lookValue.Get<Vector2>();
+    }
+
     void LateUpdate()
     {
-        UpdateCameraRotation();
         UpdateCameraPosition();
+        UpdateCameraRotation();
     }
 
     void UpdateCameraPosition()
@@ -39,7 +51,7 @@ public class CameraTest : MonoBehaviour
         Vector3 lastCameraPos = cameraTransform.position;
         Vector2 lastRotation = currentRotation;
 
-        mouseDelta = Mouse.current.delta.ReadValue();
+        mouseDelta = mouseDelta;
 
         currentRotation += mouseDelta * rotationSpeed;
 
@@ -69,6 +81,7 @@ public class CameraTest : MonoBehaviour
             }
         }
 
+
         // Calculated the next camera position
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
 
@@ -77,15 +90,16 @@ public class CameraTest : MonoBehaviour
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
         Vector3 direction = newCameraPos - lastCameraPos;
-        float distance = direction.magnitude;
 
         // Check if the new position will collide with the camera
+        float distance = direction.magnitude;
         if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
         {
             newCameraPos = hit2.point + hit2.normal * wallDistance;
 
             Vector3 hitDirection = hit2.point - lastCameraPos;
             float dotProduct = Vector3.Dot(hitDirection, cameraTransform.right);
+            float dotProductUp = Vector3.Dot(hitDirection, cameraTransform.up);
 
             if (dotProduct > 0)
             {
@@ -99,11 +113,25 @@ public class CameraTest : MonoBehaviour
             }
         }
 
-        // Move the camera
-        // cameraTransform.position = newCameraPos;
+        distanceToplayer = Vector3.Distance(cameraTransform.position, transform.position);
+        if (!movingCamera && distanceToplayer < minCameraDistance)
+        {
+            currentRotation.x -= 180;
 
-        // Move the camera smooth
-        cameraTransform.position = Vector3.SmoothDamp(cameraTransform.position, newCameraPos, ref velocity, smoothTime * Time.deltaTime);
+            rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
+
+            newCameraOffset = rotation * cameraOffset * cameraDistance;
+
+            newCameraPos = transform.position + newCameraOffset;
+
+            movingCamera = true;
+        }
+        if (distanceToplayer > minCameraDistance)
+        {
+            movingCamera = false;
+        }
+
+        cameraTransform.position = Vector3.Slerp(cameraTransform.position, newCameraPos, smoothTime * Time.deltaTime);   
     }
 
     void UpdateCameraRotation()
@@ -114,10 +142,41 @@ public class CameraTest : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.Euler(angleToPlayer.eulerAngles.x, angleToPlayer.eulerAngles.y, 0);
 
-        // Rotate the camera
         cameraTransform.rotation = targetRotation;
-
-        // Rotate the camera smooth
-        //cameraTransform.rotation = Quaternion.Lerp(cameraTransform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
     }
 }
+
+/*
+if (disableRotateUp)
+{
+    if (currentRotation.y < lastRotation.y)
+    {
+        currentRotation.y = lastRotation.y;
+    }
+    else
+    {
+        disableRotateUp = false;
+    }
+}
+if (disableRotateDown)
+{
+    if (currentRotation.y > lastRotation.y)
+    {
+        currentRotation.y = lastRotation.y;
+    }
+    else
+    {
+        disableRotateDown = false;
+    }
+}
+
+if (dotProductUp > 0)
+{
+    //If the raycast hit above of the camera
+    disableRotateUp = true;
+}
+else
+{
+    //If the raycast hit below of the camera
+    disableRotateDown = true;
+}*/
