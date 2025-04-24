@@ -19,7 +19,19 @@ public class PlayerControls : MonoBehaviour
 
     public float pullSpeed;
 
+    private Vector3 playerMoveDir; // Add at top of class
+
     Rigidbody rb;
+
+    [Header("Stairs")]
+
+    [SerializeField] GameObject stepUpLower;
+    [SerializeField] GameObject stepUpHigher;
+
+    [SerializeField] float stepHeight;
+
+    [SerializeField] float stepSmooth;
+
 
     public bool isInteracting = false;
 
@@ -28,6 +40,10 @@ public class PlayerControls : MonoBehaviour
     bool isPainting;
 
     bool isDoor;
+
+    bool door;
+
+    public bool IsDoor { get { return isDoor; } set { isDoor = value; } }
     public bool IsPainting { get { return isPainting; } set { isPainting = value; } }
 
     [SerializeField] int interacted;
@@ -60,7 +76,9 @@ public class PlayerControls : MonoBehaviour
 
         else
         {
-           
+            rb.linearDamping = 1;
+            rb.mass = 1;
+            currentSpeed = 10;
             isInteracting = false;
             Debug.Log("Interact Released");
         }
@@ -77,17 +95,18 @@ public class PlayerControls : MonoBehaviour
 
     private void IsPulling()
     {
-        if (isInteracting && targetBlock != null && isPulling)
+        if (isInteracting && targetBlock != null /*&& isPulling*/)
         {
+            Debug.Log("Helloooooo");
             // Direction player is moving in
             Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
             rb.mass = 5;
-            //rb.linearDamping = 5;
-            currentSpeed = 4.2f;
+            rb.linearDamping = 5;
+            currentSpeed = 1f;
             // If the player is moving, pull the block
-            if (moveDir.magnitude > 0f)
+            if (playerMoveDir.magnitude > 0f)
             {
-                targetBlock.transform.position += moveDir * pullSpeed * Time.deltaTime;
+                targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
             }
         }
     }
@@ -100,9 +119,17 @@ public class PlayerControls : MonoBehaviour
             IsPainting = true;
         }
 
-        if (isInteracting && haveInteracted == 0 && isDoor)
+        if (isInteracting && haveInteracted == 0 && door)
         {
             haveInteracted += 1;
+
+            isDoor = true; 
+        }
+        else if (isInteracting && haveInteracted == 1 && door)
+        {
+            isDoor = false;
+            haveInteracted = 0;
+
         }
     }
 
@@ -118,9 +145,16 @@ public class PlayerControls : MonoBehaviour
 
         Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
 
+        playerMoveDir = movement.normalized;
+
         if (movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+        }
+        else if (movement.magnitude == 0 && isPulling)
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
+
         }
         else
         {
@@ -145,10 +179,22 @@ public class PlayerControls : MonoBehaviour
             targetBlock = hit.gameObject;
             isPainting = true;
         }
+    }
 
-        if (hit.gameObject.CompareTag("DoorEasy"))
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("DoorEasy"))
         {
-            isDoor = true;
+            door = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("DoorEasy"))
+        {
+            door = false;
+            IsDoor = false;
         }
     }
 
@@ -166,11 +212,6 @@ public class PlayerControls : MonoBehaviour
             rb.linearDamping = 1;
             rb.mass = 1;
             currentSpeed = 10;
-        }
-
-        if (collision.gameObject.CompareTag("DoorEasy"))
-        {
-            isDoor = false;
         }
     }
 }
