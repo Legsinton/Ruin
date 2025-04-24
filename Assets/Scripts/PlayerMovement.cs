@@ -63,6 +63,11 @@ public class PlayerControls : MonoBehaviour
         rb.freezeRotation = true;
     }
 
+    private void Awake()
+    {
+        stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
+    }
+
     private void OnMove(InputValue movementValue)
     {
         movementInput = movementValue.Get<Vector2>();
@@ -93,6 +98,8 @@ public class PlayerControls : MonoBehaviour
         IsPulling();    
 
         IsInteracting();
+
+        StepClimb();
     }
 
     private void IsPulling()
@@ -132,6 +139,19 @@ public class PlayerControls : MonoBehaviour
             isDoor = false;
             haveInteracted = 0;
 
+        }
+    }
+
+    private void StepClimb()
+    {
+        RaycastHit hitLower;
+        if (Physics.Raycast(stepUpLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
+        {
+            RaycastHit hitUpper;
+            if (!Physics.Raycast(stepUpHigher.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
+            {
+                rb.position -= new Vector3(0f, -stepSmooth, 0f);
+            }
         }
     }
 
