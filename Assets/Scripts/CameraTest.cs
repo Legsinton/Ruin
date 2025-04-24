@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,14 +15,11 @@ public class CameraTest : MonoBehaviour
     [Header("Reference")]
     [SerializeField] Transform cameraTransform;
 
-    Vector3 velocity = Vector3.zero;
     Vector2 mouseDelta;
     Vector2 currentRotation;
 
     bool disableRotateRight = false;
     bool disableRotateLeft = false;
-    bool disableRotateUp = false;
-    bool disableRotateDown = false;
 
     float distanceToplayer;
     bool movingCamera;
@@ -93,7 +89,7 @@ public class CameraTest : MonoBehaviour
 
         // Check if the new position will collide with the camera
         float distance = direction.magnitude;
-        if (Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
+        if (!movingCamera && Physics.Raycast(lastCameraPos, direction.normalized, out RaycastHit hit2, distance + wallDistance, LayerMask.GetMask("Wall")))
         {
             newCameraPos = hit2.point + hit2.normal * wallDistance;
 
@@ -113,7 +109,7 @@ public class CameraTest : MonoBehaviour
             }
         }
 
-        distanceToplayer = Vector3.Distance(cameraTransform.position, transform.position);
+        distanceToplayer = Vector3.Distance(cameraTransform.TransformPoint(cameraFocusOffset), transform.position);
         if (!movingCamera && distanceToplayer < minCameraDistance)
         {
             currentRotation.x -= 180;
@@ -126,7 +122,7 @@ public class CameraTest : MonoBehaviour
 
             movingCamera = true;
         }
-        if (distanceToplayer > minCameraDistance)
+        if (distanceToplayer - 0.5 > minCameraDistance)
         {
             movingCamera = false;
         }
@@ -145,38 +141,3 @@ public class CameraTest : MonoBehaviour
         cameraTransform.rotation = targetRotation;
     }
 }
-
-/*
-if (disableRotateUp)
-{
-    if (currentRotation.y < lastRotation.y)
-    {
-        currentRotation.y = lastRotation.y;
-    }
-    else
-    {
-        disableRotateUp = false;
-    }
-}
-if (disableRotateDown)
-{
-    if (currentRotation.y > lastRotation.y)
-    {
-        currentRotation.y = lastRotation.y;
-    }
-    else
-    {
-        disableRotateDown = false;
-    }
-}
-
-if (dotProductUp > 0)
-{
-    //If the raycast hit above of the camera
-    disableRotateUp = true;
-}
-else
-{
-    //If the raycast hit below of the camera
-    disableRotateDown = true;
-}*/

@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
 
 public class PlayerControls : MonoBehaviour
 {
@@ -34,6 +29,9 @@ public class PlayerControls : MonoBehaviour
 
     GameObject targetBlock;
 
+    [SerializeField] Transform cameraTransform;
+    Vector2 movementInput;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -42,10 +40,7 @@ public class PlayerControls : MonoBehaviour
 
     private void OnMove(InputValue movementValue)
     {
-        Vector2 movementVector = movementValue.Get<Vector2>();
-
-        movementX = movementVector.x;
-        movementZ = movementVector.y;
+        movementInput = movementValue.Get<Vector2>();
     }
 
     private void OnInteract(InputValue value)
@@ -92,19 +87,25 @@ public class PlayerControls : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 movement = new Vector3(movementX, 0.0f, movementZ);
+        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward.y = 0;
+        cameraForward.Normalize();
+
+        Vector3 cameraRight = cameraTransform.right;
+        cameraRight.y = 0;
+        cameraRight.Normalize();
+
+        Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
 
         if (movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
         }
-
         else
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        //rb.transform.Translate(movement.normalized * currentVelocity);
         rb.linearVelocity = movement.normalized * currentVelocity;
     }
 
