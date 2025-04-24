@@ -647,7 +647,8 @@ MonoBehaviour:
   smoothTime: 15
   rotationSpeed: 0.5
   cameraDistance: 1
-  wallDistance: 1
+  minCameraDistance: 1.5
+  wallDistance: 1.5
   cameraTransform: {fileID: 995633206}
 --- !u!114 &379045627
 MonoBehaviour:
@@ -666,6 +667,7 @@ MonoBehaviour:
   acceleration: 5
   groundDrag: 21.05
   pullSpeed: 1
+  cameraTransform: {fileID: 995633206}
 --- !u!54 &379045628
 Rigidbody:
   m_ObjectHideFlags: 0
