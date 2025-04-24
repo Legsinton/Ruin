@@ -7,11 +7,13 @@ public class PressurePlate : MonoBehaviour
 
     Rigidbody rb;
     public bool triggerd = false;
+    public DoorScript[] door;
     Vector3 targetPosition;
     Vector3 currentPoisition;
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
+    bool added = false;
     
     private void Start()
     {
@@ -20,7 +22,6 @@ public class PressurePlate : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(triggerd);
         if (triggerd)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -47,10 +48,20 @@ public class PressurePlate : MonoBehaviour
         bool blockIsFullyOnPlate =
             plateMin.x <= blockMin.x && plateMax.x >= blockMax.x &&
             plateMin.y <= blockMin.y && plateMax.y >= blockMax.y;
-
-        if (blockIsFullyOnPlate)
+        if (other.CompareTag("Pullable"))
         {
-            triggerd = true;
+            if (blockIsFullyOnPlate)
+            {
+                if (!added)
+                {
+                    triggerd = true;
+                    added = true;
+                    door[1].Switches++;
+                    door[0].Switches++;
+
+                }
+
+            }
         }
     }
 

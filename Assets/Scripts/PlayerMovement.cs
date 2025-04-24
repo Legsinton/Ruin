@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
@@ -24,13 +26,20 @@ public class PlayerControls : MonoBehaviour
 
     public float pullSpeed;
 
-    float pullDistance = 1.5f;
-
     Rigidbody rb;
 
-    private bool isInteracting = false;
+    public bool isInteracting = false;
 
     bool isPulling = false;
+
+    bool isPainting;
+
+    bool isDoor;
+    public bool IsPainting { get { return isPainting; } set { isPainting = value; } }
+
+    [SerializeField] int interacted;
+
+    public int haveInteracted { get { return interacted; } set { interacted = value; } }
 
     GameObject targetBlock;
 
@@ -55,12 +64,10 @@ public class PlayerControls : MonoBehaviour
             isInteracting = true;
             Debug.Log("Interact Pressed");
         }
+
         else
         {
-            rb.linearDamping = 1;
-            rb.mass = 1;
-            currentSpeed = 10;
-            isPulling = false;
+           
             isInteracting = false;
             Debug.Log("Interact Released");
         }
@@ -71,6 +78,8 @@ public class PlayerControls : MonoBehaviour
         MovePlayer();
 
         IsPulling();    
+
+        IsInteracting();
     }
 
     private void IsPulling()
@@ -87,6 +96,20 @@ public class PlayerControls : MonoBehaviour
             {
                 targetBlock.transform.position += moveDir * pullSpeed * Time.deltaTime;
             }
+        }
+    }
+
+    private void IsInteracting()
+    {
+        if (isInteracting && haveInteracted == 0 && isPainting)
+        {
+            haveInteracted += 1;
+            IsPainting = true;
+        }
+
+        if (isInteracting && haveInteracted == 0 && isDoor)
+        {
+            haveInteracted += 1;
         }
     }
 
@@ -115,6 +138,40 @@ public class PlayerControls : MonoBehaviour
             Debug.Log("It Collides");
             targetBlock = hit.gameObject;
             isPulling = true;
+        }
+
+        if (hit.gameObject.CompareTag("Painting")) // Optional: filter by tag
+        {
+            Debug.Log("It Painting");
+            targetBlock = hit.gameObject;
+            isPainting = true;
+        }
+
+        if (hit.gameObject.CompareTag("DoorEasy"))
+        {
+            isDoor = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision) 
+    {
+        if (collision.gameObject.CompareTag("Painting")) // Optional: filter by tag
+        {
+            isPainting = false;
+            haveInteracted = 0;
+        }
+
+        if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
+        {
+            isPulling = false;
+            rb.linearDamping = 1;
+            rb.mass = 1;
+            currentSpeed = 10;
+        }
+
+        if (collision.gameObject.CompareTag("DoorEasy"))
+        {
+            isDoor = false;
         }
     }
 }
