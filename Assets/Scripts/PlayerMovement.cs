@@ -79,9 +79,9 @@ public class PlayerControls : MonoBehaviour
         {
             // Direction player is moving in
             Vector3 moveDir = (transform.right * movementX + transform.forward * movementZ).normalized;
-            //rb.mass = 5;
+            rb.mass = 5;
             //rb.linearDamping = 5;
-            currentSpeed = 4;
+            currentSpeed = 4.2f;
             // If the player is moving, pull the block
             if (moveDir.magnitude > 0f)
             {
@@ -116,8 +116,5 @@ public class PlayerControls : MonoBehaviour
             targetBlock = hit.gameObject;
             isPulling = true;
         }
-
-
     }
-
 }
