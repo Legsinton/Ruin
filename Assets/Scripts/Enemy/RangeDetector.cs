@@ -21,10 +21,12 @@ public class RangeDetector : MonoBehaviour
         if (colliders.Length > 0)
         {
             DetectedTarget = colliders[0].gameObject;
+            Debug.Log("Detecting target...");
         }
         else
         {
             DetectedTarget = null;
+            Debug.Log("Not detecting target!");
         }
         return DetectedTarget;
     }
