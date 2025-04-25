@@ -1,24 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Interact;
 
-public class PaintingScript : MonoBehaviour
+public class PaintingScript : MonoBehaviour, IInteracting
 {
-
-    PlayerMovement playerMovement;
-    bool done;
+    bool interact;
 
     private void Start()
     {
-        playerMovement = FindAnyObjectByType<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (playerMovement.IsPainting && playerMovement.isInteracting && playerMovement.haveInteracted == 1)
+        if (interact)
         {
             Debug.Log("Give Me Money");
         }
 
+    }
+
+    public void Interact()
+    {
+        interact = !interact;
     }
 
 }

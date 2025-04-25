@@ -5,6 +5,7 @@ public class Interact : MonoBehaviour
 {
     LayerMask layerMask;
     [SerializeField] Transform cameraPos;
+    bool interactPressed;
 
     private void Awake()
     {
@@ -13,7 +14,8 @@ public class Interact : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (!interactPressed) return;
+
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, cameraPos.forward, out hit, 4, layerMask))
@@ -21,6 +23,11 @@ public class Interact : MonoBehaviour
         {
             Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
             Debug.Log("Did Hit");
+            var interactable = hit.collider.GetComponent<IInteracting>();
+            if (interactable != null)
+            {
+                interactable.Interact();
+            }
         }
         else
         {
@@ -28,17 +35,13 @@ public class Interact : MonoBehaviour
             Debug.Log("Did not Hit");
         }
     }
-
     private void OnInteract(InputValue value)
     {
-        if (value.isPressed)
-        {
-            Debug.Log("Interact Pressed");
-        }
+        interactPressed = value.isPressed;
+    }
 
-        else
-        {
-            Debug.Log("Interact Released");
-        }
+    public interface IInteracting
+    {
+        void Interact();
     }
 }
