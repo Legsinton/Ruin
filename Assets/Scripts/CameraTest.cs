@@ -47,7 +47,7 @@ public class CameraTest : MonoBehaviour
         Vector3 lastCameraPos = cameraTransform.position;
         Vector2 lastRotation = currentRotation;
 
-        mouseDelta = mouseDelta;
+       // mouseDelta = mouseDelta;
 
         currentRotation += mouseDelta * rotationSpeed;
 
