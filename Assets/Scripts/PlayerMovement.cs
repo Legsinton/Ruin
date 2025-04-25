@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerControls : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
 
     [Header("Movement")]
@@ -73,7 +73,7 @@ public class PlayerControls : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
-    private void OnInteract(InputValue value)
+   /* private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
@@ -89,7 +89,7 @@ public class PlayerControls : MonoBehaviour
             isInteracting = false;
             Debug.Log("Interact Released");
         }
-    }
+    }*/
 
     private void FixedUpdate()
     {
@@ -138,7 +138,6 @@ public class PlayerControls : MonoBehaviour
         {
             isDoor = false;
             haveInteracted = 0;
-
         }
     }
 
@@ -198,7 +197,6 @@ public class PlayerControls : MonoBehaviour
         if (hit.gameObject.CompareTag("Painting")) // Optional: filter by tag
         {
             Debug.Log("It Painting");
-            targetBlock = hit.gameObject;
             isPainting = true;
         }
     }

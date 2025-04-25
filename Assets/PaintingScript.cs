@@ -4,17 +4,17 @@ using UnityEngine.InputSystem;
 public class PaintingScript : MonoBehaviour
 {
 
-    PlayerControls playerControls;
+    PlayerMovement playerMovement;
     bool done;
 
     private void Start()
     {
-        playerControls = FindAnyObjectByType<PlayerControls>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (playerControls.IsPainting && playerControls.isInteracting && playerControls.haveInteracted == 1)
+        if (playerMovement.IsPainting && playerMovement.isInteracting && playerMovement.haveInteracted == 1)
         {
             Debug.Log("Give Me Money");
         }

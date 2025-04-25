@@ -3,7 +3,7 @@ using UnityEngine;
 public class DoorEasyScript : MonoBehaviour
 {
 
-    public PlayerControls playerControls;
+    public PlayerMovement playerMovement;
     
     Vector3 targetPosition;
     Vector3 currentPoisition;
@@ -19,7 +19,7 @@ public class DoorEasyScript : MonoBehaviour
 
     void Update()
     {
-        if (playerControls.IsDoor) 
+        if (playerMovement.IsDoor) 
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime); 
@@ -31,7 +31,7 @@ public class DoorEasyScript : MonoBehaviour
 
     void OpenDoor()
     {
-        if (!playerControls.IsDoor)
+        if (!playerMovement.IsDoor)
         {
             targetPosition = originalPosition - Vector3.down * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
