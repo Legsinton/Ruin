@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Interact;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IInteracting
 {
 
     [Header("Movement")]
@@ -97,8 +98,6 @@ public class PlayerMovement : MonoBehaviour
 
         IsPulling();    
 
-        IsInteracting();
-
         StepClimb();
     }
 
@@ -117,27 +116,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
             }
-        }
-    }
-
-    private void IsInteracting()
-    {
-        if (isInteracting && haveInteracted == 0 && isPainting)
-        {
-            haveInteracted += 1;
-            IsPainting = true;
-        }
-
-        if (isInteracting && haveInteracted == 0 && door)
-        {
-            haveInteracted += 1;
-
-            isDoor = true; 
-        }
-        else if (isInteracting && haveInteracted == 1 && door)
-        {
-            isDoor = false;
-            haveInteracted = 0;
         }
     }
 
@@ -187,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision hit)
     {
-        if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
+        if (hit.gameObject.CompareTag("Pullable") && isInteracting) // Optional: filter by tag
         {
             Debug.Log("It Collides");
             targetBlock = hit.gameObject;
@@ -226,12 +204,17 @@ public class PlayerMovement : MonoBehaviour
             haveInteracted = 0;
         }
 
-        if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
+        if (collision.gameObject.CompareTag("Pullable") && isInteracting) // Optional: filter by tag
         {
             isPulling = false;
             rb.linearDamping = 1;
             rb.mass = 1;
             currentSpeed = 10;
         }
+    }
+
+    public void Interact()
+    {
+        isInteracting = !isInteracting;
     }
 }
