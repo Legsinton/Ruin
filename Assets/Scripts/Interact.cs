@@ -5,7 +5,10 @@ public class Interact : MonoBehaviour
 {
     LayerMask layerMask;
     [SerializeField] Transform cameraPos;
-    bool interactPressed;
+    bool isPressed;
+    bool isHolding;
+    bool wasPressedThisFrame;
+    bool wasReleasedThisFrame;
 
     private void Awake()
     {
@@ -14,7 +17,8 @@ public class Interact : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!interactPressed) return;
+        
+        if (!isPressed || !isHolding) return;
 
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
@@ -24,24 +28,59 @@ public class Interact : MonoBehaviour
             Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
             Debug.Log("Did Hit");
             var interactable = hit.collider.GetComponent<IInteracting>();
+            var interactableHold = hit.collider.GetComponent<IInteracting>();
+
+
             if (interactable != null)
             {
-                interactable.Interact();
+                if (wasPressedThisFrame)
+                {
+                    interactable.OnInteractTap();
+                }
             }
+            if (interactableHold != null)
+            {
+                interactableHold.OnInteractHold();
+
+            }
+
         }
         else
         {
             Debug.DrawRay(transform.position, cameraPos.forward * 1000, Color.white);
             Debug.Log("Did not Hit");
         }
+
+        wasPressedThisFrame = false;
+        wasReleasedThisFrame = false;
     }
     private void OnInteract(InputValue value)
     {
-        interactPressed = value.isPressed;
+
+        bool pressedHold = value.isPressed;
+
+        bool newPressed = value.isPressed;
+
+        // Detect "just pressed"
+        wasPressedThisFrame = newPressed && !isPressed;
+
+        // Detect "just released"
+        wasReleasedThisFrame = !newPressed && isPressed;
+
+        isPressed = newPressed;
+        isHolding = pressedHold;
+
+
+        Debug.Log($"OnIsHolding triggered: {isHolding}");
+
     }
 
     public interface IInteracting
     {
-        void Interact();
+        void OnInteractTap();
+        void OnInteractHold();
+
+
+        
     }
 }

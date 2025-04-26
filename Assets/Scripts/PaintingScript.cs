@@ -5,6 +5,7 @@ using static Interact;
 public class PaintingScript : MonoBehaviour, IInteracting
 {
     bool interact;
+    bool done;
 
     private void Start()
     {
@@ -12,16 +13,26 @@ public class PaintingScript : MonoBehaviour, IInteracting
 
     private void Update()
     {
-        if (interact)
+        if (interact && !done)
         {
+            done = true;
             Debug.Log("Give Me Money");
+        }
+        else if (!interact && done) 
+        {
+            done = false;
         }
 
     }
 
-    public void Interact()
+    public void OnInteractHold()
+    {
+    }
+
+    public void OnInteractTap()
     {
         interact = !interact;
+
     }
 
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static Interact;
 
-public class PlayerMovement : MonoBehaviour, IInteracting
+public class PlayerMovement : MonoBehaviour, Interact.IInteracting
 {
 
     [Header("Movement")]
@@ -34,22 +34,9 @@ public class PlayerMovement : MonoBehaviour, IInteracting
     [SerializeField] float stepSmooth;
 
 
-    public bool isInteracting = false;
+    bool isInteracting;
 
     bool isPulling = false;
-
-    bool isPainting;
-
-    bool isDoor;
-
-    bool door;
-
-    public bool IsDoor { get { return isDoor; } set { isDoor = value; } }
-    public bool IsPainting { get { return isPainting; } set { isPainting = value; } }
-
-    [SerializeField] int interacted;
-
-    public int haveInteracted { get { return interacted; } set { interacted = value; } }
 
     GameObject targetBlock;
 
@@ -74,7 +61,7 @@ public class PlayerMovement : MonoBehaviour, IInteracting
         movementInput = movementValue.Get<Vector2>();
     }
 
-   /* private void OnInteract(InputValue value)
+    private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
@@ -90,20 +77,24 @@ public class PlayerMovement : MonoBehaviour, IInteracting
             isInteracting = false;
             Debug.Log("Interact Released");
         }
-    }*/
+    }
 
     private void FixedUpdate()
     {
+        Debug.Log($"isInteracting: {isInteracting}");
+
         MovePlayer();
 
-        IsPulling();    
+        IsPulling();
 
         StepClimb();
     }
 
     private void IsPulling()
     {
-        if (isInteracting && targetBlock != null /*&& isPulling*/)
+        Debug.Log($"isPulling: {isPulling}, targetBlock: {targetBlock}");
+
+        if (isInteracting && targetBlock != null && isPulling)
         {
             Debug.Log("Helloooooo");
             // Direction player is moving in
@@ -117,6 +108,12 @@ public class PlayerMovement : MonoBehaviour, IInteracting
                 targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
             }
         }
+        else
+        {
+            rb.mass = 1;
+            rb.linearDamping = 1;
+            currentSpeed = 10f;
+        }
     }
 
     private void StepClimb()
@@ -129,6 +126,12 @@ public class PlayerMovement : MonoBehaviour, IInteracting
             {
                 rb.position -= new Vector3(0f, -stepSmooth, 0f);
             }
+        }
+
+        else
+        {
+            stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
+
         }
     }
 
@@ -165,46 +168,18 @@ public class PlayerMovement : MonoBehaviour, IInteracting
 
     private void OnCollisionEnter(Collision hit)
     {
-        if (hit.gameObject.CompareTag("Pullable") && isInteracting) // Optional: filter by tag
+        if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             Debug.Log("It Collides");
             targetBlock = hit.gameObject;
             isPulling = true;
         }
-
-        if (hit.gameObject.CompareTag("Painting")) // Optional: filter by tag
-        {
-            Debug.Log("It Painting");
-            isPainting = true;
-        }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("DoorEasy"))
-        {
-            door = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("DoorEasy"))
-        {
-            door = false;
-            IsDoor = false;
-        }
-    }
 
     private void OnCollisionExit(Collision collision) 
     {
-        if (collision.gameObject.CompareTag("Painting")) // Optional: filter by tag
-        {
-            isPainting = false;
-            haveInteracted = 0;
-        }
-
-        if (collision.gameObject.CompareTag("Pullable") && isInteracting) // Optional: filter by tag
+        if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             isPulling = false;
             rb.linearDamping = 1;
@@ -213,8 +188,15 @@ public class PlayerMovement : MonoBehaviour, IInteracting
         }
     }
 
-    public void Interact()
+    public void OnInteractHold()
     {
-        isInteracting = !isInteracting;
+        isInteracting = !isInteracting; // Toggle pulling based on button state
+        
+
+    }
+
+    public void OnInteractTap()
+    {
+        // Nothing here yet
     }
 }

@@ -19,21 +19,15 @@ public class DoorScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Door Move");
         if (Switches >= switchAmount)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-
         }
     }
 
     public void AddSwitch()
     {
         switches++;
-
     }
-
-
-
 }

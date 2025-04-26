@@ -34,13 +34,17 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     {
         if (interacting)
         {
-            targetPosition = originalPosition - Vector3.down * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition , moveSpeed * Time.deltaTime);
         }
     }
 
-    public void Interact()
+    public void OnInteractTap()
     {
         interacting = !interacting; // toggle open/close
+    }
+
+    public void OnInteractHold()
+    {
+        // Not used here
     }
 }
