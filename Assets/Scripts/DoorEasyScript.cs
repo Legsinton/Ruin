@@ -20,7 +20,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (!interacting) 
+        if (interacting) 
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime); 
@@ -32,7 +32,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void OpenDoor()
     {
-        if (interacting)
+        if (!interacting)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition , moveSpeed * Time.deltaTime);
         }
