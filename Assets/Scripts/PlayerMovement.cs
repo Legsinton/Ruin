@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementInput;
 
+    [SerializeField] Transform movementTransform;
+
     [Header("Stairs")]
 
     [SerializeField] GameObject stepUpLower;
@@ -81,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
     }
 
-   /* private void OnInteract(InputValue value)
+    private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
@@ -95,13 +97,13 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed = 10;
             isInteracting = false;
         }
-    }*/
+    }
 
     private void FixedUpdate()
     {
         MovePlayer();
 
-       // IsPulling();
+        IsPulling();
 
         StepClimb();
 
@@ -172,6 +174,8 @@ public class PlayerMovement : MonoBehaviour
 
         playerMoveDir = movement.normalized;
 
+       
+
         if (movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
@@ -186,8 +190,13 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        Debug.Log(playerMoveDir);
         rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;
+
+        if (!isInteracting && playerMoveDir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 20 * Time.deltaTime);
+        }
     }
 
     private void OnCollisionEnter(Collision hit)
