@@ -1,7 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static Interact;
 //using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,8 +14,6 @@ public class PlayerMovement : MonoBehaviour
     readonly private float movementZ;
 
     private float currentSpeed = 10;
-
-    public float CurrentSpeed {  get { return currentSpeed; } set { currentSpeed = value; } }
     
     public float acceleration;
 
@@ -27,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
     float gravityForce;
 
     private Vector3 playerMoveDir; // Add at top of class
-
-    public Vector3 PlayerMoveDir {get {return playerMoveDir;}}
 
     Rigidbody rb;
 
@@ -54,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Transform cameraTransform;
 
-    bool isInteracting;
+    [SerializeField] bool isInteracting;
 
     bool isPulling = false;
 
@@ -86,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
     }
 
-private void OnInteract(InputValue value)
+    private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
@@ -106,7 +101,7 @@ private void OnInteract(InputValue value)
     {
         MovePlayer();
 
-       // IsPulling();
+        IsPulling();
 
         StepClimb();
 
@@ -204,6 +199,7 @@ private void OnInteract(InputValue value)
             Debug.Log("It Collides");
             targetBlock = hit.gameObject;
             isPulling = true;
+            currentSpeed = 1;
         }
     }
 
@@ -215,7 +211,7 @@ private void OnInteract(InputValue value)
             isPulling = false;
             rb.linearDamping = 1;
             rb.mass = 1;
-            currentSpeed = 10;
+            
         }
     }
 }
