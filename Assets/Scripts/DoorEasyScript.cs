@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static Interact;
 
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
@@ -11,7 +9,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     public float pressDepth;
     public float moveSpeed;
     bool did = false;
-    public bool interacting = false;
+    public bool doorClosed = false;
 
     private void Start()
     {
@@ -20,7 +18,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (interacting) 
+        if (doorClosed) 
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime); 
@@ -32,19 +30,20 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void OpenDoor()
     {
-        if (!interacting)
+        if (!doorClosed)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition , moveSpeed * Time.deltaTime);
         }
     }
 
-    public void OnInteractTap()
+    public void PressInteract()
     {
-        interacting = !interacting; // toggle open/close
+        doorClosed = true;
     }
 
-    public void OnInteractHold()
-    {
-        // Not used here
-    }
+    public void ReleaseInteract() { }
+
+    public void InteractInRange() { }
+
+    public void InteractNotInRange() { }
 }

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using static Interact;
 //using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
-public class PlayerMovement : MonoBehaviour, Interact.IInteracting
+public class PlayerMovement : MonoBehaviour
 {
 
     [Header("Movement")]
@@ -87,7 +87,6 @@ private void OnInteract(InputValue value)
         if (value.isPressed)
         {
             isInteracting = true;
-            Debug.Log("Interact Pressed");
         }
 
         else
@@ -96,14 +95,11 @@ private void OnInteract(InputValue value)
             rb.mass = 1;
             currentSpeed = 10;
             isInteracting = false;
-            Debug.Log("Interact Released");
         }
     }
 
     private void FixedUpdate()
     {
-        Debug.Log($"isInteracting: {isInteracting}");
-
         MovePlayer();
 
         IsPulling();
@@ -129,7 +125,6 @@ private void OnInteract(InputValue value)
 
         if (isInteracting && targetBlock != null && isPulling)
         {
-            Debug.Log("Helloooooo");
             // Direction player is moving in
             Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
             rb.mass = 5;
@@ -218,15 +213,5 @@ private void OnInteract(InputValue value)
             rb.mass = 1;
             currentSpeed = 10;
         }
-    }
-
-    public void OnInteractHold()
-    {
-        isInteracting = !isInteracting; // Toggle pulling based on button state
-    }
-
-    public void OnInteractTap()
-    {
-        // Nothing here yet
     }
 }

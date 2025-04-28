@@ -1,38 +1,23 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static Interact;
 
 public class PaintingScript : MonoBehaviour, IInteracting
 {
-    bool interact;
-    bool done;
+    [SerializeField] Outline outlineScript;
 
-    private void Start()
+    public void PressInteract()
     {
+        Debug.Log("Give Me Money");
     }
 
-    private void Update()
-    {
-        if (interact && !done)
-        {
-            done = true;
-            Debug.Log("Give Me Money");
-        }
-        else if (!interact && done) 
-        {
-            done = false;
-        }
+    public void ReleaseInteract() { }
 
+    public void InteractInRange() 
+    {
+        outlineScript.enabled = true;
     }
 
-    public void OnInteractHold()
+    public void InteractNotInRange()
     {
+        outlineScript.enabled = false;
     }
-
-    public void OnInteractTap()
-    {
-        interact = !interact;
-
-    }
-
 }

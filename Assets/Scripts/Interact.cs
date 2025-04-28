@@ -19,12 +19,8 @@ public class Interact : MonoBehaviour
 
     private void Awake()
     {
-<<<<<<< Updated upstream
         Canvas = GetComponent<Canvas>();
-        layerMask = LayerMask.GetMask("Interactable", "Player");
-=======
         layerMask = LayerMask.GetMask("Interactable");
->>>>>>> Stashed changes
     }
 
     private void FixedUpdate()
@@ -34,14 +30,12 @@ public class Interact : MonoBehaviour
         if (Physics.Raycast(transform.position, cameraPos.forward, out hit, 4, layerMask))
         {
             Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
-<<<<<<< Updated upstream
-            Debug.Log("Did Hit");
             textMesh.enabled = true;
             var interactable = hit.collider.GetComponent<IInteracting>();
             var interactableHold = hit.collider.GetComponent<IInteracting>();
 
 
-            if (interactable != null)
+            /*if (interactable != null)
             {
                 if (wasPressedThisFrame)
                 {
@@ -52,10 +46,7 @@ public class Interact : MonoBehaviour
             {
                 interactableHold.OnInteractHold();
 
-            }
-=======
-            Debug.Log("Interactable object in range");
->>>>>>> Stashed changes
+            }*/
 
             currentInteractableObject = hit.collider.GetComponent<IInteracting>();
             interactInRange = true;
@@ -70,7 +61,6 @@ public class Interact : MonoBehaviour
             }
 
             Debug.DrawRay(transform.position, cameraPos.forward * 1000, Color.white);
-            Debug.Log("No interactable object in range");
         }
     }
     private void OnInteract(InputValue value)
