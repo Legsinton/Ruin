@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using static Interact;
 
 public class ShaderScript : MonoBehaviour, IInteracting
@@ -40,8 +42,6 @@ public class ShaderScript : MonoBehaviour, IInteracting
 
         /*var view = cam.WorldToViewportPoint(transform.position);
         material.SetVector(PosID, view);*/
-
-
     }
 
     public void OnInteractTap()

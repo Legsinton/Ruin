@@ -1,5 +1,7 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Interact : MonoBehaviour
 {
@@ -10,8 +12,13 @@ public class Interact : MonoBehaviour
     bool wasPressedThisFrame;
     bool wasReleasedThisFrame;
 
+    public Canvas Canvas;
+
+    public TextMeshProUGUI textMesh;
+
     private void Awake()
     {
+        Canvas = GetComponent<Canvas>();
         layerMask = LayerMask.GetMask("Interactable", "Player");
     }
 
@@ -27,6 +34,7 @@ public class Interact : MonoBehaviour
         {
             Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
             Debug.Log("Did Hit");
+            textMesh.enabled = true;
             var interactable = hit.collider.GetComponent<IInteracting>();
             var interactableHold = hit.collider.GetComponent<IInteracting>();
 
