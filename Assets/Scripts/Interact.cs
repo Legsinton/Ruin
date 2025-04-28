@@ -1,79 +1,119 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Interact : MonoBehaviour
 {
-    [SerializeField] Transform cameraPos;
+    [SerializeField] int interactLayer;
+    [SerializeField] Transform cameraTransform;
 
-    LayerMask layerMask;
-
-    bool interactInRange;
-    bool interacting;
     IInteracting currentInteractableObject;
+    List<GameObject> interactableObjects = new List<GameObject>();
 
-    public Canvas Canvas;
+    bool interactInRange = false;
+    bool interacting = false;
+    bool multipleObjectsInRange = false;
 
-    public TextMeshProUGUI textMesh;
-
-    private void Awake()
+    void OnTriggerEnter(Collider other)
     {
-        Canvas = GetComponent<Canvas>();
-        layerMask = LayerMask.GetMask("Interactable");
-    }
-
-    private void FixedUpdate()
-    {
-        RaycastHit hit;
-        // Does the ray intersect any objects excluding the player layer
-        if (Physics.Raycast(transform.position, cameraPos.forward, out hit, 4, layerMask))
+        if (other.gameObject.layer == interactLayer)
         {
-            Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
-            textMesh.enabled = true;
-            var interactable = hit.collider.GetComponent<IInteracting>();
-            var interactableHold = hit.collider.GetComponent<IInteracting>();
+            interactableObjects.Add(other.gameObject);
 
-
-            /*if (interactable != null)
+            if (interactableObjects.Count == 1)
             {
-                if (wasPressedThisFrame)
-                {
-                    interactable.OnInteractTap();
-                }
+                currentInteractableObject = other.gameObject.GetComponent<IInteracting>();
             }
-            if (interactableHold != null)
+            else
             {
-                interactableHold.OnInteractHold();
+                multipleObjectsInRange = true;
+            }
 
-            }*/
-
-            currentInteractableObject = hit.collider.GetComponent<IInteracting>();
             interactInRange = true;
             currentInteractableObject.InteractInRange();
         }
-        else
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == interactLayer)
         {
-            interactInRange = false;
-            if (currentInteractableObject != null)
+            other.GetComponent<IInteracting>().InteractNotInRange();
+
+            if (interactableObjects.Count == 2)
             {
-                currentInteractableObject.InteractNotInRange();
+                multipleObjectsInRange = false;
             }
 
-            Debug.DrawRay(transform.position, cameraPos.forward * 1000, Color.white);
+            if (interactableObjects.Count == 1)
+            {
+                interactInRange = false;
+                multipleObjectsInRange = false;
+            }
+
+            interactableObjects.Remove(other.gameObject);
+
+            if (interactableObjects.Count == 1)
+            {
+                currentInteractableObject = interactableObjects[0].GetComponent<IInteracting>();
+                currentInteractableObject.InteractInRange();
+            }
         }
     }
-    private void OnInteract(InputValue value)
+
+    void Update()
     {
-        if (!interacting && interactInRange)
+        if (multipleObjectsInRange)
         {
-            interacting = true;
-            currentInteractableObject.PressInteract();
+            currentInteractableObject.InteractNotInRange();
+
+            getCurrentObject();
+
+            currentInteractableObject.InteractInRange();
+        }
+    }
+
+    void getCurrentObject()
+    {
+        RaycastHit hit;
+        Vector3 distancePoint;
+        float closestDistance = float.PositiveInfinity;
+
+        Physics.Raycast(cameraTransform.position, cameraTransform.TransformDirection(Vector3.forward), out hit, 20);
+
+        if (hit.collider == null)
+        {
+            distancePoint = transform.position;
         }
         else
         {
-            interacting = false;
-            currentInteractableObject.ReleaseInteract();
+            distancePoint = hit.point;
+        }
+
+        for (int i = 0; i < interactableObjects.Count; i++)
+        {
+            if (Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
+            {
+                closestDistance = Vector3.Distance(distancePoint, interactableObjects[i].transform.position);
+                currentInteractableObject = interactableObjects[i].GetComponent<IInteracting>();
+            }
+        }
+    }
+
+    private void OnInteract(InputValue value)
+    {
+        if (currentInteractableObject != null)
+        {
+            if (!interacting && interactInRange)
+            {
+                interacting = true;
+                currentInteractableObject.PressInteract();
+            }
+            else
+            {
+                interacting = false;
+                currentInteractableObject.ReleaseInteract();
+            }
         }
     }
 }

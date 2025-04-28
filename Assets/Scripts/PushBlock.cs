@@ -1,16 +1,25 @@
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PushBlock : MonoBehaviour , IInteracting
 {
     [SerializeField]
     private float forceMagnitude;
     [SerializeField] bool canMove;
-    [SerializeField] Outline outline;
-    /*private void OnCollisionStay(Collision hit)
+    [SerializeField] UIScript script;
+    [SerializeField] Outline outlineScript;
+    Rigidbody rb;
+    private void Awake()
+    {
+        script = FindAnyObjectByType<UIScript>();
+    }
+
+    private void OnCollisionStay(Collision hit)
     {
         Debug.Log("Hello");
-        Rigidbody rb = hit.collider.attachedRigidbody;
+        rb = hit.gameObject.GetComponent<Rigidbody>();
         if (rb != null)
         {
             Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
@@ -18,15 +27,15 @@ public class PushBlock : MonoBehaviour , IInteracting
             forceDirection.Normalize();
            
             rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
-
         }
         
     }
 
     private void OnCollisionExit(Collision hit)
     {
-        
-    }*/
+        rb = null;
+    }
+
 
     public void PressInteract()
     {
@@ -38,14 +47,16 @@ public class PushBlock : MonoBehaviour , IInteracting
         canMove = false;
     }
 
-    public void InteractInRange() 
+    public void InteractInRange()
     {
-        outline.enabled = true;
+        script.EnableUI();
+        outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        outline.enabled = false;
+        script.DisebleUI();
+        outlineScript.enabled = false;
     }
 
 }

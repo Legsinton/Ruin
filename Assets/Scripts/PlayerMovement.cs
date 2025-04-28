@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,6 +36,15 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementInput;
 
+    [SerializeField] Transform movementTransform;
+
+    [Header("Camera")]
+
+    private Vector3 cachedCameraForward;
+    private Vector3 cachedCameraRight;
+
+    [SerializeField] Transform capsule;
+
     [Header("Stairs")]
 
     [SerializeField] GameObject stepUpLower;
@@ -55,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
 
     GameObject targetBlock;
 
-
     private void Start()
     {
         Cursor.visible = false;
@@ -74,11 +83,28 @@ public class PlayerMovement : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
+    private void LateUpdate()
+    {
+        CacheCameraVectors();
+
+    }
+
     private void GroundCheck()
     {
         Vector3 origin = transform.position; // or you can lower this a bit if needed
         origin.y -= 0.5f; // move origin slightly downward if your player is tall
         isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+    }
+
+    private void CacheCameraVectors()
+    {
+        cachedCameraForward = cameraTransform.forward;
+        cachedCameraForward.y = 0;
+        cachedCameraForward.Normalize();
+
+        cachedCameraRight = cameraTransform.right;
+        cachedCameraRight.y = 0;
+        cachedCameraRight.Normalize();
     }
 
     private void OnInteract(InputValue value)
@@ -107,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
         GroundCheck();
 
+
         if (!isGrounded)
         {
             gravityForce = 1000;
@@ -120,8 +147,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void IsPulling()
     {
-        Debug.Log($"isPulling: {isPulling}, targetBlock: {targetBlock}");
-
         if (isInteracting && targetBlock != null && isPulling)
         {
             // Direction player is moving in
@@ -160,20 +185,23 @@ public class PlayerMovement : MonoBehaviour
             stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
         }
     }
-
     private void MovePlayer()
     {
-        Vector3 cameraForward = cameraTransform.forward;
+        /*Vector3 cameraForward = cameraTransform.forward;
         cameraForward.y = 0;
         cameraForward.Normalize();
 
         Vector3 cameraRight = cameraTransform.right;
         cameraRight.y = 0;
-        cameraRight.Normalize();
+        cameraRight.Normalize();*/
 
-        Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
+        Vector3 movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
+
+       // Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
 
         playerMoveDir = movement.normalized;
+
+       
 
         if (movement.magnitude > 0)
         {
@@ -189,7 +217,14 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        rb.linearVelocity = movement.normalized * currentVelocity;
+        rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;
+
+        if (!isInteracting && playerMoveDir != Vector3.zero)
+        {
+           
+            Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }
     }
 
     private void OnCollisionEnter(Collision hit)

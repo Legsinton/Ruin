@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 9208910605800284378}
   - component: {fileID: 4986906763293567833}
   - component: {fileID: 1240648076983714646}
+  - component: {fileID: 1224513481292570000}
   m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
@@ -190,6 +191,29 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 64
+  player: {fileID: 1130461663377977015}
+  canSee: 0
+--- !u!65 &1224513481292570000
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3181256349961792975}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1.4}
+  m_Center: {x: 0, y: 0, z: 0.7}
 --- !u!1 &3831665695784811463
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +224,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6310075026258042403}
   - component: {fileID: 985773469245848142}
-  - component: {fileID: 1130461663377977015}
   - component: {fileID: 5285071339164778062}
+  - component: {fileID: 1130461663377977015}
   - component: {fileID: 2961865858088359948}
   m_Layer: 9
   m_Name: Player
@@ -253,32 +277,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 32
   m_CollisionDetection: 0
---- !u!114 &1130461663377977015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3831665695784811463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentVelocity: 2
-  currentSpeed: 10
-  acceleration: 5
-  groundDrag: 21.05
-  pullSpeed: 1
-  stepUpLower: {fileID: 2472653049047422504}
-  stepUpHigher: {fileID: 2584966170327979020}
-  stepHeight: 0.3
-  stepSmooth: 0.2
-  isInteracting: 0
-  interacted: 0
-  cameraTransform: {fileID: 0}
 --- !u!114 &5285071339164778062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +309,33 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1130461663377977015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831665695784811463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentVelocity: 2
+  acceleration: 5
+  groundDrag: 21.05
+  pullSpeed: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  movementTransform: {fileID: 6310075026258042403}
+  capsule: {fileID: 7656460790587127161}
+  stepUpLower: {fileID: 2472653049047422504}
+  stepUpHigher: {fileID: 2584966170327979020}
+  stepHeight: 0.3
+  stepSmooth: 0.2
+  cameraTransform: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
+  isInteracting: 0
 --- !u!114 &2961865858088359948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,4 +348,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a507fea603d39df41ac58d697728adf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPos: {fileID: 0}
+  interactLayer: 10
+  cameraTransform: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}

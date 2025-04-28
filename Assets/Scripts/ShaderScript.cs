@@ -10,13 +10,7 @@ public class ShaderScript : MonoBehaviour, IInteracting
 
     public Material material;
     public Camera cam;
-    public LayerMask mask;
-
-    public PlayerMovement player;
-
-    GameObject block;
-
-    float distance;
+    //public LayerMask mask;
 
     [SerializeField] bool canSee;
 
@@ -35,10 +29,12 @@ public class ShaderScript : MonoBehaviour, IInteracting
         }
 
         //if (Physics.Raycast(ray, 3000, mask))
-        else
+        else if (!canSee)
         {
+
             material.SetFloat(SizeID, 0);
         }
+       
 
         /*var view = cam.WorldToViewportPoint(transform.position);
         material.SetVector(PosID, view);*/
