@@ -44,13 +44,14 @@ public class ShaderScript : MonoBehaviour, IInteracting
         material.SetVector(PosID, view);*/
     }
 
-    public void OnInteractTap()
+    public void PressInteract()
     {
         canSee = !canSee;
     }
 
-    public void OnInteractHold()
-    {
+    public void ReleaseInteract() { }
 
-    }
+    public void InteractInRange() { }
+
+    public void InteractNotInRange() { }
 }

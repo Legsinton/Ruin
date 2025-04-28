@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class Interact : MonoBehaviour
 {
-    LayerMask layerMask;
     [SerializeField] Transform cameraPos;
-    bool isPressed;
-    bool isHolding;
-    bool wasPressedThisFrame;
-    bool wasReleasedThisFrame;
+
+    LayerMask layerMask;
+
+    bool interactInRange;
+    bool interacting;
+    IInteracting currentInteractableObject;
 
     public Canvas Canvas;
 
@@ -18,21 +19,22 @@ public class Interact : MonoBehaviour
 
     private void Awake()
     {
+<<<<<<< Updated upstream
         Canvas = GetComponent<Canvas>();
         layerMask = LayerMask.GetMask("Interactable", "Player");
+=======
+        layerMask = LayerMask.GetMask("Interactable");
+>>>>>>> Stashed changes
     }
 
     private void FixedUpdate()
     {
-        
-        if (!isPressed || !isHolding) return;
-
         RaycastHit hit;
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, cameraPos.forward, out hit, 4, layerMask))
-
         {
             Debug.DrawRay(transform.position, cameraPos.forward * 4, Color.yellow);
+<<<<<<< Updated upstream
             Debug.Log("Did Hit");
             textMesh.enabled = true;
             var interactable = hit.collider.GetComponent<IInteracting>();
@@ -51,44 +53,48 @@ public class Interact : MonoBehaviour
                 interactableHold.OnInteractHold();
 
             }
+=======
+            Debug.Log("Interactable object in range");
+>>>>>>> Stashed changes
 
+            currentInteractableObject = hit.collider.GetComponent<IInteracting>();
+            interactInRange = true;
+            currentInteractableObject.InteractInRange();
         }
         else
         {
-            Debug.DrawRay(transform.position, cameraPos.forward * 1000, Color.white);
-            Debug.Log("Did not Hit");
-        }
+            interactInRange = false;
+            if (currentInteractableObject != null)
+            {
+                currentInteractableObject.InteractNotInRange();
+            }
 
-        wasPressedThisFrame = false;
-        wasReleasedThisFrame = false;
+            Debug.DrawRay(transform.position, cameraPos.forward * 1000, Color.white);
+            Debug.Log("No interactable object in range");
+        }
     }
     private void OnInteract(InputValue value)
     {
-
-        bool pressedHold = value.isPressed;
-
-        bool newPressed = value.isPressed;
-
-        // Detect "just pressed"
-        wasPressedThisFrame = newPressed && !isPressed;
-
-        // Detect "just released"
-        wasReleasedThisFrame = !newPressed && isPressed;
-
-        isPressed = newPressed;
-        isHolding = pressedHold;
-
-
-        Debug.Log($"OnIsHolding triggered: {isHolding}");
-
+        if (!interacting && interactInRange)
+        {
+            interacting = true;
+            currentInteractableObject.PressInteract();
+        }
+        else
+        {
+            interacting = false;
+            currentInteractableObject.ReleaseInteract();
+        }
     }
+}
 
-    public interface IInteracting
-    {
-        void OnInteractTap();
-        void OnInteractHold();
+public interface IInteracting
+{
+    void PressInteract();
 
+    void ReleaseInteract();
 
-        
-    }
+    void InteractInRange();
+
+    void InteractNotInRange();
 }
