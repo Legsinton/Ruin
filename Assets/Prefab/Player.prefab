@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 9208910605800284378}
   - component: {fileID: 4986906763293567833}
   - component: {fileID: 1240648076983714646}
+  - component: {fileID: 1224513481292570000}
   m_Layer: 9
   m_Name: Capsule
   m_TagString: Untagged
@@ -192,6 +193,27 @@ MonoBehaviour:
     m_Bits: 64
   player: {fileID: 1130461663377977015}
   canSee: 0
+--- !u!65 &1224513481292570000
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3181256349961792975}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1.4}
+  m_Center: {x: 0, y: 0, z: 0.7}
 --- !u!1 &3831665695784811463
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,8 +227,6 @@ GameObject:
   - component: {fileID: 1130461663377977015}
   - component: {fileID: 5285071339164778062}
   - component: {fileID: 2961865858088359948}
-  - component: {fileID: 4940539357612869005}
-  - component: {fileID: 8705693807067613874}
   m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
@@ -279,6 +299,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   movementTransform: {fileID: 6310075026258042403}
+  capsule: {fileID: 7656460790587127161}
   stepUpLower: {fileID: 2472653049047422504}
   stepUpHigher: {fileID: 2584966170327979020}
   stepHeight: 0.3
@@ -328,43 +349,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactLayer: 10
-  cameraTransform: {fileID: 0}
---- !u!114 &4940539357612869005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3831665695784811463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
---- !u!65 &8705693807067613874
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3831665695784811463}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 2, z: 1.4}
-  m_Center: {x: 0, y: 0, z: 0.7}
+  cameraTransform: {fileID: 7656460790587127161}

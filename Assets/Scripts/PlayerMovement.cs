@@ -38,6 +38,13 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Transform movementTransform;
 
+    [Header("Camera")]
+
+    private Vector3 cachedCameraForward;
+    private Vector3 cachedCameraRight;
+
+    [SerializeField] Transform capsule;
+
     [Header("Stairs")]
 
     [SerializeField] GameObject stepUpLower;
@@ -76,11 +83,28 @@ public class PlayerMovement : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
+    private void LateUpdate()
+    {
+        CacheCameraVectors();
+
+    }
+
     private void GroundCheck()
     {
         Vector3 origin = transform.position; // or you can lower this a bit if needed
         origin.y -= 0.5f; // move origin slightly downward if your player is tall
         isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+    }
+
+    private void CacheCameraVectors()
+    {
+        cachedCameraForward = cameraTransform.forward;
+        cachedCameraForward.y = 0;
+        cachedCameraForward.Normalize();
+
+        cachedCameraRight = cameraTransform.right;
+        cachedCameraRight.y = 0;
+        cachedCameraRight.Normalize();
     }
 
     private void OnInteract(InputValue value)
@@ -108,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
         StepClimb();
 
         GroundCheck();
+
 
         if (!isGrounded)
         {
@@ -162,15 +187,17 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
-        Vector3 cameraForward = cameraTransform.forward;
+        /*Vector3 cameraForward = cameraTransform.forward;
         cameraForward.y = 0;
         cameraForward.Normalize();
 
         Vector3 cameraRight = cameraTransform.right;
         cameraRight.y = 0;
-        cameraRight.Normalize();
+        cameraRight.Normalize();*/
 
-        Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
+        Vector3 movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
+
+       // Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
 
         playerMoveDir = movement.normalized;
 
@@ -194,8 +221,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isInteracting && playerMoveDir != Vector3.zero)
         {
+           
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 20 * Time.deltaTime);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
     }
 
