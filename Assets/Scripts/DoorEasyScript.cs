@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
@@ -10,10 +12,13 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     public float moveSpeed;
     bool did = false;
     public bool doorClosed = false;
+    [SerializeField] UIScript script;
+    [SerializeField] Outline outlineScript;
 
     private void Start()
     {
         originalPosition = transform.position;
+        script = FindAnyObjectByType<UIScript>();
     }
 
     void Update()
@@ -38,12 +43,20 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        doorClosed = true;
+        doorClosed = !doorClosed;
     }
 
     public void ReleaseInteract() { }
 
-    public void InteractInRange() { }
+    public void InteractInRange()
+    {
+        script.EnableUI();
+        outlineScript.enabled = true;
+    }
 
-    public void InteractNotInRange() { }
+    public void InteractNotInRange()
+    {
+        script.DisebleUI();
+        outlineScript.enabled = false;
+    }
 }

@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -54,7 +55,6 @@ public class PlayerMovement : MonoBehaviour
     bool isPulling = false;
 
     GameObject targetBlock;
-
 
     private void Start()
     {
@@ -120,8 +120,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void IsPulling()
     {
-        Debug.Log($"isPulling: {isPulling}, targetBlock: {targetBlock}");
-
         if (isInteracting && targetBlock != null && isPulling)
         {
             // Direction player is moving in
@@ -160,7 +158,6 @@ public class PlayerMovement : MonoBehaviour
             stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
         }
     }
-
     private void MovePlayer()
     {
         Vector3 cameraForward = cameraTransform.forward;
@@ -189,7 +186,8 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        rb.linearVelocity = movement.normalized * currentVelocity;
+        Debug.Log(playerMoveDir);
+        rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;
     }
 
     private void OnCollisionEnter(Collision hit)

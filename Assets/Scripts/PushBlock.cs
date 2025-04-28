@@ -1,12 +1,15 @@
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PushBlock : MonoBehaviour , IInteracting
 {
     [SerializeField]
     private float forceMagnitude;
     [SerializeField] bool canMove;
-    [SerializeField] Outline outline;
+    [SerializeField] UIScript script;
+    [SerializeField] Outline outlineScript;
     /*private void OnCollisionStay(Collision hit)
     {
         Debug.Log("Hello");
@@ -28,6 +31,11 @@ public class PushBlock : MonoBehaviour , IInteracting
         
     }*/
 
+    private void Awake()
+    {
+        script = FindAnyObjectByType<UIScript>();
+    }
+
     public void PressInteract()
     {
         canMove = true;
@@ -38,14 +46,16 @@ public class PushBlock : MonoBehaviour , IInteracting
         canMove = false;
     }
 
-    public void InteractInRange() 
+    public void InteractInRange()
     {
-        outline.enabled = true;
+        script.EnableUI();
+        outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        outline.enabled = false;
+        script.DisebleUI();
+        outlineScript.enabled = false;
     }
 
 }
