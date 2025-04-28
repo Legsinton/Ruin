@@ -10,7 +10,6 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
-    bool did = false;
     public bool doorClosed = false;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;

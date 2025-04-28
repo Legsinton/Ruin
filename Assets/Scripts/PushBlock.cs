@@ -10,10 +10,16 @@ public class PushBlock : MonoBehaviour , IInteracting
     [SerializeField] bool canMove;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
-    /*private void OnCollisionStay(Collision hit)
+    Rigidbody rb;
+    private void Awake()
+    {
+        script = FindAnyObjectByType<UIScript>();
+    }
+
+    private void OnCollisionStay(Collision hit)
     {
         Debug.Log("Hello");
-        Rigidbody rb = hit.collider.attachedRigidbody;
+        rb = hit.gameObject.GetComponent<Rigidbody>();
         if (rb != null)
         {
             Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
@@ -21,20 +27,15 @@ public class PushBlock : MonoBehaviour , IInteracting
             forceDirection.Normalize();
            
             rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
-
         }
         
     }
 
     private void OnCollisionExit(Collision hit)
     {
-        
-    }*/
-
-    private void Awake()
-    {
-        script = FindAnyObjectByType<UIScript>();
+        rb = null;
     }
+
 
     public void PressInteract()
     {

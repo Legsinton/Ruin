@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
     }
 
-    private void OnInteract(InputValue value)
+   /* private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
@@ -95,13 +95,13 @@ public class PlayerMovement : MonoBehaviour
             currentSpeed = 10;
             isInteracting = false;
         }
-    }
+    }*/
 
     private void FixedUpdate()
     {
         MovePlayer();
 
-        IsPulling();
+       // IsPulling();
 
         StepClimb();
 
