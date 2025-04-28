@@ -1,18 +1,19 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static Interact;
+//using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
-public class PlayerMovement : MonoBehaviour, Interact.IInteracting
+public class PlayerMovement : MonoBehaviour
 {
 
     [Header("Movement")]
 
     public float currentVelocity;
 
-    private float movementX;
-    private float movementZ;
+    readonly private float movementX;
+    readonly private float movementZ;
 
-    public float currentSpeed;
+    private float currentSpeed = 10;
     
     public float acceleration;
 
@@ -20,9 +21,19 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
 
     public float pullSpeed;
 
+    float gravityForce;
+
     private Vector3 playerMoveDir; // Add at top of class
 
     Rigidbody rb;
+
+    readonly float distToGround = 1f;
+
+    private bool isGrounded;
+
+    public LayerMask groundMask; // assign this in Inspector
+
+    Vector2 movementInput;
 
     [Header("Stairs")]
 
@@ -32,16 +43,18 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
     [SerializeField] float stepHeight;
 
     [SerializeField] float stepSmooth;
+    
 
+    [Header("Interaction")]
 
-    bool isInteracting;
+    [SerializeField] Transform cameraTransform;
+
+    [SerializeField] bool isInteracting;
 
     bool isPulling = false;
 
     GameObject targetBlock;
 
-    [SerializeField] Transform cameraTransform;
-    Vector2 movementInput;
 
     private void Start()
     {
@@ -61,12 +74,18 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
         movementInput = movementValue.Get<Vector2>();
     }
 
+    private void GroundCheck()
+    {
+        Vector3 origin = transform.position; // or you can lower this a bit if needed
+        origin.y -= 0.5f; // move origin slightly downward if your player is tall
+        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+    }
+
     private void OnInteract(InputValue value)
     {
         if (value.isPressed)
         {
             isInteracting = true;
-            Debug.Log("Interact Pressed");
         }
 
         else
@@ -75,19 +94,28 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
             rb.mass = 1;
             currentSpeed = 10;
             isInteracting = false;
-            Debug.Log("Interact Released");
         }
     }
 
     private void FixedUpdate()
     {
-        Debug.Log($"isInteracting: {isInteracting}");
-
         MovePlayer();
 
         IsPulling();
 
         StepClimb();
+
+        GroundCheck();
+
+        if (!isGrounded)
+        {
+            gravityForce = 1000;
+            rb.linearVelocity += Vector3.down * gravityForce * Time.deltaTime;
+        }
+        else
+        {
+            gravityForce = 1;
+        }
     }
 
     private void IsPulling()
@@ -96,7 +124,6 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
 
         if (isInteracting && targetBlock != null && isPulling)
         {
-            Debug.Log("Helloooooo");
             // Direction player is moving in
             Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
             rb.mass = 5;
@@ -131,7 +158,6 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
         else
         {
             stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
-
         }
     }
 
@@ -173,6 +199,7 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
             Debug.Log("It Collides");
             targetBlock = hit.gameObject;
             isPulling = true;
+            currentSpeed = 1;
         }
     }
 
@@ -184,19 +211,7 @@ public class PlayerMovement : MonoBehaviour, Interact.IInteracting
             isPulling = false;
             rb.linearDamping = 1;
             rb.mass = 1;
-            currentSpeed = 10;
+            
         }
-    }
-
-    public void OnInteractHold()
-    {
-        isInteracting = !isInteracting; // Toggle pulling based on button state
-        
-
-    }
-
-    public void OnInteractTap()
-    {
-        // Nothing here yet
     }
 }

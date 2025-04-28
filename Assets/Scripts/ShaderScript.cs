@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using static Interact;
 
 public class ShaderScript : MonoBehaviour, IInteracting
@@ -10,37 +12,46 @@ public class ShaderScript : MonoBehaviour, IInteracting
     public Camera cam;
     public LayerMask mask;
 
+    public PlayerMovement player;
+
+    GameObject block;
+
+    float distance;
+
     [SerializeField] bool canSee;
 
     void Update()
     {
-        var dir = cam.transform.position - transform.position;
-        var ray = new Ray(transform.position, dir.normalized);
+        /// var playerVar = player.transform.position - transform.position;
+
+        // var dir = cam.transform.position - transform.position;
+        //var ray = new Ray(transform.position, dir.normalized);
+
+
 
         if (canSee)
-        { 
+        {
+            material.SetFloat(SizeID, 3);
         }
 
-            if (Physics.Raycast(ray, 3000, mask))
-            {
-                material.SetFloat(SizeID, 3);
-            }
-            else
-            {
-                material.SetFloat(SizeID, 0);
-            }
-            var view = cam.WorldToViewportPoint(transform.position);
-            material.SetVector(PosID, view);
-        
+        //if (Physics.Raycast(ray, 3000, mask))
+        else
+        {
+            material.SetFloat(SizeID, 0);
+        }
+
+        /*var view = cam.WorldToViewportPoint(transform.position);
+        material.SetVector(PosID, view);*/
     }
 
-    public void OnInteractTap()
+    public void PressInteract()
     {
         canSee = !canSee;
     }
 
-    public void OnInteractHold()
-    {
+    public void ReleaseInteract() { }
 
-    }
+    public void InteractInRange() { }
+
+    public void InteractNotInRange() { }
 }
