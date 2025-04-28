@@ -198,7 +198,7 @@ MonoBehaviour:
     CameraRadius: 0.4
     UseFollowTarget:
       Enabled: 1
-      YOffset: 3
+      YOffset: 1.5
     Strategy: 1
     MaximumEffort: 4
     SmoothingTime: 0
@@ -236,8 +236,8 @@ MonoBehaviour:
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
+        AccelTime: 0
+        DecelTime: 0
     - Name: Look Orbit Y
       Owner: {fileID: 8655937756258463905}
       Enabled: 1
@@ -247,8 +247,8 @@ MonoBehaviour:
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
-        AccelTime: 0.2
-        DecelTime: 0.2
+        AccelTime: 0
+        DecelTime: 0
     - Name: Orbit Scale
       Owner: {fileID: 8655937756258463905}
       Enabled: 1
