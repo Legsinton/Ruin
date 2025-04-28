@@ -14,7 +14,9 @@ public class PlayerMovement : MonoBehaviour
     readonly private float movementX;
     readonly private float movementZ;
 
-    public float currentSpeed;
+    private float currentSpeed = 10;
+
+    public float CurrentSpeed {  get { return currentSpeed; } set { currentSpeed = value; } }
     
     public float acceleration;
 
@@ -25,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     float gravityForce;
 
     private Vector3 playerMoveDir; // Add at top of class
+
+    public Vector3 PlayerMoveDir {get {return playerMoveDir;}}
 
     Rigidbody rb;
 
@@ -102,7 +106,7 @@ private void OnInteract(InputValue value)
     {
         MovePlayer();
 
-        IsPulling();
+       // IsPulling();
 
         StepClimb();
 
