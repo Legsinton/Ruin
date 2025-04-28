@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class Interact : MonoBehaviour
 {
     [SerializeField] int interactLayer;
-    
+    [SerializeField] Transform cameraTransform;
+
     IInteracting currentInteractableObject;
     List<GameObject> interactableObjects = new List<GameObject>();
 
@@ -37,16 +38,10 @@ public class Interact : MonoBehaviour
     {
         if (other.gameObject.layer == interactLayer)
         {
-            if (interactableObjects.Count >= 3)
-            {
-                other.GetComponent<IInteracting>().InteractNotInRange();
-            }
+            other.GetComponent<IInteracting>().InteractNotInRange();
 
             if (interactableObjects.Count == 2)
             {
-                currentInteractableObject.InteractNotInRange();
-                updateClosestObject();
-                currentInteractableObject.InteractInRange();
                 multipleObjectsInRange = false;
             }
 
@@ -54,10 +49,15 @@ public class Interact : MonoBehaviour
             {
                 interactInRange = false;
                 multipleObjectsInRange = false;
-                currentInteractableObject.InteractNotInRange();
             }
 
             interactableObjects.Remove(other.gameObject);
+
+            if (interactableObjects.Count == 1)
+            {
+                currentInteractableObject = interactableObjects[0].GetComponent<IInteracting>();
+                currentInteractableObject.InteractInRange();
+            }
         }
     }
 
@@ -67,21 +67,34 @@ public class Interact : MonoBehaviour
         {
             currentInteractableObject.InteractNotInRange();
 
-            updateClosestObject();
+            getCurrentObject();
 
             currentInteractableObject.InteractInRange();
         }
     }
 
-    void updateClosestObject()
+    void getCurrentObject()
     {
+        RaycastHit hit;
+        Vector3 distancePoint;
         float closestDistance = float.PositiveInfinity;
+
+        Physics.Raycast(cameraTransform.position, cameraTransform.TransformDirection(Vector3.forward), out hit, 20);
+
+        if (hit.collider == null)
+        {
+            distancePoint = transform.position;
+        }
+        else
+        {
+            distancePoint = hit.point;
+        }
 
         for (int i = 0; i < interactableObjects.Count; i++)
         {
-            if (Vector3.Distance(transform.position, interactableObjects[i].transform.position) < closestDistance)
+            if (Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
             {
-                closestDistance = Vector3.Distance(transform.position, interactableObjects[i].transform.position);
+                closestDistance = Vector3.Distance(distancePoint, interactableObjects[i].transform.position);
                 currentInteractableObject = interactableObjects[i].GetComponent<IInteracting>();
             }
         }
