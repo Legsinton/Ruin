@@ -24,9 +24,10 @@ public class PlayerMovement : MonoBehaviour
 
     float gravityForce;
 
-    private Vector3 playerMoveDir; // Add at top of class
+    public Vector3 playerMoveDir; // Add at top of class
 
     Rigidbody rb;
+    public Vector3 movement;
 
     readonly float distToGround = 1f;
 
@@ -127,9 +128,9 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
 
-        IsPulling();
+       // IsPulling();
 
-        StepClimb();
+        //StepClimb();
 
         GroundCheck();
 
@@ -164,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.mass = 1;
             rb.linearDamping = 1;
-            currentSpeed = 10f;
+           
         }
     }
 
@@ -187,30 +188,18 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
-        /*Vector3 cameraForward = cameraTransform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
-
-        Vector3 cameraRight = cameraTransform.right;
-        cameraRight.y = 0;
-        cameraRight.Normalize();*/
-
-        Vector3 movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
-
-       // Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
+        movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
 
         playerMoveDir = movement.normalized;
-
-       
 
         if (movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
         }
-        else if (movement.magnitude == 0 && isPulling)
+        else if (movement.magnitude > 0 && isPulling)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
-
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, 1);
+            currentSpeed = 1;
         }
         else
         {

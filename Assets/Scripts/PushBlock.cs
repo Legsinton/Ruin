@@ -7,33 +7,48 @@ public class PushBlock : MonoBehaviour , IInteracting
 {
     [SerializeField]
     private float forceMagnitude;
+    public PlayerMovement playerMove;
     [SerializeField] bool canMove;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
+    Vector3 forceDirection;
     Rigidbody rb;
     private void Awake()
     {
         script = FindAnyObjectByType<UIScript>();
+        canMove = FindAnyObjectByType<PlayerMovement>();
+        playerMove = FindAnyObjectByType<PlayerMovement>();
+    }
+
+    private void Update()
+    {
+        if (rb != null && canMove && playerMove.movement.magnitude > 0)
+        {
+            
+            forceDirection.y = 0;
+            forceDirection.Normalize();
+
+            rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
+        }
+        else if (rb != null && canMove && playerMove.movement.magnitude < 0)
+        {   
+            forceDirection.y = 0;
+            forceDirection.Normalize();
+
+            rb.AddForceAtPosition(-forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
+        }
     }
 
     private void OnCollisionStay(Collision hit)
     {
-        Debug.Log("Hello");
         rb = hit.gameObject.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
-            forceDirection.y = 0;
-            forceDirection.Normalize();
-           
-            rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
-        }
-        
+        forceDirection = transform.position - hit.gameObject.transform.position;
+
     }
 
     private void OnCollisionExit(Collision hit)
     {
-        rb = null;
+       // rb = null;
     }
 
 
