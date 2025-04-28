@@ -5,38 +5,69 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private BehaviorGraphAgent Agent;
 
-    public GameObject PlayerTarget { get; set; }
+    public GameObject PlayerTarget { get; private set; }
+    [SerializeField] private GameObject playerReference;
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private float detectionRange = 10.0f;
+    [SerializeField] private float moveSpeed = 3.5f; // Enemy move speed
+    public Vector3 LastKnownPlayerPosition { get; private set; }
+
+    private bool isChasingPlayer = false;
+    private float memoryTimer = 0f;
     [SerializeField]
-    private GameObject playerReference;
-    [SerializeField]
-    private LayerMask playerLayerMask;
-    [SerializeField]
-    private float detectionRange = 10.0f;
-    public Vector3 LastKnownPlayerPosition { get; set; }
+    private float memoryDuration = 5f; // Time the enemy remembers the player after losing them
 
     private void Start()
     {
         LastKnownPlayerPosition = transform.position;
-        //GetComponent<BlackboardVariable>
     }
 
     private void Update()
     {
-        RaycastHit hit;
-        Vector3 direction = playerReference.transform.position - transform.position;
-        Physics.Raycast(transform.position, direction, out hit, detectionRange, playerLayerMask);
-        if (hit.collider != null && hit.collider.gameObject == playerReference)
+        if (playerReference == null)
+            return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerReference.transform.position);
+
+        if (distanceToPlayer <= detectionRange)
         {
-            PlayerTarget = hit.collider.gameObject;
-            LastKnownPlayerPosition = PlayerTarget.transform.position;
-            Debug.Log("Chase player!");
+            // Player inside detection range
+            if (!isChasingPlayer)
+            {
+                isChasingPlayer = true;
+                Debug.Log("Player entered detection range: Start chasing!");
+            }
+
+            PlayerTarget = playerReference;
+            LastKnownPlayerPosition = playerReference.transform.position;
+            memoryTimer = memoryDuration; // Reset memory timer
         }
         else
         {
-            PlayerTarget = null;
-            Debug.Log("Stop chasing player");
+            // Player outside detection range
+            if (memoryTimer > 0)
+            {
+                memoryTimer -= Time.deltaTime;
+
+                if (memoryTimer <= 0)
+                {
+                    // Fully forget the player
+                    isChasingPlayer = false;
+                    PlayerTarget = null;
+                    Debug.Log("Memory faded: Stop chasing player!");
+                }
+                else
+                {
+                    // Still remembering player
+                    Debug.Log($"Remembering player... ({memoryTimer:F1}s left)");
+                }
+            }
         }
 
+        if (PlayerTarget != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, PlayerTarget.transform.position, moveSpeed * Time.deltaTime);
+        }
     }
 
     private void OnDrawGizmos()
@@ -46,12 +77,13 @@ public class EnemyController : MonoBehaviour
         {
             if (PlayerTarget != null)
                 Gizmos.color = Color.green;
+
             if (playerReference != null)
             {
-                Vector3 direction = playerReference.transform.position - transform.position;
                 Gizmos.DrawLine(transform.position, playerReference.transform.position);
             }
         }
+
         Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 }
