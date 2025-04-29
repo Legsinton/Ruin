@@ -13,7 +13,6 @@ public class PuzzleManager : MonoBehaviour
     {
         playerInput.Add(buttonID);
 
-
         if (playerInput.Count == correctSequence.Count)
         {
             if (checkPressSequence)
@@ -54,17 +53,15 @@ public class PuzzleManager : MonoBehaviour
 
     private void PuzzleSolved()
     {
-        Debug.Log("Puzzle Solved!");
         GetComponent<Renderer>().material.color = Color.green;
         foreach (var button in buttons)
         {
             button.PuzzleComplete();
         }
     }
-
+    
     private void ResetPuzzle()
     {
-        Debug.Log("Incorrect! Resetting puzzle.");
         playerInput.Clear();
         foreach (var button in buttons)
         {
