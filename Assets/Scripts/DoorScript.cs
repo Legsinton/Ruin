@@ -7,7 +7,6 @@ public class DoorScript : MonoBehaviour
     public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
     Vector3 targetPosition;
-    Vector3 currentPoisition;
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
