@@ -113,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
         if (value.isPressed)
         {
             isInteracting = true;
+            currentSpeed = 1;
         }
 
         else
@@ -128,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
 
-       // IsPulling();
+        IsPulling();
 
         //StepClimb();
 
@@ -154,10 +155,12 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
             rb.mass = 5;
             rb.linearDamping = 5;
-            currentSpeed = 1f;
+            currentSpeed = 1f;         
             // If the player is moving, pull the block
             if (playerMoveDir.magnitude > 0f)
             {
+                playerMoveDir.x = 0;
+                //targetBlock.position.x = 0;
                 targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
             }
         }
@@ -203,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
 
         rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;

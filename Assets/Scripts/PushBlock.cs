@@ -12,38 +12,67 @@ public class PushBlock : MonoBehaviour , IInteracting
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
     Vector3 forceDirection;
-    Rigidbody rb;
+    [SerializeField] Rigidbody rb;
     private void Awake()
     {
         script = FindAnyObjectByType<UIScript>();
-        canMove = FindAnyObjectByType<PlayerMovement>();
+        //canMove = FindAnyObjectByType<PlayerMovement>();
         playerMove = FindAnyObjectByType<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (rb != null && canMove && playerMove.movement.magnitude > 0)
+        Vector3 moveDir = playerMove.movement.normalized;
+
+       /* if (rb != null)
         {
-            
+
+
+            if (Vector3.Dot(moveDir, playerMove.transform.forward) > 0.5f)
+            {
+                Debug.Log("Moving forward");
+                forceDirection.y = 0;
+                forceDirection.Normalize();
+
+                rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
+            }
+            else if (Vector3.Dot(moveDir, playerMove.transform.forward) < -0.5f)
+            {
+                Debug.Log("Moving backward");
+                /* forceDirection.y = 0;
+                 forceDirection.Normalize();
+
+                 rb.AddForceAtPosition(-forceDirection * forceMagnitude, rb.transform.position, ForceMode.Impulse);
+            }
+        }
+
+        /*if (rb != null && Vector3.Dot(playerMove.movement.normalized, playerMove.transform.forward) > 0.5f)
+        {
+            Debug.Log("Moving forward");
             forceDirection.y = 0;
             forceDirection.Normalize();
 
             rb.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
         }
-        else if (rb != null && canMove && playerMove.movement.magnitude < 0)
-        {   
+        else if (rb != null && Vector3.Dot(playerMove.movement.normalized, playerMove.transform.forward) < -0.5f)
+        {
+            Debug.Log("Moving backward");
             forceDirection.y = 0;
             forceDirection.Normalize();
 
-            rb.AddForceAtPosition(-forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
-        }
+            rb.AddForceAtPosition(-forceDirection * forceMagnitude, rb.transform.position, ForceMode.Impulse);
+        }*/
     }
 
     private void OnCollisionStay(Collision hit)
     {
-        rb = hit.gameObject.GetComponent<Rigidbody>();
-        forceDirection = transform.position - hit.gameObject.transform.position;
-
+     
+            rb = hit.gameObject.GetComponent<Rigidbody>();
+            forceDirection = transform.position - hit.gameObject.transform.position;
+            playerMove.gameObject.transform.forward = hit.gameObject.transform.forward;
+        
+            
+        
     }
 
     private void OnCollisionExit(Collision hit)
