@@ -56,11 +56,11 @@ public class PressurePlate : MonoBehaviour
                 {
                     triggerd = true;
                     added = true;
-                    door[1].Switches++;
-                    door[0].Switches++;
-
+                    for (int i = 0; i < door.Length; i++)
+                    {
+                        door[i].Switches++;
+                    }
                 }
-
             }
         }
     }
