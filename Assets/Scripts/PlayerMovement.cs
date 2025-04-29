@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float groundDrag;
 
-    public float pullSpeed;
+    PushBlock PushBlock;
 
     float gravityForce;
 
@@ -36,8 +36,6 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask; // assign this in Inspector
 
     Vector2 movementInput;
-
-    //[SerializeField] Transform movementTransform;
 
     [Header("Camera")]
 
@@ -60,11 +58,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Transform cameraTransform;
 
-    [SerializeField] bool isInteracting;
+   // [SerializeField] bool isInteracting;
 
-    bool isPulling = false;
-
-    GameObject targetBlock;
+   // GameObject targetBlock;
 
     private void Start()
     {
@@ -108,28 +104,9 @@ public class PlayerMovement : MonoBehaviour
         cachedCameraRight.Normalize();
     }
 
-    private void OnInteract(InputValue value)
-    {
-        if (value.isPressed)
-        {
-            isInteracting = true;
-            currentSpeed = 1;
-        }
-
-        else
-        {
-            rb.linearDamping = 1;
-            rb.mass = 1;
-            currentSpeed = 10;
-            isInteracting = false;
-        }
-    }
-
     private void FixedUpdate()
     {
         MovePlayer();
-
-        IsPulling();
 
         //StepClimb();
 
@@ -144,31 +121,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             gravityForce = 1;
-        }
-    }
-
-    private void IsPulling()
-    {
-        if (isInteracting && targetBlock != null && isPulling)
-        {
-            // Direction player is moving in
-            Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
-            rb.mass = 5;
-            rb.linearDamping = 5;
-            currentSpeed = 1f;         
-            // If the player is moving, pull the block
-            if (playerMoveDir.magnitude > 0f)
-            {
-                playerMoveDir.x = 0;
-                //targetBlock.position.x = 0;
-                targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
-            }
-        }
-        else
-        {
-            rb.mass = 1;
-            rb.linearDamping = 1;
-           
         }
     }
 
@@ -191,27 +143,39 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
-        movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
-
-        playerMoveDir = movement.normalized;
-
-        if (movement.magnitude > 0)
+        if (PushBlock != null && PushBlock.CanMove)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
-        }
-        else if (movement.magnitude > 0 && isPulling)
-        {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, 1);
-            currentSpeed = 1;
+            movement = movementInput.y * cachedCameraForward;
         }
         else
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
+            
+            movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
+
+        }
+
+        playerMoveDir = movement.normalized;
+
+
+        if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
+        {
+            Debug.Log("PushBlack");
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
+
+        }
+        else if (movement.magnitude > 0)
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            Debug.Log("Else");
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
         rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;
 
-        if (!isInteracting && playerMoveDir != Vector3.zero)
+        if (playerMoveDir != Vector3.zero)
         {
            
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
@@ -224,9 +188,7 @@ public class PlayerMovement : MonoBehaviour
         if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             Debug.Log("It Collides");
-            targetBlock = hit.gameObject;
-            isPulling = true;
-            currentSpeed = 1;
+            PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
     }
 
@@ -235,9 +197,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
-            isPulling = false;
-            rb.linearDamping = 1;
-            rb.mass = 1;
+            //PushBlock = null;
             
         }
     }
