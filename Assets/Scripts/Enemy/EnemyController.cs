@@ -1,5 +1,6 @@
 using Unity.Behavior;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -29,44 +30,44 @@ public class EnemyController : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerReference.transform.position);
 
-        if (distanceToPlayer <= detectionRange)
-        {
-            // Player inside detection range
-            if (!isChasingPlayer)
-            {
-                isChasingPlayer = true;
-                Debug.Log("Player entered detection range: Start chasing!");
-            }
+        // if (distanceToPlayer <= detectionRange)
+        // {
+        //     // Player inside detection range
+        //     if (!isChasingPlayer)
+        //     {
+        //         isChasingPlayer = true;
+        //         Debug.Log("Player entered detection range: Start chasing!");
+        //     }
 
-            PlayerTarget = playerReference;
-            LastKnownPlayerPosition = playerReference.transform.position;
-            memoryTimer = memoryDuration; // Reset memory timer
-        }
-        else
-        {
-            // Player outside detection range
-            if (memoryTimer > 0)
-            {
-                memoryTimer -= Time.deltaTime;
+        //     PlayerTarget = playerReference;
+        //     LastKnownPlayerPosition = playerReference.transform.position;
+        //     memoryTimer = memoryDuration; // Reset memory timer
+        // }
+        // else
+        // {
+        //     // Player outside detection range
+        //     if (memoryTimer > 0)
+        //     {
+        //         memoryTimer -= Time.deltaTime;
 
-                if (memoryTimer <= 0)
-                {
-                    // Fully forget the player
-                    isChasingPlayer = false;
-                    PlayerTarget = null;
-                    Debug.Log("Memory faded: Stop chasing player!");
-                }
-                else
-                {
-                    // Still remembering player
-                    Debug.Log($"Remembering player... ({memoryTimer:F1}s left)");
-                }
-            }
-        }
+        //         if (memoryTimer <= 0)
+        //         {
+        //             // Fully forget the player
+        //             isChasingPlayer = false;
+        //             PlayerTarget = null;
+        //             Debug.Log("Memory faded: Stop chasing player!");
+        //         }
+        //         else
+        //         {
+        //             // Still remembering player
+        //             Debug.Log($"Remembering player... ({memoryTimer:F1}s left)");
+        //         }
+        //     }
+        // }
 
         if (PlayerTarget != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, PlayerTarget.transform.position, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, PlayerTarget.transform.position, moveSpeed);
         }
     }
 

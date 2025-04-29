@@ -11,6 +11,21 @@ public partial class LineOfSightCheckCondition : Condition
 
     public override bool IsTrue()
     {
-        return Detector.Value.PerformDetection(Target.Value) != null;
+        var detected = Detector.Value.PerformDetection(Target.Value);
+        if (detected != null)
+        {
+            Blackboard.ReferenceEquals("LastKnownPosition", detected.transform.position);
+            Blackboard.ReferenceEquals("MemoryTimer", Detector.Value); // Example usage
+            return true;
+        }
+
+        return false;
     }
+
+
+    // OLD LOGIC
+    // public override bool IsTrue()
+    // {
+    //     return Detector.Value.PerformDetection(Target.Value) != null;
+    // }
 }

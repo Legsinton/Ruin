@@ -33,31 +33,28 @@ public class RangeDetector : MonoBehaviour
             UpdateDetector();
         }
     }
-
     public GameObject UpdateDetector()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, angle, targetMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, targetMask);
 
-        if (colliders.Length > 0)
+        DetectedTarget = null;
+
+        foreach (var collider in colliders)
         {
-            DetectedTarget = colliders[0].gameObject;
-            Transform target = colliders[0].transform;
+            Transform target = collider.transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
             if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
-                    DetectedTarget = colliders[0].gameObject;
-                else
-                    DetectedTarget = null;
-            }
-            else
-            {
-                DetectedTarget = null;
+                {
+                    DetectedTarget = collider.gameObject;
+                    break; // stop at first valid target
+                }
             }
         }
+
         return DetectedTarget;
     }
 }
