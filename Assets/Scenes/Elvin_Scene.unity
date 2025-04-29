@@ -417,7 +417,7 @@ Transform:
   m_GameObject: {fileID: 224486355}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.95, y: 1.47, z: 9.39}
+  m_LocalPosition: {x: -6, y: 1.76, z: 9.58}
   m_LocalScale: {x: 1, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -453,6 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 2
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 224486360}
 --- !u!1 &268481674
 GameObject:
@@ -594,6 +596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 8
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 268481679}
 --- !u!1 &303909264
 GameObject:
@@ -989,6 +993,138 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1894231118}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &416615912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 416615916}
+  - component: {fileID: 416615915}
+  - component: {fileID: 416615914}
+  - component: {fileID: 416615913}
+  - component: {fileID: 416615917}
+  m_Layer: 0
+  m_Name: Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &416615913
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416615912}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &416615914
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416615912}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 3d073c212237b304893dde1950044ef9, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &416615915
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416615912}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &416615916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416615912}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -8.39, y: 2, z: -0}
+  m_LocalScale: {x: 2, y: 3, z: 0.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &416615917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416615912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3e428baf28ac746abbea25b1e5d0e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkPressSequence: 0
+  buttons:
+  - {fileID: 1085962811}
+  - {fileID: 224486361}
+  - {fileID: 1510712844}
+  - {fileID: 1174622280}
+  - {fileID: 2068922272}
+  - {fileID: 949613863}
+  - {fileID: 669035940}
+  - {fileID: 268481680}
+  correctSequence: 0200000001000000030000000700000008000000
 --- !u!1 &669035934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1265,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 7
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 669035939}
 --- !u!1 &949613857
 GameObject:
@@ -1270,6 +1408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 6
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 949613862}
 --- !u!1 &1085962805
 GameObject:
@@ -1375,7 +1515,7 @@ Transform:
   m_GameObject: {fileID: 1085962805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.37, y: 1.76, z: 9.58}
+  m_LocalPosition: {x: -8, y: 1.76, z: 9.58}
   m_LocalScale: {x: 1, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1411,6 +1551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 1
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 1085962810}
 --- !u!1 &1174622274
 GameObject:
@@ -1552,6 +1694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 4
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 1174622279}
 --- !u!1 &1261266666
 GameObject:
@@ -1754,7 +1898,7 @@ Transform:
   m_GameObject: {fileID: 1510712838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.24, y: 1.76, z: 9.58}
+  m_LocalPosition: {x: -4, y: 1.76, z: 9.58}
   m_LocalScale: {x: 1, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1790,6 +1934,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 3
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 1510712843}
 --- !u!1 &1536427147
 GameObject:
@@ -2075,6 +2221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonID: 5
+  puzzleManager: {fileID: 416615917}
   outlineComponent: {fileID: 2068922271}
 --- !u!1001 &3832213064447049145
 PrefabInstance:
@@ -2212,3 +2360,4 @@ SceneRoots:
   - {fileID: 949613861}
   - {fileID: 669035938}
   - {fileID: 268481678}
+  - {fileID: 416615916}
