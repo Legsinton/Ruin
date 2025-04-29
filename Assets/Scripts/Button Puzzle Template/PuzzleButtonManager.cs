@@ -6,6 +6,7 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] bool checkPressSequence;
     [SerializeField] List<PuzzleButton> buttons;
     [SerializeField] List<int> correctSequence;
+    [SerializeField] DoorScript door;
 
     List<int> playerInput = new List<int>();
 
@@ -58,6 +59,8 @@ public class PuzzleManager : MonoBehaviour
         {
             button.PuzzleComplete();
         }
+
+        door.AddSwitch();
     }
     
     private void ResetPuzzle()
