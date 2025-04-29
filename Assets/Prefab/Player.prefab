@@ -188,10 +188,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: bf913513576ba3a4086b069cfd832215, type: 2}
   cam: {fileID: 0}
-  mask:
-    serializedVersion: 2
-    m_Bits: 64
-  player: {fileID: 1130461663377977015}
   canSee: 0
 --- !u!65 &1224513481292570000
 BoxCollider:
@@ -229,7 +225,7 @@ GameObject:
   - component: {fileID: 2961865858088359948}
   m_Layer: 9
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -324,18 +320,17 @@ MonoBehaviour:
   currentVelocity: 2
   acceleration: 5
   groundDrag: 21.05
-  pullSpeed: 1
+  playerMoveDir: {x: 0, y: 0, z: 0}
+  movement: {x: 0, y: 0, z: 0}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  movementTransform: {fileID: 6310075026258042403}
   capsule: {fileID: 7656460790587127161}
   stepUpLower: {fileID: 2472653049047422504}
   stepUpHigher: {fileID: 2584966170327979020}
   stepHeight: 0.3
   stepSmooth: 0.2
-  cameraTransform: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
-  isInteracting: 0
+  cameraTransform: {fileID: 0}
 --- !u!114 &2961865858088359948
 MonoBehaviour:
   m_ObjectHideFlags: 0
