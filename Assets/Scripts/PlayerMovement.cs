@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isGrounded)
         {
-            gravityForce = 1000;
+            gravityForce = 40;
             rb.linearVelocity += Vector3.down * gravityForce * Time.deltaTime;
         }
         else
@@ -173,7 +173,9 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        rb.linearVelocity = movement.normalized * currentVelocity * movement.magnitude;
+        Vector3 vel = movement.normalized * currentVelocity * movement.magnitude;
+        vel.y = rb.linearVelocity.y; // preserve current fall speed
+        rb.linearVelocity = vel;
 
         if (playerMoveDir != Vector3.zero)
         {

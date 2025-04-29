@@ -8,6 +8,7 @@ public class PressurePlate : MonoBehaviour
     Rigidbody rb;
     public bool triggerd = false;
     public DoorScript[] door;
+    public MovingPlatform[] platforms;
     Vector3 targetPosition;
     Vector3 currentPoisition;
     Vector3 originalPosition;
@@ -58,6 +59,9 @@ public class PressurePlate : MonoBehaviour
                     added = true;
                     door[1].Switches++;
                     door[0].Switches++;
+                    platforms[0].Switches++;
+                    platforms[1].Switches++;
+
 
                 }
 
