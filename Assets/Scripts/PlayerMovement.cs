@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementInput;
 
-    [SerializeField] Transform movementTransform;
+    //[SerializeField] Transform movementTransform;
 
     [Header("Camera")]
 
