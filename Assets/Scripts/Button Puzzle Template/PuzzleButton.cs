@@ -51,8 +51,6 @@ public class PuzzleButton : MonoBehaviour, IInteracting
 
     public void Press()
     {
-        //Debug.Log($"Button {buttonID} pressed.");
-
         buttonPressed = true;
         GetComponent<Renderer>().material.color = Color.black;
         puzzleManager.RegisterButtonPress(buttonID);
