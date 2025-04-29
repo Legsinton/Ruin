@@ -485,6 +485,46 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92274181}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &107374270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 107374271}
+  m_Layer: 0
+  m_Name: ButtonPuzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &107374271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107374270}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 247008132}
+  - {fileID: 1092242122}
+  - {fileID: 1423741170}
+  - {fileID: 476553760}
+  - {fileID: 263780178}
+  - {fileID: 1140171928}
+  - {fileID: 1926789575}
+  - {fileID: 153760169}
+  - {fileID: 332204188}
+  m_Father: {fileID: 346512669}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &112726141 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1839985163773629222, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
@@ -538,7 +578,7 @@ GameObject:
   - component: {fileID: 148779634}
   - component: {fileID: 148779633}
   m_Layer: 0
-  m_Name: Door (2)
+  m_Name: Door 2
   m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,11 +593,11 @@ Transform:
   m_GameObject: {fileID: 148779631}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 64.12747, y: 3.5173855, z: 64.80804}
-  m_LocalScale: {x: 3.022615, y: 6.977945, z: 1}
+  m_LocalPosition: {x: 64.12747, y: 3.5173855, z: 64.19804}
+  m_LocalScale: {x: 3.0226152, y: 6.977945, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1019216377}
+  m_Father: {fileID: 755779900}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &148779633
 MonoBehaviour:
@@ -656,7 +696,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -672,7 +712,7 @@ PrefabInstance:
       objectReference: {fileID: 112726142}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
-      value: PuzzleButton (6)
+      value: PuzzleButton Green
       objectReference: {fileID: 0}
     - target: {fileID: 8436202517229708120, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -924,7 +964,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1839985163773629222, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
       propertyPath: m_Name
@@ -1094,7 +1134,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1110,7 +1150,7 @@ PrefabInstance:
       objectReference: {fileID: 112726142}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
-      value: PuzzleButton (3)
+      value: PuzzleButton Brown
       objectReference: {fileID: 0}
     - target: {fileID: 8436202517229708120, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1266,7 +1306,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1903258192600579183, guid: d122edd5e9a63114a913128cffeb5d74, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1310,7 +1350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2956454051107778202, guid: d122edd5e9a63114a913128cffeb5d74, type: 3}
       propertyPath: m_Name
-      value: Painting (1)
+      value: ButtonPuzzleInformation
       objectReference: {fileID: 0}
     - target: {fileID: 4479639846556117317, guid: d122edd5e9a63114a913128cffeb5d74, type: 3}
       propertyPath: script
@@ -1365,22 +1405,11 @@ Transform:
   m_Children:
   - {fileID: 658367785}
   - {fileID: 1809240426}
-  - {fileID: 1019216377}
-  - {fileID: 1508353430}
-  - {fileID: 1183321205}
-  - {fileID: 491362353}
-  - {fileID: 1997691103}
   - {fileID: 1699849302}
   - {fileID: 1801068060}
-  - {fileID: 247008132}
-  - {fileID: 1423741170}
-  - {fileID: 1092242122}
-  - {fileID: 263780178}
-  - {fileID: 476553760}
-  - {fileID: 1140171928}
-  - {fileID: 1926789575}
-  - {fileID: 153760169}
-  - {fileID: 332204188}
+  - {fileID: 107374271}
+  - {fileID: 1154408638}
+  - {fileID: 755779900}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &359140694
@@ -1558,7 +1587,7 @@ Transform:
   m_GameObject: {fileID: 456245751}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 64.1, y: 3.5, z: 55.72}
+  m_LocalPosition: {x: 64.1, y: 3.5, z: 55.11}
   m_LocalScale: {x: 15.22, y: 7.0095, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1644,7 +1673,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -1660,7 +1689,7 @@ PrefabInstance:
       objectReference: {fileID: 112726142}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
-      value: PuzzleButton (1)
+      value: PuzzleButton Orange
       objectReference: {fileID: 0}
     - target: {fileID: 8436202517229708120, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1718,11 +1747,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 755779900}
     m_Modifications:
     - target: {fileID: 3543009146489024782, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: m_Name
-      value: PressurePlateBase (3)
+      value: PressurePlateBase 2
       objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[0]'
@@ -1934,7 +1963,7 @@ Transform:
   m_GameObject: {fileID: 655054199}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 46.957474, y: 11.75, z: 39.588036}
+  m_LocalPosition: {x: 46, y: 11.54, z: 39.588036}
   m_LocalScale: {x: 55, y: 10.580444, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2050,6 +2079,40 @@ Transform:
   - {fileID: 1741443317}
   m_Father: {fileID: 346512669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &755779899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 755779900}
+  m_Layer: 0
+  m_Name: Puzzle 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &755779900
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755779899}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 148779632}
+  - {fileID: 491362353}
+  - {fileID: 1997691103}
+  m_Father: {fileID: 346512669}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &803217942
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,7 +2217,7 @@ Transform:
   m_GameObject: {fileID: 882508999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 64.1, y: 3.5, z: 73.9}
+  m_LocalPosition: {x: 64.1, y: 3.5, z: 73.29}
   m_LocalScale: {x: 15.22, y: 7.0095, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2381,8 +2444,8 @@ Transform:
   m_GameObject: {fileID: 995437847}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 46.957474, y: 11.647385, z: 80.52804}
-  m_LocalScale: {x: 56.543617, y: 10.580444, z: 1}
+  m_LocalPosition: {x: 46, y: 11.54, z: 80.52804}
+  m_LocalScale: {x: 55, y: 10.580444, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 658367785}
@@ -2461,40 +2524,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995437847}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1019216376
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1019216377}
-  m_Layer: 0
-  m_Name: Doors
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1019216377
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1019216376}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 148779632}
-  - {fileID: 1767178722}
-  - {fileID: 1204713617}
-  m_Father: {fileID: 346512669}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1025272229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2726,7 +2755,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -2915,7 +2944,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3131,6 +3160,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145849165}
   m_CullTransparentMesh: 1
+--- !u!1 &1154408637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1154408638}
+  m_Layer: 0
+  m_Name: Puzzle 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1154408638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154408637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1204713617}
+  - {fileID: 1767178722}
+  - {fileID: 1508353430}
+  - {fileID: 1183321205}
+  m_Father: {fileID: 346512669}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1154887685
 GameObject:
   m_ObjectHideFlags: 0
@@ -3245,11 +3309,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 1154408638}
     m_Modifications:
     - target: {fileID: 5756669305941176756, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_Name
-      value: Moving Block (1)
+      value: Moving Block 1
       objectReference: {fileID: 0}
     - target: {fileID: 6044773667039221453, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3628,7 +3692,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3644,7 +3708,7 @@ PrefabInstance:
       objectReference: {fileID: 112726142}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
-      value: PuzzleButton
+      value: PuzzleButton Red
       objectReference: {fileID: 0}
     - target: {fileID: 8436202517229708120, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4005,11 +4069,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 1154408638}
     m_Modifications:
     - target: {fileID: 3543009146489024782, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: m_Name
-      value: PressurePlateBase (2)
+      value: PressurePlateBase 1
       objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: door.Array.size
@@ -5648,7 +5712,7 @@ GameObject:
   - component: {fileID: 1767178724}
   - component: {fileID: 1767178723}
   m_Layer: 0
-  m_Name: Door (3)
+  m_Name: Door 1
   m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5667,7 +5731,7 @@ Transform:
   m_LocalScale: {x: 3.0226145, y: 6.977945, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1019216377}
+  m_Father: {fileID: 1154408638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1767178723
 MonoBehaviour:
@@ -19497,7 +19561,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 107374271}
     m_Modifications:
     - target: {fileID: 1914288580461083195, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -19513,7 +19577,7 @@ PrefabInstance:
       objectReference: {fileID: 112726142}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
-      value: PuzzleButton (5)
+      value: PuzzleButton Red
       objectReference: {fileID: 0}
     - target: {fileID: 8436202517229708120, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19690,11 +19754,11 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 346512669}
+    m_TransformParent: {fileID: 755779900}
     m_Modifications:
     - target: {fileID: 5756669305941176756, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_Name
-      value: Moving Block (2)
+      value: Moving Block 2
       objectReference: {fileID: 0}
     - target: {fileID: 5824736950880489420, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -20245,7 +20309,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1019216377}
+    m_TransformParent: {fileID: 1154408638}
     m_Modifications:
     - target: {fileID: 496410812052397482, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_Size.z
@@ -20313,7 +20377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6437696385884111190, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_Name
-      value: Door Easy
+      value: Door Interact 1
       objectReference: {fileID: 0}
     - target: {fileID: 8904396471674050031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: script
@@ -20703,7 +20767,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2956454051107778202, guid: d122edd5e9a63114a913128cffeb5d74, type: 3}
       propertyPath: m_Name
-      value: Painting
+      value: Information
       objectReference: {fileID: 0}
     - target: {fileID: 4479639846556117317, guid: d122edd5e9a63114a913128cffeb5d74, type: 3}
       propertyPath: image
