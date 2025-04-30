@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] Transform capsule;
 
+    public CinemachineCamera virtualCamera;
+
     [Header("Stairs")]
 
     [SerializeField] GameObject stepUpLower;
@@ -78,6 +81,20 @@ public class PlayerMovement : MonoBehaviour
     private void OnMove(InputValue movementValue)
     {
         movementInput = movementValue.Get<Vector2>();
+    }
+
+    private void Update()
+    {
+        if (PushBlock != null && PushBlock.CanMove)
+        {
+            //virtualCamera.Follow = null;
+            virtualCamera.LookAt = null;
+        }
+        else
+        {
+            virtualCamera.Follow = capsule;
+            virtualCamera.LookAt = capsule;
+        }
     }
 
     private void LateUpdate()
@@ -160,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
         {
             Debug.Log("PushBlack");
+            //cameraTransform.right = new Vector3(0,0,0);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
 
         }
