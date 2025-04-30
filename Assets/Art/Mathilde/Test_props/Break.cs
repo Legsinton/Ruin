@@ -20,7 +20,7 @@ public class Break : MonoBehaviour
         {
             rb.isKinematic = false;
             
-            Invoke(DestroyPiece, 3); 
+            Invoke(nameof(DestroyPiece), 3); 
         }
     }
 
