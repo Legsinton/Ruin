@@ -1,31 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public class Break : MonoBehaviour
 {
-    public Rigidbody rb;
+    public Rigidbody[] rb;
 
     public bool isBroken;
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        rb.isKinematic = true;
+        rb = GetComponentsInChildren<Rigidbody>(); // Fills the array automatically
+
+        foreach (Rigidbody r in rb)
+        {
+            r.isKinematic = true; // Makes all children kinematic at start
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isBroken == true)
         {
-            rb.isKinematic = false;
-            Invoke(nameof(DestroyPiece), 3); 
+            foreach (Rigidbody r in rb)
+            {
+                r.isKinematic = false; // Let them fall now
+            }
+
+            isBroken = false; // Prevent re-triggering
+            Invoke(nameof(DestroyPiece), 5);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Breaker"))
+        if(other.gameObject.CompareTag("Player"))
         {
             isBroken=true;
         }
