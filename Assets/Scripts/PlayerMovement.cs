@@ -12,9 +12,6 @@ public class PlayerMovement : MonoBehaviour
 
     public float currentVelocity;
 
-    readonly private float movementX;
-    readonly private float movementZ;
-
     private float currentSpeed = 10;
     
     public float acceleration;
@@ -46,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform capsule;
 
     public CinemachineCamera virtualCamera;
+    [SerializeField] Transform cameraTransform;
 
     [Header("Stairs")]
 
@@ -55,15 +53,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float stepHeight;
 
     [SerializeField] float stepSmooth;
-    
-
-    [Header("Interaction")]
-
-    [SerializeField] Transform cameraTransform;
-
-   // [SerializeField] bool isInteracting;
-
-   // GameObject targetBlock;
 
     private void Start()
     {
@@ -166,9 +155,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            
             movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
-
         }
 
         playerMoveDir = movement.normalized;
@@ -191,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        Vector3 vel = movement.normalized * currentVelocity * movement.magnitude;
+        Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
 

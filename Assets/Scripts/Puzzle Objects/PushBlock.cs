@@ -25,8 +25,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         {
             Vector3 moveDir = playerMove.movement;
             moveDir.y = 0;
-            moveDir.x = 0;
-
+            
             if (moveDir.magnitude > 0)
             {
                 transform.position += moveDir.normalized * pullSpeed * Time.deltaTime;
