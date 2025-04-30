@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float currentVelocity;
 
     private float currentSpeed = 10;
+
+    [SerializeField] float value;
     
     public float acceleration;
 
@@ -43,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform capsule;
 
     public CinemachineCamera virtualCamera;
+    public CinemachineFollow follow;
+    CinemachineOrbitalFollow orbitalFollow;
     [SerializeField] Transform cameraTransform;
 
     [Header("Stairs")]
@@ -56,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
@@ -64,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        orbitalFollow = virtualCamera.GetComponent<CinemachineOrbitalFollow>();
         stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
     }
 
@@ -76,13 +82,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (PushBlock != null && PushBlock.CanMove)
         {
-            //virtualCamera.Follow = null;
-            virtualCamera.LookAt = null;
-        }
-        else
-        {
-            virtualCamera.Follow = capsule;
-            virtualCamera.LookAt = capsule;
+            orbitalFollow.HorizontalAxis.Value = value;
+            orbitalFollow.VerticalAxis.Value = 17.5f;
         }
     }
 
@@ -152,6 +153,7 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && PushBlock.CanMove)
         {
             movement = movementInput.y * cachedCameraForward;
+            movement.z = 0;
         }
         else
         {

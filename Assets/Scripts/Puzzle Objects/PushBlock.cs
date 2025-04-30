@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
@@ -5,12 +6,17 @@ using UnityEngine.UI;
 
 public class PushBlock : MonoBehaviour , IInteracting
 {
-    private float pullSpeed = 0.87f;
-    [SerializeField] UIScript script;
-    [SerializeField] Outline outlineScript;
+    float pullSpeed = 0.87f;
+    UIScript script;
     PlayerMovement playerMove;
     Transform playerTransform;
     bool canMove;
+    Bounds playerBounds;
+    Bounds plateBounds;
+    Collider playerCollider;
+    [SerializeField] Outline outlineScript;
+    [SerializeField] float buffer;
+    [SerializeField] float bufferSides;
     public bool CanMove { get { return canMove; } }
     private void Awake()
     {   
@@ -20,6 +26,20 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     private void Update()
     {
+
+        if (playerCollider != null)
+        {
+            playerBounds = playerCollider.bounds;
+            plateBounds = GetComponent<Collider>().bounds;
+            plateBounds.Expand(new Vector3(bufferSides, buffer, bufferSides));
+
+            if (!plateBounds.Intersects(playerBounds))
+            {
+                playerTransform = null;
+                playerCollider = null;
+                Debug.Log("Bye");
+            }
+        }
 
         if (canMove && playerTransform != null && playerMove != null)
         {
@@ -32,22 +52,19 @@ public class PushBlock : MonoBehaviour , IInteracting
             }
         }
     }
-
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        playerBounds = collision.bounds; // The collider bounds of the block
+        plateBounds = GetComponent<Collider>().bounds; // The bounds of the plate
+        plateBounds.Expand(new Vector3(bufferSides, buffer, bufferSides));
+        if (plateBounds.Contains(playerBounds.min) && plateBounds.Contains(playerBounds.max))
         {
+            playerCollider = collision;
             playerTransform = collision.transform;
-            playerMove = collision.gameObject.GetComponent<PlayerMovement>();
+            Debug.Log("Hello");
         }
-    }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        playerTransform = null;
-        playerMove = null;
     }
-
     public void SetPlayer(Transform player)
     {
         playerTransform = player;
