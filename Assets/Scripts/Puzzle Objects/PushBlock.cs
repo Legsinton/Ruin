@@ -42,6 +42,12 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
     }
 
+    private void OnCollisionExit(Collision collision)
+    {
+        playerTransform = null;
+        playerMove = null;
+    }
+
     public void SetPlayer(Transform player)
     {
         playerTransform = player;
