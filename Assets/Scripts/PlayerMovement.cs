@@ -1,27 +1,48 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+//using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
-public class PlayerControls : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
 
     [Header("Movement")]
 
     public float currentVelocity;
 
-    private float movementX;
-    private float movementZ;
+    readonly private float movementX;
+    readonly private float movementZ;
 
-    public float currentSpeed;
+    private float currentSpeed = 10;
     
     public float acceleration;
 
     public float groundDrag;
 
-    public float pullSpeed;
+    PushBlock PushBlock;
 
-    private Vector3 playerMoveDir; // Add at top of class
+    float gravityForce;
+
+    public Vector3 playerMoveDir; // Add at top of class
 
     Rigidbody rb;
+    public Vector3 movement;
+
+    readonly float distToGround = 1f;
+
+    private bool isGrounded;
+
+    public LayerMask groundMask; // assign this in Inspector
+
+    Vector2 movementInput;
+
+    [Header("Camera")]
+
+    private Vector3 cachedCameraForward;
+    private Vector3 cachedCameraRight;
+
+    [SerializeField] Transform capsule;
 
     [Header("Stairs")]
 
@@ -31,29 +52,15 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] float stepHeight;
 
     [SerializeField] float stepSmooth;
+    
 
-
-    public bool isInteracting = false;
-
-    bool isPulling = false;
-
-    bool isPainting;
-
-    bool isDoor;
-
-    bool door;
-
-    public bool IsDoor { get { return isDoor; } set { isDoor = value; } }
-    public bool IsPainting { get { return isPainting; } set { isPainting = value; } }
-
-    [SerializeField] int interacted;
-
-    public int haveInteracted { get { return interacted; } set { interacted = value; } }
-
-    GameObject targetBlock;
+    [Header("Interaction")]
 
     [SerializeField] Transform cameraTransform;
-    Vector2 movementInput;
+
+   // [SerializeField] bool isInteracting;
+
+   // GameObject targetBlock;
 
     private void Start()
     {
@@ -73,72 +80,47 @@ public class PlayerControls : MonoBehaviour
         movementInput = movementValue.Get<Vector2>();
     }
 
-    private void OnInteract(InputValue value)
+    private void LateUpdate()
     {
-        if (value.isPressed)
-        {
-            isInteracting = true;
-            Debug.Log("Interact Pressed");
-        }
+        CacheCameraVectors();
 
-        else
-        {
-            rb.linearDamping = 1;
-            rb.mass = 1;
-            currentSpeed = 10;
-            isInteracting = false;
-            Debug.Log("Interact Released");
-        }
+    }
+
+    private void GroundCheck()
+    {
+        Vector3 origin = transform.position; // or you can lower this a bit if needed
+        origin.y -= 0.5f; // move origin slightly downward if your player is tall
+        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+    }
+
+    private void CacheCameraVectors()
+    {
+        cachedCameraForward = cameraTransform.forward;
+        cachedCameraForward.y = 0;
+        cachedCameraForward.Normalize();
+
+        cachedCameraRight = cameraTransform.right;
+        cachedCameraRight.y = 0;
+        cachedCameraRight.Normalize();
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
 
-        IsPulling();    
+        //StepClimb();
 
-        IsInteracting();
+        GroundCheck();
 
-        StepClimb();
-    }
 
-    private void IsPulling()
-    {
-        if (isInteracting && targetBlock != null /*&& isPulling*/)
+        if (!isGrounded)
         {
-            Debug.Log("Helloooooo");
-            // Direction player is moving in
-            Vector3 moveDir = (transform.right * movementZ + transform.forward * movementX).normalized;
-            rb.mass = 5;
-            rb.linearDamping = 5;
-            currentSpeed = 1f;
-            // If the player is moving, pull the block
-            if (playerMoveDir.magnitude > 0f)
-            {
-                targetBlock.transform.position += playerMoveDir * pullSpeed * Time.deltaTime;
-            }
+            gravityForce = 40;
+            rb.linearVelocity += Vector3.down * gravityForce * Time.deltaTime;
         }
-    }
-
-    private void IsInteracting()
-    {
-        if (isInteracting && haveInteracted == 0 && isPainting)
+        else
         {
-            haveInteracted += 1;
-            IsPainting = true;
-        }
-
-        if (isInteracting && haveInteracted == 0 && door)
-        {
-            haveInteracted += 1;
-
-            isDoor = true; 
-        }
-        else if (isInteracting && haveInteracted == 1 && door)
-        {
-            isDoor = false;
-            haveInteracted = 0;
-
+            gravityForce = 1;
         }
     }
 
@@ -153,37 +135,54 @@ public class PlayerControls : MonoBehaviour
                 rb.position -= new Vector3(0f, -stepSmooth, 0f);
             }
         }
-    }
 
+        else
+        {
+            stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
+        }
+    }
     private void MovePlayer()
     {
-        Vector3 cameraForward = cameraTransform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
-
-        Vector3 cameraRight = cameraTransform.right;
-        cameraRight.y = 0;
-        cameraRight.Normalize();
-
-        Vector3 movement = movementInput.x * cameraRight + movementInput.y * cameraForward;
-
-        playerMoveDir = movement.normalized;
-
-        if (movement.magnitude > 0)
+        if (PushBlock != null && PushBlock.CanMove)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
-        }
-        else if (movement.magnitude == 0 && isPulling)
-        {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
-
+            movement = movementInput.y * cachedCameraForward;
         }
         else
         {
+            
+            movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
+
+        }
+
+        playerMoveDir = movement.normalized;
+
+
+        if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
+        {
+            Debug.Log("PushBlack");
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
+
+        }
+        else if (movement.magnitude > 0)
+        {
+            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            Debug.Log("Else");
             currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
         }
 
-        rb.linearVelocity = movement.normalized * currentVelocity;
+        Vector3 vel = movement.normalized * currentVelocity * movement.magnitude;
+        vel.y = rb.linearVelocity.y; // preserve current fall speed
+        rb.linearVelocity = vel;
+
+        if (playerMoveDir != Vector3.zero)
+        {
+           
+            Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }
     }
 
     private void OnCollisionEnter(Collision hit)
@@ -191,49 +190,17 @@ public class PlayerControls : MonoBehaviour
         if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             Debug.Log("It Collides");
-            targetBlock = hit.gameObject;
-            isPulling = true;
-        }
-
-        if (hit.gameObject.CompareTag("Painting")) // Optional: filter by tag
-        {
-            Debug.Log("It Painting");
-            targetBlock = hit.gameObject;
-            isPainting = true;
+            PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("DoorEasy"))
-        {
-            door = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("DoorEasy"))
-        {
-            door = false;
-            IsDoor = false;
-        }
-    }
 
     private void OnCollisionExit(Collision collision) 
     {
-        if (collision.gameObject.CompareTag("Painting")) // Optional: filter by tag
-        {
-            isPainting = false;
-            haveInteracted = 0;
-        }
-
         if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
-            isPulling = false;
-            rb.linearDamping = 1;
-            rb.mass = 1;
-            currentSpeed = 10;
+            //PushBlock = null;
+            
         }
     }
 }
