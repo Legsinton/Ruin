@@ -5,17 +5,15 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
 
-    Rigidbody rb;
     public bool triggerd = false;
     public DoorScript[] door;
     public MovingPlatform[] platforms;
     Vector3 targetPosition;
-    Vector3 currentPoisition;
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
     bool added = false;
-    
+
     private void Start()
     {
         originalPosition = transform.position;
@@ -72,10 +70,22 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        rb = other.GetComponent<Rigidbody>();
         if (other.CompareTag("Pullable"))
         {
-            triggerd = false;
+            if (added)
+            {
+                triggerd = false;
+                added = false;
+                for (int i = 0; i < door.Length; i++)
+                {
+                    door[i].Switches--;
+                }
+                for (int i = 0; i < platforms.Length; i++)
+                {
+                    platforms[i].Switches--;
+                }
+            }
+
         }
     }
 }

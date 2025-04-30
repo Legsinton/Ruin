@@ -23,6 +23,11 @@ public class DoorScript : MonoBehaviour
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
+
+        else if (Switches != switchAmount)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
     }
 
     public void AddSwitch()
