@@ -13,16 +13,12 @@ public partial class MoveToLastKnownPositionAction : Action
     [SerializeReference] public BlackboardVariable<Vector3> LastKnownPosition;
     [SerializeReference] public BlackboardVariable<NavMeshAgent> Agent;
 
-    private RangeDetectorAction rangeDetectorAction;
-
     protected override Status OnUpdate()
     {
         if (LastKnownPosition == null || Agent == null)
             return Status.Failure;
 
-        //Agent.Value.SetDestination(LastKnownPosition.Value);
-
-        Debug.Log("Agnes, move to this last known position: " + LastKnownPosition.Value);
+        Agent.Value.SetDestination(LastKnownPosition.Value);
 
         if (!Agent.Value.pathPending && Agent.Value.remainingDistance <= Agent.Value.stoppingDistance)
         {
