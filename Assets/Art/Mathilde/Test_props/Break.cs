@@ -26,7 +26,7 @@ public class Break : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag=="Breaker")
+        if(other.gameObject.CompareTag("Breaker"))
         {
             isBroken=true;
         }
