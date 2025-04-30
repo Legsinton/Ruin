@@ -16,7 +16,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     Collider playerCollider;
     [SerializeField] Outline outlineScript;
     [SerializeField] float buffer;
-    [SerializeField] float bufferSides;
+    float bufferSides = 2f;
     public bool CanMove { get { return canMove; } }
     private void Awake()
     {   
