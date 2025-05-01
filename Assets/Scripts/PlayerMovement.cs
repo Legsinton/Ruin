@@ -3,39 +3,35 @@ using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-//using static Unity.Cinemachine.InputAxisControllerBase<T>;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     [Header("Movement")]
-
-    public float currentVelocity;
-
-    private float currentSpeed = 10;
-
-    [SerializeField] float value;
     
+    public Vector3 movement;
     public float acceleration;
-
     public float groundDrag;
 
+    [SerializeField] float currentSpeed = 8;
+    
+    Rigidbody rb;
     PushBlock PushBlock;
 
+    Vector2 movementInput;
+    Vector3 playerMoveDir; 
+
     float gravityForce;
+    float currentVelocity;
 
-    public Vector3 playerMoveDir; // Add at top of class
+    bool interact;
 
-    Rigidbody rb;
-    public Vector3 movement;
+    [Header("GroundCheck")]
+
+    public LayerMask groundMask; 
 
     readonly float distToGround = 1f;
 
     private bool isGrounded;
-
-    public LayerMask groundMask; // assign this in Inspector
-
-    Vector2 movementInput;
 
     [Header("Camera")]
 
@@ -43,24 +39,22 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 cachedCameraRight;
 
     [SerializeField] Transform capsule;
+    [SerializeField] Transform cameraTransform;
 
     public CinemachineCamera virtualCamera;
-    public CinemachineFollow follow;
     CinemachineOrbitalFollow orbitalFollow;
-    [SerializeField] Transform cameraTransform;
 
     [Header("Stairs")]
 
     [SerializeField] GameObject stepUpLower;
     [SerializeField] GameObject stepUpHigher;
 
-    [SerializeField] float stepHeight;
-
     [SerializeField] float stepSmooth;
+    [SerializeField] float stepHeight;
+    [SerializeField] float value;
 
     private void Start()
     {
-        
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
@@ -72,36 +66,46 @@ public class PlayerMovement : MonoBehaviour
         orbitalFollow = virtualCamera.GetComponent<CinemachineOrbitalFollow>();
         stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
     }
-
-    private void OnMove(InputValue movementValue)
-    {
-        movementInput = movementValue.Get<Vector2>();
-    }
-
     private void Update()
     {
         if (PushBlock != null && PushBlock.CanMove)
         {
-            orbitalFollow.HorizontalAxis.Value = value;
-            orbitalFollow.VerticalAxis.Value = 17.5f;
+            virtualCamera.LookAt = null;
+            if (movement.x > 0.5)
+            {
+                orbitalFollow.HorizontalAxis.Value = 82;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if ( movement.x < -0.5f)
+            {
+                orbitalFollow.HorizontalAxis.Value = -104;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if (movement.z > 0.5f)
+            {
+                orbitalFollow.HorizontalAxis.Value = 8;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if (movement.z < -0.5f)
+            {
+                orbitalFollow.HorizontalAxis.Value = 148;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+           
+        }
+        else
+        {
+            virtualCamera.LookAt = capsule;
+        }
+
+        if (PushBlock != null)
+        {
+            interact = PushBlock.CanMove;
         }
     }
-
     private void LateUpdate()
     {
-        CacheCameraVectors();
-
-    }
-
-    private void GroundCheck()
-    {
-        Vector3 origin = transform.position; // or you can lower this a bit if needed
-        origin.y -= 0.5f; // move origin slightly downward if your player is tall
-        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
-    }
-
-    private void CacheCameraVectors()
-    {
+        // For the camera to move the capsule so the interaction cast will move based on camera movement
         cachedCameraForward = cameraTransform.forward;
         cachedCameraForward.y = 0;
         cachedCameraForward.Normalize();
@@ -110,15 +114,13 @@ public class PlayerMovement : MonoBehaviour
         cachedCameraRight.y = 0;
         cachedCameraRight.Normalize();
     }
-
     private void FixedUpdate()
     {
         MovePlayer();
 
-        //StepClimb();
+        StepClimb();
 
         GroundCheck();
-
 
         if (!isGrounded)
         {
@@ -130,7 +132,16 @@ public class PlayerMovement : MonoBehaviour
             gravityForce = 1;
         }
     }
-
+    private void OnMove(InputValue movementValue)
+    {
+        movementInput = movementValue.Get<Vector2>();
+    }
+    private void GroundCheck()
+    {
+        Vector3 origin = transform.position; // or you can lower this a bit if needed
+        origin.y -= 0.5f; // move origin slightly downward if your player is tall
+        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+    }
     private void StepClimb()
     {
         RaycastHit hitLower;
@@ -142,7 +153,6 @@ public class PlayerMovement : MonoBehaviour
                 rb.position -= new Vector3(0f, -stepSmooth, 0f);
             }
         }
-
         else
         {
             stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
@@ -153,7 +163,16 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && PushBlock.CanMove)
         {
             movement = movementInput.y * cachedCameraForward;
-            movement.z = 0;
+
+            if (movement.x > 0.5 || movement.x < -0.5f)
+            {
+                movement.z = 0;
+
+            }
+            else if (movement.z > 0.5f || movement.z < -0.5f)
+            {
+                movement.x = 0; 
+            }
         }
         else
         {
@@ -166,7 +185,6 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
         {
             Debug.Log("PushBlack");
-            //cameraTransform.right = new Vector3(0,0,0);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
 
         }
@@ -176,17 +194,20 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Else");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 4, groundDrag * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, groundDrag * Time.deltaTime);
         }
 
         Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
 
-        if (playerMoveDir != Vector3.zero)
+        if (playerMoveDir != Vector3.zero && PushBlock != null && interact)
         {
-           
+         
+        }
+
+        else if (playerMoveDir != Vector3.zero && !interact)
+        {
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
@@ -196,12 +217,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
-            Debug.Log("It Collides");
             PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
     }
-
-
     private void OnCollisionExit(Collision collision) 
     {
         if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
