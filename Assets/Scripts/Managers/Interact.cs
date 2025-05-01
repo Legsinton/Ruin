@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class Interact : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class Interact : MonoBehaviour
 
     bool interactInRange = false;
     bool interacting = false;
+    public bool Interacting { get { return interacting; } set { interacting = value; } }
     bool multipleObjectsInRange = false;
 
     void OnTriggerEnter(Collider other)

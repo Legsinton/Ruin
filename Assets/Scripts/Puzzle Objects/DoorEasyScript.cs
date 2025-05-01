@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
-    
+    public Interact interact;
     Vector3 targetPosition;
     Vector3 currentPoisition;
     Vector3 originalPosition;
@@ -18,6 +18,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     {
         originalPosition = transform.position;
         script = FindAnyObjectByType<UIScript>();
+        interact = FindAnyObjectByType<Interact>();
     }
 
     void Update()
@@ -42,7 +43,10 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
+        if (interact.Interacting)
+        {
         doorClosed = !doorClosed;
+        }
     }
 
     public void ReleaseInteract() { }
@@ -50,7 +54,10 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     public void InteractInRange()
     {
         script.EnableUI();
-        outlineScript.enabled = true;
+        if (!doorClosed)
+        {
+            outlineScript.enabled = true;
+        }
     }
 
     public void InteractNotInRange()

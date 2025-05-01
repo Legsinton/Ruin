@@ -18,10 +18,12 @@ public class PushBlock : MonoBehaviour , IInteracting
     [SerializeField] float buffer;
     float bufferSides = 2f;
     public bool CanMove { get { return canMove; } set { canMove = value; } }
+    public Interact interact;
     private void Awake()
     {   
         script = FindAnyObjectByType<UIScript>();
         playerMove = FindAnyObjectByType<PlayerMovement>();
+        interact = FindAnyObjectByType<Interact>();
     }
 
     private void Update()
@@ -37,6 +39,7 @@ public class PushBlock : MonoBehaviour , IInteracting
             {
                 playerTransform = null;
                 playerCollider = null;
+                canMove = false;
                 Debug.Log("Bye");
             }
         }
@@ -72,7 +75,10 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     public void PressInteract()
     {
-        canMove = true;
+        if (interact.Interacting)
+        {
+            canMove = true;
+        }
     }
 
     public void ReleaseInteract() 
@@ -83,7 +89,10 @@ public class PushBlock : MonoBehaviour , IInteracting
     public void InteractInRange()
     {
         script.EnableUI();
-        outlineScript.enabled = true;
+        if (!canMove)
+        {
+            outlineScript.enabled = true;
+        }
     }
 
     public void InteractNotInRange()
