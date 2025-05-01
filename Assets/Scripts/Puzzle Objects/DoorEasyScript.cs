@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
     public Interact interact;
+    public PushBlock pushBlock;
     Vector3 targetPosition;
     Vector3 currentPoisition;
     Vector3 originalPosition;
@@ -41,11 +42,33 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Pullable"))
+        {
+            pushBlock = other.GetComponent<PushBlock>();
+        }
+       
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Pullable"))
+        {
+            pushBlock = null;
+        }
+       
+    }
+
     public void PressInteract()
     {
-        if (interact.Interacting)
+        if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
         {
-        doorClosed = !doorClosed;
+            doorClosed = !doorClosed;
+        }
+        else
+        {
+            doorClosed = !doorClosed;
         }
     }
 
