@@ -317,20 +317,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVelocity: 2
+  movement: {x: 0, y: 0, z: 0}
   acceleration: 5
   groundDrag: 21.05
-  playerMoveDir: {x: 0, y: 0, z: 0}
-  movement: {x: 0, y: 0, z: 0}
+  currentSpeed: 8
   groundMask:
     serializedVersion: 2
     m_Bits: 8
   capsule: {fileID: 7656460790587127161}
+  cameraTransform: {fileID: 0}
+  virtualCamera: {fileID: 0}
   stepUpLower: {fileID: 2472653049047422504}
   stepUpHigher: {fileID: 2584966170327979020}
-  stepHeight: 0.3
   stepSmooth: 0.2
-  cameraTransform: {fileID: 0}
+  stepHeight: 0.3
+  value: 82
 --- !u!114 &2961865858088359948
 MonoBehaviour:
   m_ObjectHideFlags: 0
