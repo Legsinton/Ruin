@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour
 {
 
     public bool triggerd = false;
-    public DoorScript[] door;
+    public GateScript[] gate;
     public MovingPlatform[] platforms;
     Vector3 targetPosition;
     Vector3 originalPosition;
@@ -55,9 +55,9 @@ public class PressurePlate : MonoBehaviour
                 {
                     triggerd = true;
                     added = true;
-                    for (int i = 0; i < door.Length; i++)
+                    for (int i = 0; i < gate.Length; i++)
                     {
-                        door[i].Switches++;
+                        gate[i].Switches++;
                     }
                     for (int i = 0; i < platforms.Length; i++)
                     {
@@ -76,9 +76,9 @@ public class PressurePlate : MonoBehaviour
             {
                 triggerd = false;
                 added = false;
-                for (int i = 0; i < door.Length; i++)
+                for (int i = 0; i < gate.Length; i++)
                 {
-                    door[i].Switches--;
+                    gate[i].Switches--;
                 }
                 for (int i = 0; i < platforms.Length; i++)
                 {
