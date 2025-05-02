@@ -24,7 +24,7 @@ public class DoorScript : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (doorClosed && !doorMoving)
+        if (doorClosed)
         {
             
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -32,12 +32,14 @@ public class DoorScript : MonoBehaviour, IInteracting
 
         }
 
+        DoorMoving();
+
         OpenDoor();
     }
 
     void OpenDoor()
     {
-        if (!doorClosed && !doorMoving)
+        if (!doorClosed)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
@@ -45,7 +47,7 @@ public class DoorScript : MonoBehaviour, IInteracting
 
     void DoorMoving()
     {
-        if (Vector3.Distance(transform.position, targetPosition) > 0.01f || Vector3.Distance(transform.position, originalPosition) < 0.01f)
+        if (doorClosed && Vector3.Distance(transform.position, targetPosition) > 0.01f || doorClosed && Vector3.Distance(transform.position, originalPosition) < 0.01f) 
         {
             doorMoving = true;
         }
@@ -73,7 +75,6 @@ public class DoorScript : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        Invoke(nameof(DoorMoving), 3.4f);
         if (!doorMoving)
         {
             doorClosed = !doorClosed;
@@ -86,7 +87,7 @@ public class DoorScript : MonoBehaviour, IInteracting
     public void InteractInRange()
     {
         script.EnableUI();
-        if (!doorClosed)
+        if (!doorMoving)
         {
             outlineScript.enabled = true;
         }
