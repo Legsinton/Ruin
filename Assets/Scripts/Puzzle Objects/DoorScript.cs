@@ -7,11 +7,11 @@ public class DoorScript : MonoBehaviour, IInteracting
     public Interact interact;
     public PushBlock pushBlock;
     Vector3 targetPosition;
-    Vector3 currentPoisition;
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
     public bool doorClosed = false;
+    bool playerOnTop;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
 
@@ -48,6 +48,11 @@ public class DoorScript : MonoBehaviour, IInteracting
         {
             pushBlock = other.GetComponent<PushBlock>();
         }
+
+        if (other.CompareTag("Player"))
+        {
+            playerOnTop = true;
+        }
        
     }
 
@@ -57,18 +62,22 @@ public class DoorScript : MonoBehaviour, IInteracting
         {
             pushBlock = null;
         }
-       
+
+        if (other.CompareTag("Player"))
+        {
+            playerOnTop = false;
+        }
+
     }
 
     public void PressInteract()
     {
-        if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
+        if (!playerOnTop)
         {
             doorClosed = !doorClosed;
         }
-        else
+        else if (playerOnTop)
         {
-            doorClosed = !doorClosed;
         }
     }
 

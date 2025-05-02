@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class GateScript : MonoBehaviour
 {
-    public PressurePlate pressurePlate;
     [SerializeField] int switches;
     public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;

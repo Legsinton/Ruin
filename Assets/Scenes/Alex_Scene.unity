@@ -166,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressurePlate: {fileID: 1860684710}
   switches: 0
   switchAmount: 1
   pressDepth: 7
@@ -890,7 +889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressurePlate: {fileID: 1860684710}
   switches: 0
   switchAmount: 2
   pressDepth: 7
@@ -3500,19 +3498,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7029312405635255326, guid: b333c176ca84f6d4cae66b941ad4a1fe, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956338
+      value: 0.99563867
       objectReference: {fileID: 0}
     - target: {fileID: 7029312405635255326, guid: b333c176ca84f6d4cae66b941ad4a1fe, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08118344
+      value: 0.08118386
       objectReference: {fileID: 0}
     - target: {fileID: 7029312405635255326, guid: b333c176ca84f6d4cae66b941ad4a1fe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.045920074
+      value: -0.04581391
       objectReference: {fileID: 0}
     - target: {fileID: 7029312405635255326, guid: b333c176ca84f6d4cae66b941ad4a1fe, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0037442986
+      value: 0.003735642
       objectReference: {fileID: 0}
     - target: {fileID: 7029312405635255326, guid: b333c176ca84f6d4cae66b941ad4a1fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3606,11 +3604,23 @@ PrefabInstance:
       value: PressurePlateBase (4)
       objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: gate.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[0]'
       value: 
       objectReference: {fileID: 148779633}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1767178723}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: 'gate.Array.data[0]'
+      value: 
+      objectReference: {fileID: 148779633}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: 'gate.Array.data[1]'
       value: 
       objectReference: {fileID: 1767178723}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
@@ -3762,11 +3772,23 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: gate.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[0]'
       value: 
       objectReference: {fileID: 148779633}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1767178723}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: 'gate.Array.data[0]'
+      value: 
+      objectReference: {fileID: 148779633}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: 'gate.Array.data[1]'
       value: 
       objectReference: {fileID: 1767178723}
     - target: {fileID: 9040777388548311219, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
@@ -5310,7 +5332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressurePlate: {fileID: 1860684710}
   switches: 0
   switchAmount: 1
   pressDepth: 7
@@ -33882,9 +33903,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerd: 0
-  door:
+  gate:
   - {fileID: 2116844472}
-  - {fileID: 28586781}
   platforms: []
   pressDepth: 0.2
   moveSpeed: 1.04
@@ -33995,19 +34015,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956338
+      value: 0.99563867
       objectReference: {fileID: 0}
     - target: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08118345
+      value: 0.08118387
       objectReference: {fileID: 0}
     - target: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.045920074
+      value: -0.04581391
       objectReference: {fileID: 0}
     - target: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0037442986
+      value: 0.003735643
       objectReference: {fileID: 0}
     - target: {fileID: 778501775076631680, guid: ca3e1682fc099564894ed8e1746894f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -34525,11 +34545,19 @@ PrefabInstance:
       value: PressurePlateBase
       objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: gate.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[0]'
       value: 
       objectReference: {fileID: 2116844472}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'door.Array.data[1]'
+      value: 
+      objectReference: {fileID: 28586781}
+    - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
+      propertyPath: 'gate.Array.data[0]'
       value: 
       objectReference: {fileID: 28586781}
     - target: {fileID: 9040777388548311219, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
