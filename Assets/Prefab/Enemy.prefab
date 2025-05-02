@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 8826233821192418032}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -272,6 +272,7 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 256
+  position: 
 --- !u!114 &3229521380463986099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +334,7 @@ MonoBehaviour:
   - rid: 2920248458600776028
   - rid: 2920248458600776419
   - rid: 2920248483948790176
+  - rid: 2920248598274244909
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -401,6 +403,14 @@ MonoBehaviour:
           m_Value1: 222690110450134636
         Name: currentState
         m_Value: 1
+    - rid: 2920248598274244909
+      type: {class: 'BlackboardVariable`1[[UnityEngine.AI.NavMeshAgent, UnityEngine.AIModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14869688016442758659
+          m_Value1: 7429198151731938329
+        Name: Agent
+        m_Value: {fileID: 8017602805268497981}
 --- !u!95 &4833192043281076607
 Animator:
   serializedVersion: 7
@@ -409,7 +419,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2380043004272649322}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f24cd4320fb6a334596e591cd6f5e09d, type: 2}
   m_CullingMode: 0
@@ -430,7 +440,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2380043004272649322}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c46fbb75462728d49b66eef5a26eeec2, type: 3}
   m_Name: 
@@ -441,7 +451,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   detectionRange: 4
-  moveSpeed: 2
+  moveSpeed: 3.5
   memoryDuration: 5
 --- !u!114 &8826233821192418032
 MonoBehaviour:
