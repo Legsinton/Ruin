@@ -4,8 +4,9 @@ using Unity.Behavior;
 [BlackboardEnum]
 public enum State
 {
-    Idle,
+	Idle,
 	Patrol,
+	Searching,
 	Chase,
 	Attack
 }
