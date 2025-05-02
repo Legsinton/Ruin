@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RangeDetector : MonoBehaviour
 {
-
     [Header("Detection Settings")]
     [SerializeField] private float radius;
     [Range(0, 360)]
@@ -11,16 +10,21 @@ public class RangeDetector : MonoBehaviour
     public LayerMask targetMask;
     [SerializeField] private LayerMask obstructionMask;
 
+    public GameObject DetectedTarget { get; private set; }
+    public Vector3? LastKnownPosition { get; private set; }
 
-    public GameObject DetectedTarget
-    {
-        get;
-        set;
-    }
+    public string position;
+    private bool previouslyDetected = false;
 
-    private void Start()
+    void Start()
     {
         StartCoroutine(FOVRoutine());
+    }
+
+    void Update()
+    {
+        position = LastKnownPosition.ToString();
+
     }
 
     private IEnumerator FOVRoutine()
@@ -36,28 +40,40 @@ public class RangeDetector : MonoBehaviour
 
     public GameObject UpdateDetector()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, angle, targetMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, targetMask);
 
-        if (colliders.Length > 0)
+        GameObject newDetectedTarget = null;
+
+        foreach (var collider in colliders)
         {
-            DetectedTarget = colliders[0].gameObject;
-            Transform target = colliders[0].transform;
+            Transform target = collider.transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
             if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
-                    DetectedTarget = colliders[0].gameObject;
-                else
-                    DetectedTarget = null;
-            }
-            else
-            {
-                DetectedTarget = null;
+                {
+                    newDetectedTarget = collider.gameObject;
+                    break;
+                }
             }
         }
+
+        if (previouslyDetected && newDetectedTarget == null && DetectedTarget != null)
+        {
+            LastKnownPosition = DetectedTarget.transform.position;
+            Debug.Log("Agnes, last known position: " + LastKnownPosition);
+        }
+
+        DetectedTarget = newDetectedTarget;
+        previouslyDetected = DetectedTarget != null;
+
         return DetectedTarget;
+    }
+
+    public void ClearLastKnownPosition()
+    {
+        LastKnownPosition = null;
     }
 }
