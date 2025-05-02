@@ -11,7 +11,7 @@ public class DoorScript : MonoBehaviour, IInteracting
     public float pressDepth;
     public float moveSpeed;
     public bool doorClosed = false;
-    bool playerOnTop;
+    bool doorMoving;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
 
@@ -24,10 +24,11 @@ public class DoorScript : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (doorClosed) 
+        if (doorClosed && !doorMoving)
         {
+            
             targetPosition = originalPosition - Vector3.up * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime); 
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         }
 
@@ -36,9 +37,21 @@ public class DoorScript : MonoBehaviour, IInteracting
 
     void OpenDoor()
     {
-        if (!doorClosed)
+        if (!doorClosed && !doorMoving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition , moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    void DoorMoving()
+    {
+        if (Vector3.Distance(transform.position, targetPosition) > 0.01f || Vector3.Distance(transform.position, originalPosition) < 0.01f)
+        {
+            doorMoving = true;
+        }
+        else
+        {
+            doorMoving = false;
         }
     }
 
@@ -48,12 +61,6 @@ public class DoorScript : MonoBehaviour, IInteracting
         {
             pushBlock = other.GetComponent<PushBlock>();
         }
-
-        if (other.CompareTag("Player"))
-        {
-            playerOnTop = true;
-        }
-       
     }
 
     private void OnTriggerExit(Collider other)
@@ -62,22 +69,15 @@ public class DoorScript : MonoBehaviour, IInteracting
         {
             pushBlock = null;
         }
-
-        if (other.CompareTag("Player"))
-        {
-            playerOnTop = false;
-        }
-
     }
 
     public void PressInteract()
     {
-        if (!playerOnTop)
+        Invoke(nameof(DoorMoving), 3.4f);
+        if (!doorMoving)
         {
             doorClosed = !doorClosed;
-        }
-        else if (playerOnTop)
-        {
+
         }
     }
 
