@@ -20,7 +20,7 @@ public class SceneManagement : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
         gameOverText.gameObject.SetActive(false);
-        SceneManager.LoadScene("Agnes_Scene");
+        SceneManager.LoadScene("Playtest_1");
     }
 
 
