@@ -2,16 +2,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DoorScript : MonoBehaviour, IInteracting
+public class DoorEasyScript : MonoBehaviour, IInteracting
 {
     public Interact interact;
     public PushBlock pushBlock;
     Vector3 targetPosition;
+    Vector3 currentPoisition;
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
     public bool doorClosed = false;
-    bool doorMoving;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
 
@@ -26,14 +26,9 @@ public class DoorScript : MonoBehaviour, IInteracting
     {
         if (doorClosed)
         {
-            
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-
         }
-
-        DoorMoving();
-
         OpenDoor();
     }
 
@@ -45,24 +40,13 @@ public class DoorScript : MonoBehaviour, IInteracting
         }
     }
 
-    void DoorMoving()
-    {
-        if (doorClosed && Vector3.Distance(transform.position, targetPosition) > 0.01f || doorClosed && Vector3.Distance(transform.position, originalPosition) < 0.01f) 
-        {
-            doorMoving = true;
-        }
-        else
-        {
-            doorMoving = false;
-        }
-    }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Pullable"))
         {
             pushBlock = other.GetComponent<PushBlock>();
         }
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -71,14 +55,18 @@ public class DoorScript : MonoBehaviour, IInteracting
         {
             pushBlock = null;
         }
+
     }
 
     public void PressInteract()
     {
-        if (!doorMoving)
+        if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
         {
             doorClosed = !doorClosed;
-
+        }
+        else
+        {
+            doorClosed = !doorClosed;
         }
     }
 
@@ -87,7 +75,7 @@ public class DoorScript : MonoBehaviour, IInteracting
     public void InteractInRange()
     {
         script.EnableUI();
-        if (!doorMoving)
+        if (!doorClosed && pushBlock != null && !pushBlock.CanMove)
         {
             outlineScript.enabled = true;
         }
