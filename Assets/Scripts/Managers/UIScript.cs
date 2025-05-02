@@ -6,11 +6,15 @@ public class UIScript : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI textMesh;
     [SerializeField] Image image;
+    [SerializeField] TextMeshProUGUI textMeshHold;
+    [SerializeField] Image imageHold;
 
     private void Awake()
     {
         textMesh.enabled = false;
         image.enabled = false;
+        textMeshHold.enabled = false;
+        imageHold.enabled = false;
     }
 
     public void EnableUI()
@@ -23,6 +27,18 @@ public class UIScript : MonoBehaviour
     {
         textMesh.enabled = false;
         image.enabled = false;
+    }
+
+    public void EnableUIHold()
+    {
+        textMeshHold.enabled = true;
+        imageHold.enabled = true;
+    }
+
+    public void DisebleUIHold()
+    {
+        textMeshHold.enabled = false;
+        imageHold.enabled = false;
     }
 
 }

@@ -88,7 +88,7 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     public void InteractInRange()
     {
-        script.EnableUI();
+        script.EnableUIHold();
         if (!canMove)
         {
             outlineScript.enabled = true;
@@ -97,7 +97,7 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     public void InteractNotInRange()
     {
-        script.DisebleUI();
+        script.DisebleUIHold();
         outlineScript.enabled = false;
     }
 
