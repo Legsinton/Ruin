@@ -73,22 +73,22 @@ public class PlayerMovement : MonoBehaviour
             virtualCamera.LookAt = null;
             if (movement.x > 0.5)
             {
-                //orbitalFollow.HorizontalAxis.Value = 82;
+                orbitalFollow.HorizontalAxis.Value = 82;
                 orbitalFollow.VerticalAxis.Value = 17.5f;
             }
             else if ( movement.x < -0.5f)
             {
-                //orbitalFollow.HorizontalAxis.Value = -104;
+                orbitalFollow.HorizontalAxis.Value = -104;
                 orbitalFollow.VerticalAxis.Value = 17.5f;
             }
             else if (movement.z > 0.5f)
             {
-                //orbitalFollow.HorizontalAxis.Value = 8;
+                orbitalFollow.HorizontalAxis.Value = 8;
                 orbitalFollow.VerticalAxis.Value = 17.5f;
             }
             else if (movement.z < -0.5f)
             {
-                //orbitalFollow.HorizontalAxis.Value = 148;
+                orbitalFollow.HorizontalAxis.Value = 148;
                 orbitalFollow.VerticalAxis.Value = 17.5f;
             }         
         }
