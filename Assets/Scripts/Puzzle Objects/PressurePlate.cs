@@ -36,6 +36,26 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
+        if (other.CompareTag("Rotating"))
+        {
+            Debug.Log("Rotating object on pressure plate!");
+
+            if (!added)
+            {
+                triggerd = true;
+                added = true;
+                for (int i = 0; i < platforms.Length; i++)
+                {
+                    platforms[i].Switches++;
+                }
+                for (int i = 0; i < gate.Length; i++)
+                {
+                    gate[i].Switches++;
+                }
+
+            }
+        }
+
         Bounds blockBounds = other.bounds; // The collider bounds of the block
         Bounds plateBounds = GetComponent<Collider>().bounds; // The bounds of the plate        if (other.CompareTag("Pullable"))
         Vector2 plateMin = new Vector2(plateBounds.min.x, plateBounds.min.z);
@@ -66,6 +86,7 @@ public class PressurePlate : MonoBehaviour
                 }
             }
         }
+       
     }
 
     private void OnTriggerExit(Collider other)
@@ -87,5 +108,23 @@ public class PressurePlate : MonoBehaviour
             }
 
         }
+        if (other.CompareTag("Rotating"))
+        {
+            if (added)
+            {
+                triggerd = false;
+                added = false;
+
+                for (int i = 0; i < gate.Length; i++)
+                {
+                    gate[i].Switches--;
+                }
+                for (int i = 0; i < platforms.Length; i++)
+                {
+                    platforms[i].Switches--;
+                }
+            }
+        }
     }
 }
+

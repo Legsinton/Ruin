@@ -7,18 +7,20 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    
+
     public Vector3 movement;
     public float acceleration;
     public float groundDrag;
+    [SerializeField] float rotateSpeed;
 
     [SerializeField] float currentSpeed = 8;
-    
+
     Rigidbody rb;
     PushBlock PushBlock;
+    RotatingObject rotatingObject;
 
     Vector2 movementInput;
-    Vector3 playerMoveDir; 
+    Vector3 playerMoveDir;
 
     float gravityForce;
     float currentVelocity;
@@ -27,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("GroundCheck")]
 
-    public LayerMask groundMask; 
+    public LayerMask groundMask;
 
     readonly float distToGround = 1f;
 
@@ -43,10 +45,6 @@ public class PlayerMovement : MonoBehaviour
 
     public CinemachineCamera virtualCamera;
     CinemachineOrbitalFollow orbitalFollow;
-
-    private Vector3 fixedPushDirection;
-    private bool isPushingBlock;
-
 
     [Header("Stairs")]
 
@@ -218,7 +216,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (movement.z > 0.5f || movement.z < -0.5f)
             {
-                movement.x = 0; 
+                movement.x = 0;
             }
         }
         else
@@ -233,6 +231,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log("PushBlack");
             currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
+
+        }
+        else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
+        {
+            Debug.Log("PushBlack");
+            currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
 
         }
         else if (movement.magnitude > 0)
@@ -250,7 +254,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerMoveDir != Vector3.zero && PushBlock != null && interact)
         {
-         
+
         }
 
         else if (playerMoveDir != Vector3.zero && !interact)
@@ -266,13 +270,17 @@ public class PlayerMovement : MonoBehaviour
         {
             PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
+        if (hit.gameObject.CompareTag("Rotating"))
+        {
+            rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
+        }
     }
-    private void OnCollisionExit(Collision collision) 
+    private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             //PushBlock = null;
-            
+
         }
     }
 }
