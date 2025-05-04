@@ -230,12 +230,12 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
         {
             Debug.Log("PushBlack");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);
 
         }
         else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
         {
-            Debug.Log("PushBlack");
+            Debug.Log("Rotating");
             currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
 
         }
@@ -270,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
         {
             PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
-        if (hit.gameObject.CompareTag("Rotating"))
+        if (hit.gameObject.CompareTag("RotatingTag"))
         {
             rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
         }
