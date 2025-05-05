@@ -1,67 +1,82 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
-    public Interact interact;
-    public PushBlock pushBlock;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
-
-    public float pressDepth;
-    public float moveSpeed;
-    public bool doorClosed = false;
-
+    [Header("Settings")]
+    [SerializeField] float openSpeed;
+    [SerializeField] float openAngle;
+    [SerializeField] float closingDistance;
     [SerializeField] bool locked;
     [SerializeField] int itemIdToUnlock;
-    [SerializeField] UIScript script;
+
+    [Header("Reference")]
+    [SerializeField] UIScript UIScript;
     [SerializeField] Outline outlineScript;
+
+    GameObject player;
+    bool openingDoor;
+    bool closingDoor;
+    bool isDoorOpen;
+    Quaternion closedRotation;
+    Quaternion openRotation;
 
     private void Start()
     {
-        originalPosition = transform.position;
-        script = FindAnyObjectByType<UIScript>();
-        interact = FindAnyObjectByType<Interact>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        UIScript = FindAnyObjectByType<UIScript>();
+        closedRotation = transform.rotation;
+        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
     }
 
     void Update()
     {
-        if (!locked)
+        if (locked) return;
+
+        if (openingDoor)
         {
-            CloseDoor();
-            OpenDoor();            
+            OpenDoor();
+        }
+        if (isDoorOpen && !openingDoor)
+        {
+            if (!closingDoor)
+            {
+                if (Vector3.Distance(transform.position, player.transform.position) > closingDistance)
+                {
+                    closingDoor = true;
+                }
+            }
+
+            if (closingDoor)
+            {
+                CloseDoor();
+            }
         }
     }
 
     void CloseDoor()
     {
-        if (doorClosed)
+        if (Quaternion.Angle(transform.rotation, closedRotation) > 0.5f)
         {
-            targetPosition = originalPosition - Vector3.up * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, closedRotation, Time.deltaTime * openSpeed);
+        }
+        else
+        {
+            closingDoor = false;
+            isDoorOpen = false;
         }
     }
 
     void OpenDoor()
     {
-        if (!doorClosed)
+        if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
         }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Pullable"))
+        else
         {
-            pushBlock = other.GetComponent<PushBlock>();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Pullable"))
-        {
-            pushBlock = null;
+            openingDoor = false;
+            isDoorOpen = true;
         }
     }
 
@@ -78,16 +93,24 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
             }
         }
 
-        if (!locked)
+        if (!locked && !isDoorOpen && !openingDoor)
         {
-            if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
+            Vector3 toPlayer = player.transform.position - transform.position;
+            float dot = Vector3.Dot(transform.forward, toPlayer.normalized);
+
+            if (dot > 0)
             {
-                doorClosed = !doorClosed;
+                openAngle = -openAngle;
             }
             else
             {
-                doorClosed = !doorClosed;
+                openAngle = Mathf.Abs(openAngle);
             }
+
+            openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
+
+            openingDoor = true;
+            InteractNotInRange();
         }
     }
 
@@ -95,18 +118,18 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        if (script != null)
+        if (UIScript != null)
         {
-            script.EnableUI();
+            UIScript.EnableUI();
         }
         outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        if (script != null)
+        if (UIScript != null)
         {
-            script.DisebleUI();
+            UIScript.DisebleUI();
         }
         outlineScript.enabled = false;
     }
