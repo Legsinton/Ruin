@@ -9,8 +9,9 @@ public class MovingPlatform : MonoBehaviour
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
-    [SerializeField] bool down;
-    [SerializeField] bool side;
+    [SerializeField] bool downUp;
+    [SerializeField] bool sideZ;
+    [SerializeField] bool sideX;
     Transform blockTransform;
 
     private void Start()
@@ -19,30 +20,48 @@ public class MovingPlatform : MonoBehaviour
     }
 
     void Update()
-    { 
-        if (Switches >= switchAmount && down)
+    {
+        MovementY();
+        MovementX();
+        MovementZ();
+    }
+
+    private void MovementY()
+    {
+        if (Switches >= switchAmount && downUp)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
-
-        else if (Switches != switchAmount && down)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-        }
-
-        if (Switches >= switchAmount && side)
-        {
-            targetPosition = originalPosition - Vector3.forward * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        }
-
-        else if (Switches != switchAmount && side)
+        else if (Switches != switchAmount && downUp)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
+    private void MovementX()
+    {
+        if (Switches >= switchAmount && sideX)
+        {
+            targetPosition = originalPosition - Vector3.right * pressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
+        else if (Switches != switchAmount && sideX)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
+    private void MovementZ()
+    {
+        if (Switches >= switchAmount && sideZ)
+        {
+            targetPosition = originalPosition - Vector3.forward * pressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
+        else if (Switches != switchAmount && sideZ)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Pullable"))
@@ -51,7 +70,6 @@ public class MovingPlatform : MonoBehaviour
             blockTransform.transform.SetParent(transform);
         }
     }
-
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Pullable"))
@@ -63,7 +81,6 @@ public class MovingPlatform : MonoBehaviour
             }
         }
     }
-
     public void AddSwitch()
     {
         switches++;

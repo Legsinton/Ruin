@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class PushBlock : MonoBehaviour , IInteracting
 {
-    float pullSpeed = 0.87f;
+    [SerializeField] float pullSpeed = 1f;
     UIScript script;
     PlayerMovement playerMove;
     [SerializeField] Transform playerTransform;
