@@ -6,7 +6,7 @@ public class Inventory : MonoBehaviour
     public static Inventory Instance { get; private set; }
 
     [SerializeField] private ItemDatabase itemDatabase;
-    List<Item> inventoryItems = new List<Item>();
+    public List<Item> inventoryItems = new List<Item>();
 
     private void Awake()
     {
@@ -29,10 +29,6 @@ public class Inventory : MonoBehaviour
             inventoryItems.Add(itemToAdd);
             Debug.Log($"Added: {itemToAdd.itemName}");
         }
-        else
-        {
-            Debug.LogWarning($"Item with ID {itemId} not found.");
-        }
     }
 
     public void RemoveItem(int itemId)
@@ -42,10 +38,6 @@ public class Inventory : MonoBehaviour
         {
             inventoryItems.Remove(itemToRemove);
             Debug.Log($"Removed: {itemToRemove.itemName}");
-        }
-        else
-        {
-            Debug.LogWarning($"Item with ID {itemId} not in inventory.");
         }
     }
 }
