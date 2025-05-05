@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class Interact : MonoBehaviour
 {
