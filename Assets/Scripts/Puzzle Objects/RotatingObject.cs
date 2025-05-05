@@ -4,7 +4,7 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class RotatingObject : MonoBehaviour, IInteracting
 {
-    float pullSpeed = 15;
+    float pullSpeed = 30;
     UIScript script;
     PlayerMovement playerMove;
     Transform playerTransform;
@@ -12,7 +12,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
     [SerializeField] Camera mainCamera;
     [SerializeField] CinemachineCamera cameraCin;
 
-    [SerializeField] float Value;
+    float Value;
     public bool CanRotate { get { return canRotate; } set { canRotate = value; } }
     [SerializeField] Outline outlineScript;
     [SerializeField] float buffer;
@@ -20,6 +20,8 @@ public class RotatingObject : MonoBehaviour, IInteracting
     public Interact interact;
     private void Awake()
     {
+        mainCamera = Camera.main;
+        cameraCin = FindAnyObjectByType<CinemachineCamera>();
         script = FindAnyObjectByType<UIScript>();
         playerMove = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();        

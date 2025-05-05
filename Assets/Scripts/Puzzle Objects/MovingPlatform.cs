@@ -9,6 +9,8 @@ public class MovingPlatform : MonoBehaviour
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
+    [SerializeField] bool down;
+    [SerializeField] bool side;
 
     private void Start()
     {
@@ -17,13 +19,24 @@ public class MovingPlatform : MonoBehaviour
 
     void Update()
     {
-        if (Switches >= switchAmount)
+        if (Switches >= switchAmount && down)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
-        if (Switches != switchAmount)
+        else if (Switches != switchAmount && down)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+
+        if (Switches >= switchAmount && side)
+        {
+            targetPosition = originalPosition - Vector3.forward * pressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
+
+        else if (Switches != switchAmount && side)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }

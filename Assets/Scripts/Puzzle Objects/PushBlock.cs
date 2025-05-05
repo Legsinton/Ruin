@@ -9,7 +9,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     float pullSpeed = 0.87f;
     UIScript script;
     PlayerMovement playerMove;
-    Transform playerTransform;
+    [SerializeField] Transform playerTransform;
     bool canMove;
     Bounds playerBounds;
     Bounds plateBounds;
