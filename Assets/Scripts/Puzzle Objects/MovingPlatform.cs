@@ -10,7 +10,8 @@ public class MovingPlatform : MonoBehaviour
     public float pressDepth;
     public float moveSpeed;
     [SerializeField] bool down;
-    [SerializeField] bool side;
+    [SerializeField] bool sideZ;
+    [SerializeField] bool sideX;
     Transform blockTransform;
 
     private void Start()
@@ -19,7 +20,14 @@ public class MovingPlatform : MonoBehaviour
     }
 
     void Update()
-    { 
+    {
+        MovementZ();
+        MovementX();
+        MovementUp(); 
+    }
+
+    void MovementUp()
+    {
         if (Switches >= switchAmount && down)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -30,14 +38,31 @@ public class MovingPlatform : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
+    }
 
-        if (Switches >= switchAmount && side)
+    void MovementZ()
+    {
+        if (Switches >= switchAmount && sideZ)
         {
             targetPosition = originalPosition - Vector3.forward * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
-        else if (Switches != switchAmount && side)
+        else if (Switches != switchAmount && sideZ)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    void MovementX()
+    {
+        if (Switches >= switchAmount && sideX)
+        {
+            targetPosition = originalPosition - Vector3.right * pressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        }
+
+        else if (Switches != switchAmount && sideX)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }

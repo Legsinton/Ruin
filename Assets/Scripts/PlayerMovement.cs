@@ -31,9 +31,9 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundMask;
 
-    readonly float distToGround = 1f;
+     readonly float distToGround = 1;
 
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
 
     [Header("Camera")]
 
@@ -87,8 +87,6 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
 
-        StepClimb();
-
         GroundCheck();
 
         if (!isGrounded)
@@ -107,9 +105,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GroundCheck()
     {
-        Vector3 origin = transform.position; // or you can lower this a bit if needed
-        origin.y -= 0.5f; // move origin slightly downward if your player is tall
-        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+        /*Vector3 origin = transform.position; // or you can lower this a bit if needed
+        origin.y -= 0.5f;*/ // move origin slightly downward if your player is tall
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, distToGround, groundMask);
     }
 
     private void SetCamera()
@@ -184,23 +182,6 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null)
         {
             interact = PushBlock.CanMove;
-        }
-    }
-
-    private void StepClimb()
-    {
-        RaycastHit hitLower;
-        if (Physics.Raycast(stepUpLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
-        {
-            RaycastHit hitUpper;
-            if (!Physics.Raycast(stepUpHigher.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
-            {
-                rb.position -= new Vector3(0f, -stepSmooth, 0f);
-            }
-        }
-        else
-        {
-            stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
         }
     }
     private void MovePlayer()
