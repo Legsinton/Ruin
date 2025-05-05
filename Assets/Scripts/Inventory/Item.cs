@@ -9,8 +9,4 @@ public class Item : ScriptableObject
     public SlotTag itemTag;
     public int itemId;
     public string itemName;
-
-    [Header("If the item can be equipped")]
-
-    public GameObject equipmentItem;
 }
