@@ -11,6 +11,7 @@ public class MovingPlatform : MonoBehaviour
     public float moveSpeed;
     [SerializeField] bool down;
     [SerializeField] bool side;
+    Transform blockTransform;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class MovingPlatform : MonoBehaviour
     }
 
     void Update()
-    {
+    { 
         if (Switches >= switchAmount && down)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -39,6 +40,27 @@ public class MovingPlatform : MonoBehaviour
         else if (Switches != switchAmount && side)
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Pullable"))
+        {
+            blockTransform = collision.transform;
+            blockTransform.transform.SetParent(transform);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Pullable"))
+        {
+            blockTransform = null;
+            if (blockTransform != null)
+            {
+                blockTransform.transform.SetParent(null);
+            }
         }
     }
 
