@@ -21,6 +21,8 @@ public class PaintingScript : MonoBehaviour, IInteracting
     {
         paintingText.enabled = !paintingText.enabled;
         background.enabled = !background.enabled;
+
+        Debug.Log("Give Me Money");
     }
 
     public void ReleaseInteract() { }

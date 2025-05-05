@@ -1,17 +1,18 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DoorEasyScript : MonoBehaviour, IInteracting
 {
     public Interact interact;
     public PushBlock pushBlock;
     Vector3 targetPosition;
-    Vector3 currentPoisition;
     Vector3 originalPosition;
+
     public float pressDepth;
     public float moveSpeed;
     public bool doorClosed = false;
+
+    [SerializeField] bool locked;
+    [SerializeField] int itemIdToUnlock;
     [SerializeField] UIScript script;
     [SerializeField] Outline outlineScript;
 
@@ -24,12 +25,20 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void Update()
     {
+        if (!locked)
+        {
+            CloseDoor();
+            OpenDoor();            
+        }
+    }
+
+    void CloseDoor()
+    {
         if (doorClosed)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
-        OpenDoor();
     }
 
     void OpenDoor()
@@ -46,7 +55,6 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
         {
             pushBlock = other.GetComponent<PushBlock>();
         }
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -55,18 +63,31 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
         {
             pushBlock = null;
         }
-
     }
 
     public void PressInteract()
     {
-        if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
+        if (locked)
         {
-            doorClosed = !doorClosed;
+            for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
+            {
+                if (Inventory.Instance.inventoryItems[i].itemId == itemIdToUnlock)
+                {
+                    locked = false;
+                }
+            }
         }
-        else
+
+        if (!locked)
         {
-            doorClosed = !doorClosed;
+            if (interact.Interacting && pushBlock != null && !pushBlock.CanMove)
+            {
+                doorClosed = !doorClosed;
+            }
+            else
+            {
+                doorClosed = !doorClosed;
+            }
         }
     }
 
@@ -74,16 +95,19 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        script.EnableUI();
-        if (!doorClosed && pushBlock != null && !pushBlock.CanMove)
+        if (script != null)
         {
-            outlineScript.enabled = true;
+            script.EnableUI();
         }
+        outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        script.DisebleUI();
+        if (script != null)
+        {
+            script.DisebleUI();
+        }
         outlineScript.enabled = false;
     }
 }

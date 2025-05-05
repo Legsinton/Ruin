@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
+
     public bool triggerd = false;
     public GateScript[] gate;
     public MovingPlatform[] platforms;
@@ -15,6 +16,7 @@ public class PressurePlate : MonoBehaviour
 
     private void Start()
     {
+        
         originalPosition = transform.position;
     }
 
@@ -67,7 +69,8 @@ public class PressurePlate : MonoBehaviour
                     }
                 }
             }
-        }   
+        }
+       
     }
 
     private void OnTriggerExit(Collider other)
@@ -87,6 +90,7 @@ public class PressurePlate : MonoBehaviour
                     platforms[i].Switches--;
                 }
             }
+
         }
     }
 }

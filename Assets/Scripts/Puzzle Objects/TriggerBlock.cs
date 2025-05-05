@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TriggerBlock : MonoBehaviour
 {
+
     public bool triggerd = false;
     public GateScript[] gate;
     public MovingPlatform[] platforms;
@@ -12,10 +13,12 @@ public class TriggerBlock : MonoBehaviour
     public float pressDepth;
     public float moveSpeed;
     bool added = false;
+
     private void Start()
     {
         originalPosition = transform.position;
     }
+
     private void Update()
     {
         if (triggerd)
@@ -29,6 +32,7 @@ public class TriggerBlock : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("RotatingTag"))
@@ -47,6 +51,7 @@ public class TriggerBlock : MonoBehaviour
                 {
                     gate[i].Switches++;
                 }
+
             }
         }
     }

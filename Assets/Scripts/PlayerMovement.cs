@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration;
     public float groundDrag;
     [SerializeField] float rotateSpeed;
-    [SerializeField] float pushSpeed;
 
     [SerializeField] float currentSpeed = 8;
 
@@ -227,10 +226,11 @@ public class PlayerMovement : MonoBehaviour
 
         playerMoveDir = movement.normalized;
 
+
         if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
         {
             Debug.Log("PushBlack");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, pushSpeed, acceleration * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);
 
         }
         else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
