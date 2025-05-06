@@ -112,7 +112,7 @@ public class PlayerMovementNew : MonoBehaviour
 
     private void SetCamera()
     {
-        if (PushBlock != null && PushBlock.CanMove)
+        if (PushBlock != null)
         {
             Quaternion targetRotation = virtualCamera.transform.rotation;
             //virtualCamera.LookAt = null;
@@ -181,12 +181,12 @@ public class PlayerMovementNew : MonoBehaviour
 
         if (PushBlock != null)
         {
-            interact = PushBlock.CanMove;
+            //interact = PushBlock.CanMove;
         }
     }
     private void MovePlayer()
     {
-        if (PushBlock != null && PushBlock.CanMove)
+        if (PushBlock != null)
         {
             movement = movementInput.y * cachedCameraForward;
 
@@ -208,7 +208,7 @@ public class PlayerMovementNew : MonoBehaviour
         playerMoveDir = movement.normalized;
 
 
-        if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
+        if (PushBlock != null && movement.magnitude > 0)
         {
             Debug.Log("PushBlack");
             currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);

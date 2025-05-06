@@ -108,7 +108,7 @@ public class PushBlockNew : MonoBehaviour, IInteracting
     }
     public void PressInteract()
     {
-        if (interact.Interacting && isGrounded)
+        if (isGrounded)
         {
             canMove = true;
         }
