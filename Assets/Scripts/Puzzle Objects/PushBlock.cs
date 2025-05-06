@@ -47,7 +47,6 @@ public class PushBlock : MonoBehaviour , IInteracting
                         }
                     }
 
-                    offsetToPlayer = transform.position - currentPlayerPosTarget.position;
                     isAttached = true;
                 }
                 if (!movedPlayerToTargetPos)
@@ -58,6 +57,7 @@ public class PushBlock : MonoBehaviour , IInteracting
                     }
                     else
                     {
+                        offsetToPlayer = transform.position - player.transform.position;
                         movedPlayerToTargetPos = true;
                     }
                 }
@@ -85,6 +85,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         else
         {
             playerInRange = false;
+            outlineScript.enabled = false;
         }
     }
 
