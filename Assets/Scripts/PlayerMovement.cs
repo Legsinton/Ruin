@@ -20,10 +20,14 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movementInput;
     Vector3 playerMoveDir;
 
+    [HideInInspector] public float currentVelocity;
     float gravityForce;
-    float currentVelocity;
-
     bool interact;
+
+    [HideInInspector] public bool rightMoveDisabled;
+    [HideInInspector] public bool leftMoveDisabled;
+    [HideInInspector] public bool forwardMoveDisabled;
+    [HideInInspector] public bool backMoveDisabled;
 
     [Header("GroundCheck")]
 
@@ -186,6 +190,22 @@ public class PlayerMovement : MonoBehaviour
     {
         if (PushBlock != null)
         {
+            if (forwardMoveDisabled && movementInput.y > 0)
+            {
+                movementInput.y = 0;
+            }
+            if (backMoveDisabled && movementInput.y < 0)
+            {
+                movementInput.y = 0;
+            }
+            if (rightMoveDisabled && movementInput.x > 0)
+            {
+                movementInput.x = 0;
+            }
+            if (leftMoveDisabled && movementInput.x < 0)
+            {
+                movementInput.x = 0;
+            }
             movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
         }
         else
