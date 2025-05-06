@@ -1,6 +1,4 @@
-using TMPro;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float currentSpeed = 8;
 
     Rigidbody rb;
-    PushBlock PushBlock;
+    [HideInInspector] public PushBlock PushBlock;
     RotatingObject rotatingObject;
 
     Vector2 movementInput;
@@ -31,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundMask;
 
-     readonly float distToGround = 1;
+    readonly float distToGround = 1.05f;
 
     [SerializeField] private bool isGrounded;
 
@@ -70,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        SetCamera();
+        //SetCamera();
     }
     private void LateUpdate()
     {
@@ -112,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetCamera()
     {
-        if (PushBlock != null && PushBlock.CanMove)
+        if (PushBlock != null /*&& PushBlock.CanMove*/)
         {
             Quaternion targetRotation = virtualCamera.transform.rotation;
             //virtualCamera.LookAt = null;
@@ -181,24 +179,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null)
         {
-            interact = PushBlock.CanMove;
+            //interact = PushBlock.CanMove;
         }
     }
     private void MovePlayer()
     {
-        if (PushBlock != null && PushBlock.CanMove)
+        if (PushBlock != null)
         {
-            movement = movementInput.y * cachedCameraForward;
-
-            if (movement.x > 0.5 || movement.x < -0.5f)
-            {
-                movement.z = 0;
-
-            }
-            else if (movement.z > 0.5f || movement.z < -0.5f)
-            {
-                movement.x = 0;
-            }
+            movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
         }
         else
         {
@@ -207,18 +195,14 @@ public class PlayerMovement : MonoBehaviour
 
         playerMoveDir = movement.normalized;
 
-
-        if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
+        if (PushBlock != null && movement.magnitude > 0)
         {
-            Debug.Log("PushBlack");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);
-
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1.75f, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
         {
             Debug.Log("Rotating");
             currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
-
         }
         else if (movement.magnitude > 0)
         {
@@ -233,35 +217,23 @@ public class PlayerMovement : MonoBehaviour
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
 
-        if (playerMoveDir != Vector3.zero && PushBlock != null && interact)
-        {
-
-        }
-
-        else if (playerMoveDir != Vector3.zero && !interact)
+        if (playerMoveDir != Vector3.zero && !interact && PushBlock == null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }
+        else if (PushBlock != null)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
     }
 
     private void OnCollisionEnter(Collision hit)
     {
-        if (hit.gameObject.CompareTag("Pullable")) // Optional: filter by tag
-        {
-            PushBlock = hit.gameObject.GetComponent<PushBlock>();
-        }
         if (hit.gameObject.CompareTag("RotatingTag"))
         {
             rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
-        }
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
-        {
-            //PushBlock = null;
-
         }
     }
 }

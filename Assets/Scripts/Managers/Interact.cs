@@ -11,8 +11,6 @@ public class Interact : MonoBehaviour
     List<GameObject> interactableObjects = new List<GameObject>();
 
     bool interactInRange = false;
-    bool interacting = false;
-    public bool Interacting { get { return interacting; } set { interacting = value; } }
     bool multipleObjectsInRange = false;
 
     void OnTriggerEnter(Collider other)
@@ -109,14 +107,12 @@ public class Interact : MonoBehaviour
         {
             CheckIfObjectStillExists();
 
-            if (!interacting && interactInRange)
+            if (interactInRange && value.isPressed)
             {
-                interacting = true;
                 currentInteractableObject.GetComponent<IInteracting>().PressInteract();
             }
-            else
+            if (!value.isPressed)
             {
-                interacting = false;
                 currentInteractableObject.GetComponent<IInteracting>().ReleaseInteract();
             }
         }
