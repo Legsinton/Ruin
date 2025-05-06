@@ -16,6 +16,7 @@ public class PressurePlate : MonoBehaviour
 
     private void Start()
     {
+        
         originalPosition = transform.position;
     }
 
@@ -55,6 +56,9 @@ public class PressurePlate : MonoBehaviour
                 {
                     triggerd = true;
                     added = true;
+                    SoundFXManager.Instance.PlaySoundFX(SoundType.Coin);
+                    
+
                     for (int i = 0; i < gate.Length; i++)
                     {
                         gate[i].Switches++;
@@ -66,6 +70,7 @@ public class PressurePlate : MonoBehaviour
                 }
             }
         }
+       
     }
 
     private void OnTriggerExit(Collider other)
@@ -89,3 +94,4 @@ public class PressurePlate : MonoBehaviour
         }
     }
 }
+

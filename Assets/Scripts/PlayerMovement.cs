@@ -7,18 +7,20 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    
+
     public Vector3 movement;
     public float acceleration;
     public float groundDrag;
+    [SerializeField] float rotateSpeed;
 
     [SerializeField] float currentSpeed = 8;
-    
+
     Rigidbody rb;
     PushBlock PushBlock;
+    RotatingObject rotatingObject;
 
     Vector2 movementInput;
-    Vector3 playerMoveDir; 
+    Vector3 playerMoveDir;
 
     float gravityForce;
     float currentVelocity;
@@ -27,11 +29,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("GroundCheck")]
 
-    public LayerMask groundMask; 
+    public LayerMask groundMask;
 
-    readonly float distToGround = 1f;
+     readonly float distToGround = 1;
 
-    private bool isGrounded;
+    [SerializeField] private bool isGrounded;
 
     [Header("Camera")]
 
@@ -68,39 +70,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        if (PushBlock != null && PushBlock.CanMove)
-        {
-            virtualCamera.LookAt = null;
-            if (movement.x > 0.5)
-            {
-                //orbitalFollow.HorizontalAxis.Value = 82;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if ( movement.x < -0.5f)
-            {
-                //orbitalFollow.HorizontalAxis.Value = -104;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movement.z > 0.5f)
-            {
-                //orbitalFollow.HorizontalAxis.Value = 8;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movement.z < -0.5f)
-            {
-                //orbitalFollow.HorizontalAxis.Value = 148;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }         
-        }
-        else
-        {
-            virtualCamera.LookAt = capsule;
-        }
-
-        if (PushBlock != null)
-        {
-            interact = PushBlock.CanMove;
-        }
+        SetCamera();
     }
     private void LateUpdate()
     {
@@ -116,8 +86,6 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
-
-        StepClimb();
 
         GroundCheck();
 
@@ -137,24 +105,83 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GroundCheck()
     {
-        Vector3 origin = transform.position; // or you can lower this a bit if needed
-        origin.y -= 0.5f; // move origin slightly downward if your player is tall
-        isGrounded = Physics.Raycast(origin, Vector3.down, distToGround, groundMask);
+        /*Vector3 origin = transform.position; // or you can lower this a bit if needed
+        origin.y -= 0.5f;*/ // move origin slightly downward if your player is tall
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, distToGround, groundMask);
     }
-    private void StepClimb()
+
+    private void SetCamera()
     {
-        RaycastHit hitLower;
-        if (Physics.Raycast(stepUpLower.transform.position, transform.TransformDirection(Vector3.forward), out hitLower, 0.1f))
+        if (PushBlock != null && PushBlock.CanMove)
         {
-            RaycastHit hitUpper;
-            if (!Physics.Raycast(stepUpHigher.transform.position, transform.TransformDirection(Vector3.forward), out hitUpper, 0.1f))
+            Quaternion targetRotation = virtualCamera.transform.rotation;
+            virtualCamera.LookAt = null;
+            if (movementInput.y > 0.5f && movement.x > 0.5)
             {
-                rb.position -= new Vector3(0f, -stepSmooth, 0f);
+                targetRotation = Quaternion.Euler(21, 91, 4);
+                orbitalFollow.HorizontalAxis.Value = 82;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
             }
+            else if (movementInput.y > 0.5f && movement.x < -0.5f)
+            {
+                targetRotation = Quaternion.Euler(17, -89, 0);
+
+                orbitalFollow.HorizontalAxis.Value = -104;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if (movementInput.y > 0.5f && movement.z > 0.5f)
+            {
+                targetRotation = Quaternion.Euler(14, 1, 0);
+                orbitalFollow.HorizontalAxis.Value = 8;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if (movementInput.y > 0.5f && movement.z < -0.5f)
+            {
+                targetRotation = Quaternion.Euler(20, 181, 0);
+                orbitalFollow.HorizontalAxis.Value = 148;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            if (movementInput.y < -0.5f && movement.z > 0.5f)
+            {
+                targetRotation = Quaternion.Euler(20, 181, 0);
+                orbitalFollow.HorizontalAxis.Value = 148;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+            else if (movementInput.y < -0.5f && movement.z < -0.5f)
+            {
+                targetRotation = Quaternion.Euler(14, 1, 0);
+                orbitalFollow.HorizontalAxis.Value = 8;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+
+            }
+            else if (movementInput.y < -0.5f && movement.x < -0.5f)
+            {
+                targetRotation = Quaternion.Euler(21, 91, 4);
+                orbitalFollow.HorizontalAxis.Value = 82;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+
+            }
+            else if (movementInput.y < -0.5f && movement.x > 0.5f)
+            {
+                targetRotation = Quaternion.Euler(17, -89, 0);
+
+                orbitalFollow.HorizontalAxis.Value = -104;
+                orbitalFollow.VerticalAxis.Value = 17.5f;
+            }
+
+            virtualCamera.transform.rotation = Quaternion.Lerp(
+                virtualCamera.transform.rotation,
+                targetRotation,
+                Time.deltaTime * 3);
         }
         else
         {
-            stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
+            virtualCamera.LookAt = capsule;
+        }
+
+        if (PushBlock != null)
+        {
+            interact = PushBlock.CanMove;
         }
     }
     private void MovePlayer()
@@ -170,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (movement.z > 0.5f || movement.z < -0.5f)
             {
-                movement.x = 0; 
+                movement.x = 0;
             }
         }
         else
@@ -184,7 +211,13 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && movement.magnitude > 0 && PushBlock.CanMove)
         {
             Debug.Log("PushBlack");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, 1);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);
+
+        }
+        else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
+        {
+            Debug.Log("Rotating");
+            currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
 
         }
         else if (movement.magnitude > 0)
@@ -202,7 +235,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerMoveDir != Vector3.zero && PushBlock != null && interact)
         {
-         
+
         }
 
         else if (playerMoveDir != Vector3.zero && !interact)
@@ -218,13 +251,17 @@ public class PlayerMovement : MonoBehaviour
         {
             PushBlock = hit.gameObject.GetComponent<PushBlock>();
         }
+        if (hit.gameObject.CompareTag("RotatingTag"))
+        {
+            rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
+        }
     }
-    private void OnCollisionExit(Collision collision) 
+    private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Pullable")) // Optional: filter by tag
         {
             //PushBlock = null;
-            
+
         }
     }
 }

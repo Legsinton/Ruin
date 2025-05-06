@@ -57,7 +57,7 @@ using static Unity.VisualScripting.Member;
                 { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
                 { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
                 { SoundType.Bonk, Resources.LoadAll<AudioClip>("Sounds/Effects/Bonk") },
-                { SoundType.Splat, Resources.LoadAll<AudioClip>("Sounds/Effects/Splat") },
+                { SoundType.Chain, Resources.LoadAll<AudioClip>("Sounds/Effects/Chain") },
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
                 { SoundType.Slash, Resources.LoadAll<AudioClip>("Sounds/Effects/Slash") }
 
@@ -195,7 +195,7 @@ using static Unity.VisualScripting.Member;
         Launch,
         Smash,
         Smack,
-        Splat,
+        Chain,
         Slash
     }
 

@@ -1,14 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class Interact : MonoBehaviour
 {
     [SerializeField] int interactLayer;
     [SerializeField] Transform cameraTransform;
 
-    IInteracting currentInteractableObject;
+    GameObject currentInteractableObject;
     List<GameObject> interactableObjects = new List<GameObject>();
 
     bool interactInRange = false;
@@ -20,11 +19,13 @@ public class Interact : MonoBehaviour
     {
         if (other.gameObject.layer == interactLayer)
         {
+            CheckIfObjectStillExists();
+
             interactableObjects.Add(other.gameObject);
 
             if (interactableObjects.Count == 1)
             {
-                currentInteractableObject = other.gameObject.GetComponent<IInteracting>();
+                currentInteractableObject = other.gameObject;
             }
             else
             {
@@ -32,7 +33,7 @@ public class Interact : MonoBehaviour
             }
 
             interactInRange = true;
-            currentInteractableObject.InteractInRange();
+            currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
         }
     }
 
@@ -40,7 +41,7 @@ public class Interact : MonoBehaviour
     {
         if (other.gameObject.layer == interactLayer)
         {
-            other.GetComponent<IInteracting>().InteractNotInRange();
+            other.gameObject.GetComponent<IInteracting>().InteractNotInRange();
 
             if (interactableObjects.Count == 2)
             {
@@ -53,12 +54,12 @@ public class Interact : MonoBehaviour
                 multipleObjectsInRange = false;
             }
 
-            interactableObjects.Remove(other.gameObject);
+            interactableObjects.Remove(other.gameObject.gameObject);
 
             if (interactableObjects.Count == 1)
             {
-                currentInteractableObject = interactableObjects[0].GetComponent<IInteracting>();
-                currentInteractableObject.InteractInRange();
+                currentInteractableObject = interactableObjects[0];
+                currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
             }
         }
     }
@@ -67,11 +68,11 @@ public class Interact : MonoBehaviour
     {
         if (multipleObjectsInRange)
         {
-            currentInteractableObject.InteractNotInRange();
+            currentInteractableObject.GetComponent<IInteracting>().InteractNotInRange();
 
             getCurrentObject();
 
-            currentInteractableObject.InteractInRange();
+            currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
         }
     }
 
@@ -97,7 +98,7 @@ public class Interact : MonoBehaviour
             if (Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
             {
                 closestDistance = Vector3.Distance(distancePoint, interactableObjects[i].transform.position);
-                currentInteractableObject = interactableObjects[i].GetComponent<IInteracting>();
+                currentInteractableObject = interactableObjects[i];
             }
         }
     }
@@ -106,17 +107,24 @@ public class Interact : MonoBehaviour
     {
         if (currentInteractableObject != null)
         {
+            CheckIfObjectStillExists();
+
             if (!interacting && interactInRange)
             {
                 interacting = true;
-                currentInteractableObject.PressInteract();
+                currentInteractableObject.GetComponent<IInteracting>().PressInteract();
             }
             else
             {
                 interacting = false;
-                currentInteractableObject.ReleaseInteract();
+                currentInteractableObject.GetComponent<IInteracting>().ReleaseInteract();
             }
         }
+    }
+
+    void CheckIfObjectStillExists()
+    {
+        interactableObjects.RemoveAll(item => item == null);
     }
 }
 

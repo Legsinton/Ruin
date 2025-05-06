@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2472767530608365469}
   - component: {fileID: 8926760632587065877}
   - component: {fileID: 9148964631782439551}
+  - component: {fileID: 8205860358761286612}
   m_Layer: 0
   m_Name: Gate
-  m_TagString: Door
+  m_TagString: Gate
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839985163773629222}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -27.789997, y: 20.7, z: -0.54000187}
   m_LocalScale: {x: 3.0226145, y: 6.3776236, z: 1}
   m_ConstrainProportionsScale: 0
@@ -121,8 +122,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pressurePlate: {fileID: 0}
   switches: 0
+  outlineScript: {fileID: 8205860358761286612}
   switchAmount: 2
+  solved: 0
   pressDepth: 7
   moveSpeed: 2
+--- !u!114 &8205860358761286612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839985163773629222}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

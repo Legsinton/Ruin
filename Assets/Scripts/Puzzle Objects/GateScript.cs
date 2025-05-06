@@ -1,12 +1,16 @@
+using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GateScript : MonoBehaviour
 {
     [SerializeField] int switches;
+    [SerializeField] Outline outlineScript;
     public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
     Vector3 targetPosition;
     Vector3 originalPosition;
+    public bool solved;
     public float pressDepth;
     public float moveSpeed;
 
@@ -28,7 +32,6 @@ public class GateScript : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
     public void AddSwitch()
     {
         switches++;

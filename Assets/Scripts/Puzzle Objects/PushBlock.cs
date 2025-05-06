@@ -9,7 +9,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     float pullSpeed = 0.87f;
     UIScript script;
     PlayerMovement playerMove;
-    Transform playerTransform;
+    [SerializeField] Transform playerTransform;
     bool canMove;
     Bounds playerBounds;
     Bounds plateBounds;
@@ -19,6 +19,11 @@ public class PushBlock : MonoBehaviour , IInteracting
     float bufferSides = 2f;
     public bool CanMove { get { return canMove; } set { canMove = value; } }
     public Interact interact;
+    public LayerMask groundMask;
+
+    public float distToGround = 1f;
+
+    [SerializeField] private bool isGrounded;
     private void Awake()
     {   
         script = FindAnyObjectByType<UIScript>();
@@ -28,7 +33,7 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     private void Update()
     {
-
+        GroundCheck();
         if (playerCollider != null)
         {
             playerBounds = playerCollider.bounds;
@@ -42,6 +47,14 @@ public class PushBlock : MonoBehaviour , IInteracting
                 canMove = false;
                 Debug.Log("Bye");
             }
+        }
+
+        if (!isGrounded)
+        {
+            canMove = false;
+            playerTransform = null;
+            playerCollider = null;
+
         }
 
         if (canMove && playerTransform != null && playerMove != null)
@@ -72,10 +85,30 @@ public class PushBlock : MonoBehaviour , IInteracting
         playerTransform = player;
     }
 
+    private void GroundCheck()
+    {
+        Bounds bounds = GetComponent<Collider>().bounds;
 
+        Vector3 boxCenter = new Vector3(bounds.center.x, bounds.min.y - 0.05f, bounds.center.z);
+        Vector3 boxSize = new Vector3(bounds.size.x * 1f, 0.20f, bounds.size.z * 1f);
+
+        isGrounded = Physics.CheckBox(boxCenter, boxSize / 2, Quaternion.identity, groundMask);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (GetComponent<Collider>() == null) return;
+
+        Bounds bounds = GetComponent<Collider>().bounds;
+        Vector3 boxCenter = new Vector3(bounds.center.x, bounds.min.y - 0.05f, bounds.center.z);
+        Vector3 boxSize = new Vector3(bounds.size.x * 1f, 0.20f, bounds.size.z * 1f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(boxCenter, boxSize);
+    }
     public void PressInteract()
     {
-        if (interact.Interacting)
+        if (interact.Interacting && isGrounded)
         {
             canMove = true;
         }
@@ -88,7 +121,7 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     public void InteractInRange()
     {
-        script.EnableUI();
+        script.EnableUIHold();
         if (!canMove)
         {
             outlineScript.enabled = true;
@@ -97,7 +130,7 @@ public class PushBlock : MonoBehaviour , IInteracting
 
     public void InteractNotInRange()
     {
-        script.DisebleUI();
+        script.DisebleUIHold();
         outlineScript.enabled = false;
     }
 
