@@ -98,7 +98,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     void CheckBlockCollision()
     {
         float rayDistance = 0.5f;
-        Vector3 origin = transform.position;
+        Vector3 origin = transform.position + new Vector3(0, 0.3f, 0);
         Quaternion orientation = playerRotation.transform.rotation;
 
         if (Physics.BoxCast(origin, new Vector3(1f, 1f, 0.5f), playerRotation.transform.forward, out RaycastHit hitForward, orientation, rayDistance))
@@ -141,10 +141,9 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.05f))
+        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.35f))
         {
             moveBlock = false;
-            Debug.Log("TEEST");
         }
     }
 
