@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
         if (PushBlock != null && PushBlock.CanMove)
         {
             Quaternion targetRotation = virtualCamera.transform.rotation;
-            virtualCamera.LookAt = null;
+            //virtualCamera.LookAt = null;
             if (movementInput.y > 0.5f && movement.x > 0.5)
             {
                 targetRotation = Quaternion.Euler(21, 91, 4);
