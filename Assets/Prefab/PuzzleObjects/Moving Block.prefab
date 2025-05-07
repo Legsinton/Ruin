@@ -233,7 +233,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &8641937009419895554
 MonoBehaviour:
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af35949d8daae084e8c933a6bdcbbb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistanceToPlayer: 5
+  minDistanceToPlayer: 1.8
   playerPositionTargets:
   - {fileID: 8700234467197007957}
   - {fileID: 3210743850643062481}
@@ -255,6 +255,7 @@ MonoBehaviour:
   - {fileID: 7359876143055583252}
   rb: {fileID: 5452599987843964459}
   outlineScript: {fileID: 3222015937391994162}
+  movedPlayerToTargetPos: 0
 --- !u!114 &3222015937391994162
 MonoBehaviour:
   m_ObjectHideFlags: 0

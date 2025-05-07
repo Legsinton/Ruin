@@ -107,14 +107,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GroundCheck()
     {
-        /*Vector3 origin = transform.position; // or you can lower this a bit if needed
-        origin.y -= 0.5f;*/ // move origin slightly downward if your player is tall
         isGrounded = Physics.Raycast(transform.position, Vector3.down, distToGround, groundMask);
     }
 
     private void SetCamera()
     {
-        if (PushBlock != null /*&& PushBlock.CanMove*/)
+        if (PushBlock != null)
         {
             Quaternion targetRotation = virtualCamera.transform.rotation;
             //virtualCamera.LookAt = null;
@@ -180,12 +178,8 @@ public class PlayerMovement : MonoBehaviour
         {
             virtualCamera.LookAt = capsule;
         }
-
-        if (PushBlock != null)
-        {
-            //interact = PushBlock.CanMove;
-        }
     }
+
     private void MovePlayer()
     {
         if (PushBlock != null)
@@ -206,7 +200,13 @@ public class PlayerMovement : MonoBehaviour
             {
                 movementInput.x = 0;
             }
+
             movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
+
+            if (!PushBlock.movedPlayerToTargetPos)
+            {
+                movement = Vector2.zero;
+            }
         }
         else
         {

@@ -19,7 +19,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     bool playerInRange;
     bool moveBlock;
     bool isAttached;
-    bool movedPlayerToTargetPos;
+    [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
 
     void Awake()
@@ -101,6 +101,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         Vector3 origin = transform.position + new Vector3(0, 0.5f, 0);
         Quaternion orientation = playerRotation.transform.rotation;
 
+        //Forward
         if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), playerRotation.transform.forward, out RaycastHit hitForward, orientation, rayDistance))
         {
             playerMovement.forwardMoveDisabled = true;
@@ -141,7 +142,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.85f))
+        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.55f))
         {
             moveBlock = false;
         }
