@@ -188,29 +188,7 @@ public class MovingPlatform : MonoBehaviour
 
     void PlaySoundFX()
     {
-
         SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Pullable"))
-        {
-            blockTransform = collision.transform;
-            blockTransform.transform.SetParent(transform);
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Pullable"))
-        {
-            blockTransform = null;
-            if (blockTransform != null)
-            {
-                blockTransform.transform.SetParent(null);
-            }
-        }
     }
     public void AddSwitch()
     {

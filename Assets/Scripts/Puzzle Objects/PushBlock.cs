@@ -19,7 +19,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     bool playerInRange;
     bool moveBlock;
     bool isAttached;
-    bool movedPlayerToTargetPos;
+    [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
 
     void Awake()
@@ -98,10 +98,11 @@ public class PushBlock : MonoBehaviour , IInteracting
     void CheckBlockCollision()
     {
         float rayDistance = 0.5f;
-        Vector3 origin = transform.position + new Vector3(0, 0.3f, 0);
+        Vector3 origin = transform.position + new Vector3(0, 0.5f, 0);
         Quaternion orientation = playerRotation.transform.rotation;
 
-        if (Physics.BoxCast(origin, new Vector3(1f, 1f, 0.5f), playerRotation.transform.forward, out RaycastHit hitForward, orientation, rayDistance))
+        //Forward
+        if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), playerRotation.transform.forward, out RaycastHit hitForward, orientation, rayDistance))
         {
             playerMovement.forwardMoveDisabled = true;
         }
@@ -111,7 +112,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
         
         // Backward
-        if (Physics.BoxCast(origin, new Vector3(1f, 1f, 0.5f), -playerRotation.transform.forward, out RaycastHit hitBack, orientation, rayDistance))
+        if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), -playerRotation.transform.forward, out RaycastHit hitBack, orientation, rayDistance))
         {
             playerMovement.backMoveDisabled = true;
         }
@@ -121,7 +122,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Left
-        if (Physics.BoxCast(origin, new Vector3(0.5f, 1f, 1f), -playerRotation.transform.right, out RaycastHit hitLeft, orientation, rayDistance))
+        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), -playerRotation.transform.right, out RaycastHit hitLeft, orientation, rayDistance))
         {
             playerMovement.leftMoveDisabled = true;
         }
@@ -131,7 +132,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Right
-        if (Physics.BoxCast(origin, new Vector3(0.5f, 1f, 1f), playerRotation.transform.right, out RaycastHit hitRight, orientation, rayDistance))
+        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), playerRotation.transform.right, out RaycastHit hitRight, orientation, rayDistance))
         {
             playerMovement.rightMoveDisabled = true;
         }
@@ -141,7 +142,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.35f))
+        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.55f))
         {
             moveBlock = false;
         }
