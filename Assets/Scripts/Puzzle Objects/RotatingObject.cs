@@ -21,7 +21,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
     private void Awake()
     {
         mainCamera = Camera.main;
-        cameraCin = FindAnyObjectByType<CinemachineCamera>();
         script = FindAnyObjectByType<UIScript>();
         playerMove = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();        
