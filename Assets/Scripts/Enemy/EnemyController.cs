@@ -9,8 +9,8 @@ public class EnemyController : MonoBehaviour
     public GameObject PlayerTarget { get; private set; }
     [SerializeField] private GameObject playerReference;
     [SerializeField] private LayerMask playerLayerMask;
-    [SerializeField] private float detectionRange = 10.0f;
-    [SerializeField] private float moveSpeed = 3.5f; // Enemy move speed
+    [SerializeField] private float detectionRange = 3f;
+    [SerializeField] private float moveSpeed = 3.5f;
     public Vector3 LastKnownPlayerPosition { get; private set; }
 
     private bool isChasingPlayer = false;
