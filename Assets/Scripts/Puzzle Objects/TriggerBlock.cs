@@ -13,6 +13,7 @@ public class TriggerBlock : MonoBehaviour
     public float pressDepth;
     public float moveSpeed;
     bool added = false;
+    public PlayerMovement playerMovement;
 
     private void Start()
     {
@@ -33,6 +34,12 @@ public class TriggerBlock : MonoBehaviour
         }
     }
 
+    void EnablePlayer()
+    {
+        playerMovement.enabled = true;
+        playerMovement.movement = new Vector3(0, 0, 0);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("RotatingTag"))
@@ -43,6 +50,9 @@ public class TriggerBlock : MonoBehaviour
             {
                 triggerd = true;
                 added = true;
+                playerMovement.enabled = false;
+                playerMovement.movement = new Vector3(0, 0, 0);
+                Invoke(nameof(EnablePlayer), 1);
                 for (int i = 0; i < platforms.Length; i++)
                 {
                     platforms[i].Switches++;
