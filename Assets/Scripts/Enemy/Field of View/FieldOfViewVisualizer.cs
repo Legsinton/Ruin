@@ -6,7 +6,7 @@ public class FieldOfViewVisualizer : MonoBehaviour
 {
     public float viewRadius = 5f;
     [Range(0, 360)]
-    public float viewAngle = 90f;
+    public float viewAngle = 150f;
     public int meshResolution = 50;
     public LayerMask obstructionMask;
     public float edgeFadeAmount = 0.3f; //(0 = sharp edge)
@@ -28,9 +28,10 @@ public class FieldOfViewVisualizer : MonoBehaviour
     {
         int stepCount = Mathf.RoundToInt(viewAngle * meshResolution / 360f);
         float stepAngleSize = viewAngle / stepCount;
-        List<Vector3> viewPoints = new List<Vector3>();
-
-        viewPoints.Add(Vector3.zero); // Center point (origin)
+        List<Vector3> viewPoints = new List<Vector3>
+        {
+            Vector3.zero // Center point (origin)
+        };
 
         for (int i = 0; i <= stepCount; i++)
         {
