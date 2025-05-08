@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8050911581139132332}
   - component: {fileID: 7887163356509705373}
   - component: {fileID: 6708081729185766907}
+  - component: {fileID: 8716941079609319097}
   m_Layer: 0
   m_Name: TriggerBoxRotator
   m_TagString: Untagged
@@ -107,10 +108,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.9466653
-  m_Height: 2.3808079
+  m_Radius: 0.5175678
+  m_Height: 2.998739
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: -0.42}
+  m_Center: {x: 3.2202574e-12, y: 0.006015897, z: 0.009097339}
 --- !u!114 &6708081729185766907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,8 +125,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerd: 0
-  gate:
+  gate: []
+  platforms:
   - {fileID: 0}
-  platforms: []
   pressDepth: 0.5
   moveSpeed: 2
+--- !u!65 &8716941079609319097
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8180626614088876111}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.28065833, y: 2, z: 1.3581004}
+  m_Center: {x: 0.01634649, y: 0, z: -0.4879191}

@@ -13,6 +13,7 @@ public class GateScript : MonoBehaviour
     public bool solved;
     public float pressDepth;
     public float moveSpeed;
+    bool played;
 
     private void Start()
     {
@@ -23,14 +24,29 @@ public class GateScript : MonoBehaviour
     {
         if (Switches >= switchAmount)
         {
+            if (!played)
+            {
+                PlaySoundFX();
+                played = true;
+            }
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
         else if (Switches != switchAmount)
         {
+            if (played)
+            {
+                PlaySoundFX();
+                played = false;
+            }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
+    }
+
+    void PlaySoundFX()
+    {
+        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
     }
     public void AddSwitch()
     {

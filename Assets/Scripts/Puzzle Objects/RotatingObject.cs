@@ -58,7 +58,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
     {
         canRotate = true;
     }
-
     public void ReleaseInteract()
     {
         canRotate = false;

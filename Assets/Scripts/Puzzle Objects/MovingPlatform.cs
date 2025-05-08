@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class MovingPlatform : MonoBehaviour
 {
@@ -9,10 +10,16 @@ public class MovingPlatform : MonoBehaviour
     Vector3 originalPosition;
     public float pressDepth;
     public float moveSpeed;
+    bool played;
     [SerializeField] bool down;
     [SerializeField] bool sideZ;
     [SerializeField] bool sideX;
     Transform blockTransform;
+    [SerializeField] bool canSwitch;
+    [SerializeField] SwitchCamera switchCam;
+    [SerializeField] private bool switchCam1;
+    [SerializeField] private bool switchCam2;
+    [SerializeField] private bool switchCam3;
 
     private void Start()
     {
@@ -23,72 +30,166 @@ public class MovingPlatform : MonoBehaviour
     {
         MovementZ();
         MovementX();
-        MovementUp(); 
+        MovementUp();
     }
 
     void MovementUp()
     {
-        if (Switches >= switchAmount && down)
+        if (Switches == switchAmount && down)
         {
+            if (!played)
+            {
+                PlaySoundFX();
+                played = true;
+                if (switchCam != null)
+                {
+                    if (switchCam1 && switchCam)
+                    {
+                        switchCam.SetCamera(1);
+                    }
+                    else if (switchCam2)
+                    {
+                        switchCam.SetCamera(2);
+                    }
+                    else if (switchCam3)
+                    {
+                        switchCam.SetCamera(3);
+                    }
+                    else
+                    {
+
+                    }
+                    Invoke(nameof(UnSwitch), 3);
+
+                }
+            }
+
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
         else if (Switches != switchAmount && down)
         {
+
+            if (played)
+            {
+
+                PlaySoundFX();
+                played = false;
+            }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
 
     void MovementZ()
     {
-        if (Switches >= switchAmount && sideZ)
+        if (Switches == switchAmount && sideZ)
         {
+            if (!played)
+            {
+
+                PlaySoundFX();
+                played = true;
+                if (switchCam != null)
+                {
+                    if (switchCam1)
+                    {
+                        switchCam.SetCamera(1);
+                    }
+                    else if (switchCam2)
+                    {
+                        switchCam.SetCamera(2);
+                    }
+                    else if (switchCam3)
+                    {
+                        switchCam.SetCamera(3);
+                    }
+                    else
+                    {
+
+                    }
+                    Invoke(nameof(UnSwitch), 3);
+
+                }
+
+            }
             targetPosition = originalPosition - Vector3.forward * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
         else if (Switches != switchAmount && sideZ)
         {
+            if (played)
+            {
+                PlaySoundFX();
+                played = false;
+            }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
 
     void MovementX()
     {
-        if (Switches >= switchAmount && sideX)
+        if (Switches == switchAmount && sideX)
         {
+            if (!played)
+            {
+
+                PlaySoundFX();
+                played = true;
+                if (switchCam != null)
+                {
+                    if (switchCam1)
+                    {
+                        switchCam.SetCamera(1);
+                    }
+                    else if (switchCam2)
+                    {
+                        switchCam.SetCamera(2);
+                    }
+                    else if (switchCam3)
+                    {
+                        switchCam.SetCamera(3);
+                    }
+                    else
+                    {
+
+                    }
+                    Invoke(nameof(UnSwitch), 3);
+                }
+            }
             targetPosition = originalPosition - Vector3.right * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
 
         else if (Switches != switchAmount && sideX)
         {
+
+            if (played)
+            {
+                PlaySoundFX();
+                played = false;
+            }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void UnSwitch()
     {
-        if (collision.gameObject.CompareTag("Pullable"))
+        if (switchCam1 || switchCam2 || switchCam3)
         {
-            blockTransform = collision.transform;
-            blockTransform.transform.SetParent(transform);
+            switchCam.SetCamera(0);
+        }
+        else
+        {
+
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    void PlaySoundFX()
     {
-        if (collision.gameObject.CompareTag("Pullable"))
-        {
-            blockTransform = null;
-            if (blockTransform != null)
-            {
-                blockTransform.transform.SetParent(null);
-            }
-        }
+        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
     }
-
     public void AddSwitch()
     {
         switches++;

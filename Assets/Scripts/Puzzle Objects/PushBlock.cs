@@ -1,137 +1,171 @@
-using System;
-using System.Runtime.CompilerServices;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PushBlock : MonoBehaviour , IInteracting
 {
-    float pullSpeed = 0.87f;
-    UIScript script;
-    PlayerMovement playerMove;
-    [SerializeField] Transform playerTransform;
-    bool canMove;
-    Bounds playerBounds;
-    Bounds plateBounds;
-    Collider playerCollider;
+    [Header("Settings")]
+    [SerializeField] float minDistanceToPlayer;
+
+    [Header("Reference")]
+    [SerializeField] Transform[] playerPositionTargets;
+    [SerializeField] Rigidbody rb;
     [SerializeField] Outline outlineScript;
-    [SerializeField] float buffer;
-    float bufferSides = 2f;
-    public bool CanMove { get { return canMove; } set { canMove = value; } }
-    public Interact interact;
-    public LayerMask groundMask;
 
-    public float distToGround = 1f;
+    GameObject player;
+    PlayerMovement playerMovement;
+    Transform playerRotation;
+    Transform currentPlayerPosTarget;
 
-    [SerializeField] private bool isGrounded;
-    private void Awake()
-    {   
-        script = FindAnyObjectByType<UIScript>();
-        playerMove = FindAnyObjectByType<PlayerMovement>();
-        interact = FindAnyObjectByType<Interact>();
+    bool checkDistanceToPlayer;
+    bool playerInRange;
+    bool moveBlock;
+    bool isAttached;
+    [HideInInspector] public bool movedPlayerToTargetPos;
+    Vector3 offsetToPlayer;
+
+    void Awake()
+    {
+        player = GameObject.Find("Player");
+        playerMovement = player.GetComponent<PlayerMovement>();
+        playerRotation = player.transform.GetChild(0).transform;
     }
 
-    private void Update()
+    void Update()
     {
-        GroundCheck();
-        if (playerCollider != null)
+        if (checkDistanceToPlayer)
         {
-            playerBounds = playerCollider.bounds;
-            plateBounds = GetComponent<Collider>().bounds;
-            plateBounds.Expand(new Vector3(bufferSides, buffer, bufferSides));
+            CheckIfPlayerInRange();
 
-            if (!plateBounds.Intersects(playerBounds))
+            if (moveBlock && playerInRange)
             {
-                playerTransform = null;
-                playerCollider = null;
-                canMove = false;
-                Debug.Log("Bye");
+                CheckBlockCollision();
+
+                if (!isAttached)
+                {
+                    playerMovement.PushBlock = this;
+
+                    float closestPlayerPosTarget = float.PositiveInfinity;
+                    for (int i = 0; i < playerPositionTargets.Length; i++)
+                    {
+                        if (Vector3.Distance(playerPositionTargets[i].position, player.transform.position) < closestPlayerPosTarget)
+                        {
+                            closestPlayerPosTarget = Vector3.Distance(playerPositionTargets[i].position, player.transform.position);
+                            currentPlayerPosTarget = playerPositionTargets[i];
+                        }
+                    }
+
+                    isAttached = true;
+                }
+                if (!movedPlayerToTargetPos)
+                {
+                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.025)
+                    {
+                        player.transform.position = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                    }
+                    else
+                    {
+                        offsetToPlayer = transform.position - player.transform.position;
+                        movedPlayerToTargetPos = true;
+                    }
+                }
+                else
+                {
+                    rb.transform.position = player.transform.position + offsetToPlayer;
+                }
+            }
+            else if (isAttached)
+            {
+                player.GetComponent<PlayerMovement>().PushBlock = null;
+                movedPlayerToTargetPos = false;
+                isAttached = false;
             }
         }
+    }
 
-        if (!isGrounded)
+    void CheckIfPlayerInRange()
+    {
+        if (Vector3.Distance(transform.position, player.transform.position) < minDistanceToPlayer)
         {
-            canMove = false;
-            playerTransform = null;
-            playerCollider = null;
-
+            playerInRange = true;
+            outlineScript.enabled = true;  
         }
-
-        if (canMove && playerTransform != null && playerMove != null)
+        else
         {
-            Vector3 moveDir = playerMove.movement;
-            moveDir.y = 0;
-            
-            if (moveDir.magnitude > 0)
-            {
-                transform.position += moveDir.normalized * pullSpeed * Time.deltaTime;
-            }
+            playerInRange = false;
+            outlineScript.enabled = false;
         }
     }
-    private void OnTriggerStay(Collider collision)
+
+    void CheckBlockCollision()
     {
-        playerBounds = collision.bounds; // The collider bounds of the block
-        plateBounds = GetComponent<Collider>().bounds; // The bounds of the plate
-        plateBounds.Expand(new Vector3(bufferSides, buffer, bufferSides));
-        if (plateBounds.Contains(playerBounds.min) && plateBounds.Contains(playerBounds.max))
+        float rayDistance = 0.5f;
+        Vector3 origin = transform.position + new Vector3(0, 0.5f, 0);
+        Quaternion orientation = playerRotation.transform.rotation;
+
+        //Forward
+        if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), playerRotation.transform.forward, out RaycastHit hitForward, orientation, rayDistance))
         {
-            playerCollider = collision;
-            playerTransform = collision.transform;
+            playerMovement.forwardMoveDisabled = true;
+        }
+        else
+        {
+            playerMovement.forwardMoveDisabled = false;
+        }
+        
+        // Backward
+        if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), -playerRotation.transform.forward, out RaycastHit hitBack, orientation, rayDistance))
+        {
+            playerMovement.backMoveDisabled = true;
+        }
+        else
+        {
+            playerMovement.backMoveDisabled = false;
         }
 
+        // Left
+        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), -playerRotation.transform.right, out RaycastHit hitLeft, orientation, rayDistance))
+        {
+            playerMovement.leftMoveDisabled = true;
+        }
+        else
+        {
+            playerMovement.leftMoveDisabled = false;
+        }
+
+        // Right
+        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), playerRotation.transform.right, out RaycastHit hitRight, orientation, rayDistance))
+        {
+            playerMovement.rightMoveDisabled = true;
+        }
+        else
+        {
+            playerMovement.rightMoveDisabled = false;
+        }
+
+        // Down
+        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.55f))
+        {
+            moveBlock = false;
+        }
     }
-    public void SetPlayer(Transform player)
-    {
-        playerTransform = player;
-    }
 
-    private void GroundCheck()
-    {
-        Bounds bounds = GetComponent<Collider>().bounds;
-
-        Vector3 boxCenter = new Vector3(bounds.center.x, bounds.min.y - 0.05f, bounds.center.z);
-        Vector3 boxSize = new Vector3(bounds.size.x * 1f, 0.20f, bounds.size.z * 1f);
-
-        isGrounded = Physics.CheckBox(boxCenter, boxSize / 2, Quaternion.identity, groundMask);
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (GetComponent<Collider>() == null) return;
-
-        Bounds bounds = GetComponent<Collider>().bounds;
-        Vector3 boxCenter = new Vector3(bounds.center.x, bounds.min.y - 0.05f, bounds.center.z);
-        Vector3 boxSize = new Vector3(bounds.size.x * 1f, 0.20f, bounds.size.z * 1f);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(boxCenter, boxSize);
-    }
     public void PressInteract()
     {
-        if (interact.Interacting && isGrounded)
-        {
-            canMove = true;
-        }
+        moveBlock = true;
     }
 
     public void ReleaseInteract() 
     {
-        canMove = false;
+        moveBlock = false;
     }
 
     public void InteractInRange()
     {
-        script.EnableUIHold();
-        if (!canMove)
-        {
-            outlineScript.enabled = true;
-        }
+        checkDistanceToPlayer = true;
     }
 
     public void InteractNotInRange()
     {
-        script.DisebleUIHold();
+        checkDistanceToPlayer = false;
         outlineScript.enabled = false;
     }
-
 }

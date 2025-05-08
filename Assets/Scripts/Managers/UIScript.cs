@@ -9,14 +9,6 @@ public class UIScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI textMeshHold;
     [SerializeField] Image imageHold;
 
-    private void Awake()
-    {
-        textMesh.enabled = false;
-        image.enabled = false;
-        textMeshHold.enabled = false;
-        imageHold.enabled = false;
-    }
-
     public void EnableUI()
     {
         textMesh.enabled = true;
@@ -40,5 +32,4 @@ public class UIScript : MonoBehaviour
         textMeshHold.enabled = false;
         imageHold.enabled = false;
     }
-
 }
