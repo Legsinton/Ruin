@@ -142,7 +142,7 @@ public class PushBlock : MonoBehaviour , IInteracting
         }
 
         // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.55f))
+        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.7f))
         {
             moveBlock = false;
         }
