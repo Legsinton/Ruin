@@ -20,6 +20,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private bool switchCam1;
     [SerializeField] private bool switchCam2;
     [SerializeField] private bool switchCam3;
+    public PlayerMovement playerMovement;
 
     private void Start()
     {
@@ -45,21 +46,28 @@ public class MovingPlatform : MonoBehaviour
                 {
                     if (switchCam1 && switchCam)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
+
                         switchCam.SetCamera(1);
                     }
                     else if (switchCam2)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(2);
                     }
                     else if (switchCam3)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(3);
                     }
                     else
                     {
 
                     }
-                    Invoke(nameof(UnSwitch), 3);
+                    Invoke(nameof(UnSwitch), 4);
 
                 }
             }
@@ -94,21 +102,27 @@ public class MovingPlatform : MonoBehaviour
                 {
                     if (switchCam1)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(1);
                     }
                     else if (switchCam2)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(2);
                     }
                     else if (switchCam3)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(3);
                     }
                     else
                     {
 
                     }
-                    Invoke(nameof(UnSwitch), 3);
+                    Invoke(nameof(UnSwitch), 4);
 
                 }
 
@@ -141,21 +155,27 @@ public class MovingPlatform : MonoBehaviour
                 {
                     if (switchCam1)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(1);
                     }
                     else if (switchCam2)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(2);
                     }
                     else if (switchCam3)
                     {
+                        playerMovement.movement = new Vector3(0, 0, 0);
+                        playerMovement.enabled = false;
                         switchCam.SetCamera(3);
                     }
                     else
                     {
 
                     }
-                    Invoke(nameof(UnSwitch), 3);
+                    Invoke(nameof(UnSwitch), 4);
                 }
             }
             targetPosition = originalPosition - Vector3.right * pressDepth;
@@ -178,6 +198,10 @@ public class MovingPlatform : MonoBehaviour
     {
         if (switchCam1 || switchCam2 || switchCam3)
         {
+            playerMovement.enabled = true;
+            playerMovement.movement = new Vector3(0, 0, 0);
+
+
             switchCam.SetCamera(0);
         }
         else
