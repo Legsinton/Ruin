@@ -217,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 2.5f, acceleration * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
         {
@@ -230,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, groundDrag * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 7, groundDrag * Time.deltaTime);
         }
 
         Vector3 vel = playerMoveDir * currentVelocity;
