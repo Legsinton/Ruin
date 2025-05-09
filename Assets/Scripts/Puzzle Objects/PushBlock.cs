@@ -19,6 +19,7 @@ public class PushBlock : MonoBehaviour , IInteracting
     bool playerInRange;
     bool moveBlock;
     bool isAttached;
+    public bool IsAttached { get { return isAttached; } set { isAttached = value; } }
     [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
 

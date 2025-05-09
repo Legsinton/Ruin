@@ -219,9 +219,12 @@ public class PlayerMovement : MonoBehaviour
             movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
         }
 
+        //playerMoveDir = movement.normalized;
+        float inputMagnitude = movement.magnitude;
         playerMoveDir = movement.normalized;
 
-        if (PushBlock != null && movement.magnitude > 0)
+
+        if (PushBlock != null && PushBlock.IsAttached && movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
@@ -232,7 +235,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (movement.magnitude > 0)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
+            float targetSpeed = currentSpeed * inputMagnitude;
+            currentVelocity = Mathf.MoveTowards(currentVelocity, targetSpeed, acceleration * Time.deltaTime);
         }
         else
         {
