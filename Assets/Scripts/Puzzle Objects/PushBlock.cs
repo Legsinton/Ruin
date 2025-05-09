@@ -114,7 +114,10 @@ public class PushBlock : MonoBehaviour , IInteracting
         // Backward
         if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), -playerRotation.transform.forward, out RaycastHit hitBack, orientation, rayDistance))
         {
-            playerMovement.backMoveDisabled = true;
+            if (!hitBack.collider.CompareTag("Player"))
+            {
+                playerMovement.backMoveDisabled = true;
+            }
         }
         else
         {

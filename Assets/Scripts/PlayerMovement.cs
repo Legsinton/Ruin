@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask groundMask;
 
-    readonly float distToGround = 1.05f;
+    readonly float distToGround = 1.2f;
 
     [SerializeField] private bool isGrounded;
 
@@ -217,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 1.75f, acceleration * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 2.5f, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
         {
