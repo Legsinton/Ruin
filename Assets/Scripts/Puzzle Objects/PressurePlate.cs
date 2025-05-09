@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class PressurePlate : MonoBehaviour
     public float moveSpeed;
     bool added = false;
     public bool smallTrigger;
+    public float buffer;
 
     private void Start()
     { 
@@ -58,19 +60,30 @@ public class PressurePlate : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         Bounds blockBounds = other.bounds; // The collider bounds of the block
-        Bounds plateBounds = GetComponent<Collider>().bounds; // The bounds of the plate        if (other.CompareTag("Pullable"))
+        Bounds plateBounds = GetComponent<Collider>().bounds; // The bounds of the plate
         Vector2 plateMin = new Vector2(plateBounds.min.x, plateBounds.min.z);
         Vector2 plateMax = new Vector2(plateBounds.max.x, plateBounds.max.z);
 
         Vector2 blockMin = new Vector2(blockBounds.min.x, blockBounds.min.z);
         Vector2 blockMax = new Vector2(blockBounds.max.x, blockBounds.max.z);
 
-        bool blockIsFullyOnPlate =
-            plateMin.x <= blockMin.x && plateMax.x >= blockMax.x &&
-            plateMin.y <= blockMin.y && plateMax.y >= blockMax.y;
+        // Calculate intersection area
+        float intersectMinX = Mathf.Max(plateMin.x, blockMin.x);
+        float intersectMaxX = Mathf.Min(plateMax.x, blockMax.x);
+        float intersectMinY = Mathf.Max(plateMin.y, blockMin.y);
+        float intersectMaxY = Mathf.Min(plateMax.y, blockMax.y);
+
+        float intersectWidth = Mathf.Max(0, intersectMaxX - intersectMinX);
+        float intersectHeight = Mathf.Max(0, intersectMaxY - intersectMinY);
+        float intersectArea = intersectWidth * intersectHeight;
+
+        float blockArea = (blockMax.x - blockMin.x) * (blockMax.y - blockMin.y);
+
+        float overlapRatio = intersectArea / blockArea;
+
         if (other.CompareTag("Pullable"))
         {
-            if (blockIsFullyOnPlate)
+            if (overlapRatio >= 0.85f)
             {
                 if (!added)
                 {
