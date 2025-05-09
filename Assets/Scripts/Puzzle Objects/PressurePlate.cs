@@ -11,27 +11,47 @@ public class PressurePlate : MonoBehaviour
     Vector3 targetPosition;
     Vector3 originalPosition;
     public float pressDepth;
+    public float smallPressDepth;
     public float moveSpeed;
     bool added = false;
+    public bool smallTrigger;
 
     private void Start()
-    {
-        
+    { 
         originalPosition = transform.position;
     }
 
     private void Update()
     {
-        if (triggerd)
+        MovementFull();
+        MovementSmall();
+    }
+
+    void MovementSmall()
+    {
+        if (smallTrigger && !triggerd)
+        {
+            targetPosition = originalPosition - Vector3.up * smallPressDepth;
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+        }
+        else if (!smallTrigger && !triggerd)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+        }
+    }
+
+    void MovementFull()
+    {
+        if (triggerd && !smallTrigger)
         {
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
 
         }
-        else if (!triggerd)
+        else if (!triggerd && !smallTrigger)
         {
-            targetPosition = originalPosition - Vector3.down * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
 
@@ -54,11 +74,10 @@ public class PressurePlate : MonoBehaviour
             {
                 if (!added)
                 {
+                    smallTrigger = false;
                     SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
-                    added = true;
-                    SoundFXManager.Instance.PlaySoundFX(SoundType.Coin);
-                    
+                    added = true;                    
 
                     for (int i = 0; i < gate.Length; i++)
                     {
@@ -71,7 +90,11 @@ public class PressurePlate : MonoBehaviour
                 }
             }
         }
-       
+
+        if (other.CompareTag("Player") && !triggerd)
+        {
+            smallTrigger = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -82,6 +105,7 @@ public class PressurePlate : MonoBehaviour
             {
                 triggerd = false;
                 added = false;
+                smallTrigger = false;
                 for (int i = 0; i < gate.Length; i++)
                 {
                     gate[i].Switches--;
@@ -91,7 +115,10 @@ public class PressurePlate : MonoBehaviour
                     platforms[i].Switches--;
                 }
             }
-
+        }
+        if (other.CompareTag("Player") && !triggerd)
+        {
+            smallTrigger = false;
         }
     }
 }
