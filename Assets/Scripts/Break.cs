@@ -31,8 +31,8 @@ public class Break : MonoBehaviour
             }
 
             isBroken = false; // Prevent re-triggering
-            StartCoroutine(FadeOut(2));
-            Invoke(nameof(DestroyPiece), 5);
+            StartCoroutine(FadeOut(3));
+            Invoke(nameof(DestroyPiece), 6);
         }
     }
 
@@ -54,9 +54,10 @@ public class Break : MonoBehaviour
     {
         if (rbMesh != null)
         {
-           // yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(3);
             float elapsedTime = 0f;
 
+            Debug.Log("Hellooooo");
             // Store the original colors
             Color[] startColors = new Color[rbMesh.Length];
             for (int i = 0; i < rbMesh.Length; i++)
