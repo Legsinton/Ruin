@@ -180,6 +180,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void ResetPlayerVelocity()
+    {
+        currentVelocity = 0;
+    }
+
     private void MovePlayer()
     {
         if (PushBlock != null)
@@ -201,7 +206,8 @@ public class PlayerMovement : MonoBehaviour
                 movementInput.x = 0;
             }
 
-            movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
+            //movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
+            movement = movementInput.y * capsule.transform.forward;
 
             if (!PushBlock.movedPlayerToTargetPos)
             {

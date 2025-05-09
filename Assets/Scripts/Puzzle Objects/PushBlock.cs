@@ -54,6 +54,7 @@ public class PushBlock : MonoBehaviour , IInteracting
                     }
 
                     isAttached = true;
+                    playerMovement.ResetPlayerVelocity();
                 }
                 if (!movedPlayerToTargetPos)
                 {
