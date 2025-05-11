@@ -13,13 +13,21 @@ public class GateScript : MonoBehaviour
     public bool solved;
     public float pressDepth;
     public float moveSpeed;
+    public PlayerMovement playerMovement;
     bool played;
+
+    [Header("Settings For Cameras")]
+
     [SerializeField] bool canSwitch;
+    [SerializeField] float switchSeconds;
+    [SerializeField] float switchBackSeconds;
+
+    [Header("Camera References")]
+
     [SerializeField] SwitchCamera switchCam;
     [SerializeField] private bool switchCam1;
     [SerializeField] private bool switchCam2;
     [SerializeField] private bool switchCam3;
-    public PlayerMovement playerMovement;
 
     private void Start()
     {
@@ -34,7 +42,7 @@ public class GateScript : MonoBehaviour
             {
                 PlaySoundFX();
                 played = true;
-                Invoke(nameof(CameraSwitch), 0.5f);
+                Invoke(nameof(CameraSwitch), switchSeconds);
             }
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -87,7 +95,7 @@ public class GateScript : MonoBehaviour
             {
 
             }
-            Invoke(nameof(UnSwitch), 3);
+            Invoke(nameof(UnSwitch), switchBackSeconds);
 
         }
     }

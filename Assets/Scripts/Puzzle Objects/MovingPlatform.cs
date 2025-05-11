@@ -3,24 +3,34 @@ using UnityEngine.Rendering;
 
 public class MovingPlatform : MonoBehaviour
 {
+    [Header("Switch Settings")]
     [SerializeField] int switches;
     public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
+    public PlayerMovement playerMovement;
     Vector3 targetPosition;
     Vector3 originalPosition;
-    public float pressDepth;
-    public float moveSpeed;
     bool played;
+
+    [Header("Settings To Move Platform")]
+
     [SerializeField] bool down;
     [SerializeField] bool sideZ;
     [SerializeField] bool sideX;
-    Transform blockTransform;
+    public float pressDepth;
+    public float moveSpeed;
+
+    [Header("Settings For Cameras")]
+
     [SerializeField] bool canSwitch;
+    [SerializeField] float switchSeconds;
+    [SerializeField] float switchBackSeconds;
+
+    [Header("Camera References")]
     [SerializeField] SwitchCamera switchCam;
     [SerializeField] private bool switchCam1;
     [SerializeField] private bool switchCam2;
     [SerializeField] private bool switchCam3;
-    public PlayerMovement playerMovement;
 
     private void Start()
     {
@@ -42,7 +52,7 @@ public class MovingPlatform : MonoBehaviour
             {
                 PlaySoundFX();
                 played = true;
-                Invoke(nameof(CameraSwitch), 1);   
+                Invoke(nameof(CameraSwitch), switchSeconds);   
             }
 
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -69,7 +79,7 @@ public class MovingPlatform : MonoBehaviour
             {
                 PlaySoundFX();
                 played = true;
-                Invoke(nameof(CameraSwitch), 2);
+                Invoke(nameof(CameraSwitch), switchSeconds);
             }
             targetPosition = originalPosition - Vector3.forward * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -94,7 +104,7 @@ public class MovingPlatform : MonoBehaviour
             {
                 PlaySoundFX();
                 played = true;
-                Invoke(nameof(CameraSwitch), 2);
+                Invoke(nameof(CameraSwitch), switchSeconds);
             }
             targetPosition = originalPosition - Vector3.right * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -148,7 +158,7 @@ public class MovingPlatform : MonoBehaviour
             {
 
             }
-            Invoke(nameof(UnSwitch), 4);
+            Invoke(nameof(UnSwitch), switchBackSeconds);
 
         }
     }

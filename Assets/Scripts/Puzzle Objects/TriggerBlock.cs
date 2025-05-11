@@ -37,7 +37,6 @@ public class TriggerBlock : MonoBehaviour
     void EnablePlayer()
     {
         playerMovement.enabled = true;
-        playerMovement.movement = new Vector3(0, 0, 0);
     }
 
     private void OnTriggerStay(Collider other)
