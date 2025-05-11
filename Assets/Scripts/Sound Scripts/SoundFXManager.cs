@@ -52,8 +52,10 @@ using static Unity.VisualScripting.Member;
                 //Single AudioClips
                 { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
                 { SoundType.Coin, Resources.Load<AudioClip>("Sounds/Effects/CoinPling") },
+
  
                 //AudioClips
+                { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
                 { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
                 { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
                 { SoundType.Bonk, Resources.LoadAll<AudioClip>("Sounds/Effects/Bonk") },
@@ -196,6 +198,7 @@ using static Unity.VisualScripting.Member;
         Smash,
         Smack,
         Chain,
-        Slash
+        Slash,
+        Walk
     }
 

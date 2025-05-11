@@ -15915,7 +15915,7 @@ PrefabInstance:
     - target: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: puzzleManager
       value: 
-      objectReference: {fileID: 1601529374}
+      objectReference: {fileID: 0}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
       value: PuzzleButton (4)
@@ -15965,17 +15965,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
---- !u!114 &144688268 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
-  m_PrefabInstance: {fileID: 144688267}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &152325219
 GameObject:
   m_ObjectHideFlags: 0
@@ -16336,6 +16325,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[0].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[1].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[2].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[0].soundType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[1].soundType
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: soundVolumeList.Array.data[2].soundType
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5572631127563652053, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.536956
@@ -17688,7 +17705,7 @@ GameObject:
   - component: {fileID: 233166941}
   - component: {fileID: 233166940}
   - component: {fileID: 233166939}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (46)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29176,7 +29193,7 @@ GameObject:
   - component: {fileID: 299887857}
   - component: {fileID: 299887856}
   - component: {fileID: 299887855}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stairs (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40194,7 +40211,7 @@ PrefabInstance:
     - target: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: puzzleManager
       value: 
-      objectReference: {fileID: 1601529374}
+      objectReference: {fileID: 0}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
       value: PuzzleButton (8)
@@ -40244,17 +40261,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
---- !u!114 &324374657 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
-  m_PrefabInstance: {fileID: 324374656}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &326565473
 GameObject:
   m_ObjectHideFlags: 0
@@ -42564,7 +42570,7 @@ GameObject:
   - component: {fileID: 369870176}
   - component: {fileID: 369870175}
   - component: {fileID: 369870174}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (45)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57453,7 +57459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.022118
+      value: 20.380562
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalPosition.z
@@ -57461,19 +57467,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9956445
+      value: 0.9915617
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08118556
+      value: 0.1211232
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.04568518
+      value: -0.045861043
       objectReference: {fileID: 0}
     - target: {fileID: 157737079639534224, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0037252011
+      value: 0.005602108
       objectReference: {fileID: 0}
     - target: {fileID: 1053071568027268448, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: Priority.m_Value
@@ -57657,19 +57663,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7288399251095179958, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99564457
+      value: 0.9915617
       objectReference: {fileID: 0}
     - target: {fileID: 7288399251095179958, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0811852
+      value: 0.12112325
       objectReference: {fileID: 0}
     - target: {fileID: 7288399251095179958, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.045684658
+      value: -0.04586104
       objectReference: {fileID: 0}
     - target: {fileID: 7288399251095179958, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.003725143
+      value: 0.0056021092
       objectReference: {fileID: 0}
     - target: {fileID: 7970848066335082731, guid: d5da83992f47aca4c8ece989217ecd62, type: 3}
       propertyPath: m_LocalPosition.x
@@ -76247,7 +76253,7 @@ GameObject:
   - component: {fileID: 731456095}
   - component: {fileID: 731456094}
   - component: {fileID: 731456093}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107881,7 +107887,7 @@ PrefabInstance:
     - target: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: puzzleManager
       value: 
-      objectReference: {fileID: 1601529374}
+      objectReference: {fileID: 0}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
       value: PuzzleButton (7)
@@ -107931,17 +107937,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
---- !u!114 &938574985 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
-  m_PrefabInstance: {fileID: 938574984}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &941946776
 GameObject:
   m_ObjectHideFlags: 0
@@ -120059,7 +120054,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1616416703}
+  m_Mesh: {fileID: 771336492}
 --- !u!33 &1175146293
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -145693,7 +145688,7 @@ PrefabInstance:
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'gate.Array.data[0]'
       value: 
-      objectReference: {fileID: 1601529372}
+      objectReference: {fileID: 0}
     - target: {fileID: 4714655819939256929, guid: 57e3fc89ca04de145937b3a17d05d23e, type: 3}
       propertyPath: 'gate.Array.data[1]'
       value: 
@@ -148512,7 +148507,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 771336492}
+  m_Mesh: {fileID: 892371576}
 --- !u!33 &1474176356
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -176656,115 +176651,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1601529371
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1839985163773629222, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_Name
-      value: Gate 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 3.02262
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 6.3776197
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 274.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 11.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 12.14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6457410987454458522, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9148964631782439551, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      propertyPath: switchAmount
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1839985163773629222, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1601529374}
-  m_SourcePrefab: {fileID: 100100000, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
---- !u!114 &1601529372 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9148964631782439551, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-  m_PrefabInstance: {fileID: 1601529371}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601529373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1601529373 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1839985163773629222, guid: c2b64ff480f31404c9d5bde7c8e639b9, type: 3}
-  m_PrefabInstance: {fileID: 1601529371}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1601529374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601529373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb3e428baf28ac746abbea25b1e5d0e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkPressSequence: 1
-  buttons:
-  - {fileID: 144688268}
-  - {fileID: 2083397804}
-  - {fileID: 1782716843}
-  - {fileID: 938574985}
-  - {fileID: 324374657}
-  correctSequence: 010000000400000002000000
-  gate: {fileID: 1601529372}
 --- !u!1001 &1603181166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -183289,6 +183175,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FallingPlatform (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5768593458650533268, guid: c9856af2a7cf7894e889530b1c4d427a, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8450473046228355647, guid: c9856af2a7cf7894e889530b1c4d427a, type: 3}
       propertyPath: buffer
       value: 23.44
@@ -184334,7 +184224,7 @@ PrefabInstance:
     - target: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: puzzleManager
       value: 
-      objectReference: {fileID: 1601529374}
+      objectReference: {fileID: 0}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
       value: PuzzleButton (6)
@@ -184384,17 +184274,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
---- !u!114 &1782716843 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
-  m_PrefabInstance: {fileID: 1782716842}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1786366264
 GameObject:
   m_ObjectHideFlags: 0
@@ -185322,7 +185201,7 @@ GameObject:
   - component: {fileID: 1817761595}
   - component: {fileID: 1817761594}
   - component: {fileID: 1817761593}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207221,6 +207100,10 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1351248220}
+    - target: {fileID: 1130461663377977015, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
+      propertyPath: playerMoveAudio
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1240648076983714646, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: cam
       value: 
@@ -207319,7 +207202,7 @@ PrefabInstance:
     - target: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: puzzleManager
       value: 
-      objectReference: {fileID: 1601529374}
+      objectReference: {fileID: 0}
     - target: {fileID: 3890101126057896603, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
       propertyPath: m_Name
       value: PuzzleButton (5)
@@ -207369,17 +207252,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
---- !u!114 &2083397804 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2520111766153728114, guid: 4704c9d2106e8f34196ba3ca359fc507, type: 3}
-  m_PrefabInstance: {fileID: 2083397803}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e919d78515ca0104e928bfdefa5ac446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2090320024
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -210380,7 +210252,6 @@ SceneRoots:
   - {fileID: 1081198528}
   - {fileID: 1347728179}
   - {fileID: 2073873393}
-  - {fileID: 1601529371}
   - {fileID: 1373876708}
   - {fileID: 438948941}
   - {fileID: 1520544013}

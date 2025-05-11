@@ -19,7 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 movementInput;
     Vector3 playerMoveDir;
-
+    [SerializeField] private float stepRateAtFullSpeed = 0.4f;
+    private float stepTimer = 0f;
     [HideInInspector] public float currentVelocity;
     float gravityForce;
     bool interact;
@@ -62,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         //SetCamera();
+        PlayWalkingSound();
     }
     private void LateUpdate()
     {
@@ -228,6 +230,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
 
@@ -244,6 +247,27 @@ public class PlayerMovement : MonoBehaviour
         {
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }
+    }
+
+    void PlayWalkingSound()
+    {
+        if (playerMoveDir.magnitude > 0.1f && isGrounded)
+        {
+            stepTimer -= Time.deltaTime;
+
+            float normalizedSpeed = currentVelocity / currentSpeed;
+            float stepRate = Mathf.Lerp(0.8f, stepRateAtFullSpeed, normalizedSpeed);
+
+            if (stepTimer <= 0f)
+            {
+                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk, transform.position);
+                stepTimer = stepRate;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
         }
     }
 
