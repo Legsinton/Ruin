@@ -47,16 +47,6 @@ public class PlayerMovement : MonoBehaviour
 
     public CinemachineCamera virtualCamera;
     CinemachineOrbitalFollow orbitalFollow;
-
-    [Header("Stairs")]
-
-    [SerializeField] GameObject stepUpLower;
-    [SerializeField] GameObject stepUpHigher;
-
-    [SerializeField] float stepSmooth;
-    [SerializeField] float stepHeight;
-    [SerializeField] float value;
-
     private void Start()
     {
         Cursor.visible = false;
@@ -68,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         orbitalFollow = virtualCamera.GetComponent<CinemachineOrbitalFollow>();
-        stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
     }
     private void Update()
     {
@@ -219,7 +208,6 @@ public class PlayerMovement : MonoBehaviour
             movement = movementInput.x * cachedCameraRight + movementInput.y * cachedCameraForward;
         }
 
-        //playerMoveDir = movement.normalized;
         float inputMagnitude = movement.magnitude;
         playerMoveDir = movement.normalized;
 
@@ -240,7 +228,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 7, groundDrag * Time.deltaTime);
+            currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
 
         Vector3 vel = playerMoveDir * currentVelocity;

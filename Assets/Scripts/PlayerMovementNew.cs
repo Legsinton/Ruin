@@ -224,10 +224,10 @@ public class PlayerMovementNew : MonoBehaviour
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
         }
-        else
+       /* else
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, groundDrag * Time.deltaTime);
-        }
+        }*/
 
         Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
