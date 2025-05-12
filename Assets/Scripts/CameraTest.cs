@@ -45,7 +45,7 @@ public class CameraTest : MonoBehaviour
         currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
 
         // Lerped position offset
-        Vector3 smoothedPlayerPos = Vector3.Lerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
+        Vector3 smoothedPlayerPos = Vector3.Slerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
         Vector3 playerOffset = smoothedPlayerPos - transform.position;
         previousPlayerPos = smoothedPlayerPos;
 

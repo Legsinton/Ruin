@@ -51,8 +51,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
                 float direction = Vector3.Cross(toPlayer, input).y;
                 Value = direction * pullSpeed * Time.deltaTime;
 
-                
-
                 transform.RotateAround(centerPoint.position, Vector3.up, Value);
                 playerTransform.RotateAround(centerPoint.position, Vector3.up, Value);
             }
@@ -60,7 +58,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
         else
         {
             isStoppingMovement = false; // Reset here so it can run again next time
-            playerMove.GetComponent<PlayerMovement>().PushBlock = null;
             canMove = false;
         }
     }
