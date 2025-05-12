@@ -36,6 +36,7 @@ public class TriggerBlock : MonoBehaviour
 
     void EnablePlayer()
     {
+        SoundFXManager.Instance.StopLoop();
         playerMovement.enabled = true;
     }
 
@@ -43,10 +44,10 @@ public class TriggerBlock : MonoBehaviour
     {
         if (other.gameObject.CompareTag("RotatingTag"))
         {
-            Debug.Log("Rotating object on pressure plate!");
 
             if (!added)
             {
+                SoundFXManager.Instance.Start3DLoop(SoundType.Roll, transform.position);
                 triggerd = true;
                 added = true;
                 playerMovement.enabled = false;

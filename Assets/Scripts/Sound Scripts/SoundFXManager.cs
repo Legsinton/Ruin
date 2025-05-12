@@ -53,7 +53,7 @@ public class SoundFXManager : MonoBehaviour
                 //Single AudioClips
                 { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
                 { SoundType.Coin, Resources.Load<AudioClip>("Sounds/Effects/Coin") },
-                { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Rolling") },
+                { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
 
                 //AudioClips
                 { SoundType.Break, Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
@@ -173,7 +173,7 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    public void StopLoop(SoundType type)
+    private void StopLoop(SoundType type)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 

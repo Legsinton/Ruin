@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
@@ -29,6 +30,8 @@ public class Break : MonoBehaviour,IInteracting
         if (isBroken == true)
         {
             collision.enabled = false;
+            outlineScript.enabled = false;
+
             if (!played)
             {
                 played = true;
@@ -39,7 +42,6 @@ public class Break : MonoBehaviour,IInteracting
                 r.isKinematic = false; // Let them fall now
             }
 
-            isBroken = false; // Prevent re-triggering
             StartCoroutine(FadeOut(3));
             Invoke(nameof(DestroyPiece), 6);
         }
@@ -48,7 +50,11 @@ public class Break : MonoBehaviour,IInteracting
     void DestroyPiece() 
     {
         played = false;
-        Destroy(this.gameObject);
+        // Cleanup to prevent reference issues
+        rb = null;
+        rbMesh = null;
+        outlineScript = null;
+        Destroy(gameObject);
     }
 
     IEnumerator FadeOut(float duration)
@@ -90,20 +96,23 @@ public class Break : MonoBehaviour,IInteracting
         }
     }
 
-
     public void PressInteract()
     {
+        if (this == null || outlineScript == null) return;
+
         isBroken = true;
     }
 
     public void ReleaseInteract()
     {
+        if (this == null || outlineScript == null) return;
 
     }
 
     public void InteractInRange()
     {
-        if (!isBroken && this.gameObject != null)
+        if (this == null || outlineScript == null) return;
+        else if (!isBroken)     
         {
             outlineScript.enabled = true;
         }
@@ -111,7 +120,9 @@ public class Break : MonoBehaviour,IInteracting
 
     public void InteractNotInRange()
     {
-        if (!isBroken && this.gameObject != null)
+        if (this == null || outlineScript == null) return;
+
+        else if (isBroken )
         {
             outlineScript.enabled = false;
         }
