@@ -10,12 +10,13 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration;
     public float groundDrag;
     [SerializeField] float rotateSpeed;
+    public bool DisableRotation { get; set; }
 
     [SerializeField] float currentSpeed = 8;
 
     Rigidbody rb;
     [HideInInspector] public PushBlock PushBlock;
-    RotatingObject rotatingObject;
+    public RotatingObject rotatingObject;
 
     Vector2 movementInput;
     Vector3 playerMoveDir;
@@ -44,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 cachedCameraRight;
 
     [SerializeField] Transform capsule;
+    public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
 
     public CinemachineCamera virtualCamera;
@@ -241,13 +243,18 @@ public class PlayerMovement : MonoBehaviour
         if (playerMoveDir != Vector3.zero && !interact && PushBlock == null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
         }
         else if (PushBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
+       /* else if (rotatingObject != null)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(rotatingObject.transform.position - capsule.transform.position);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }*/
     }
 
     void PlayWalkingSound()

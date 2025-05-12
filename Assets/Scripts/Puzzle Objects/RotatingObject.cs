@@ -10,7 +10,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
     UIScript script;
     [SerializeField] bool canMove;
     [SerializeField] PlayerMovement playerMove;
-    Transform playerTransform;
+    [SerializeField] Transform playerTransform;
     Transform playerRotation;
     bool canRotate;
     bool isStoppingMovement = false;
@@ -39,19 +39,18 @@ public class RotatingObject : MonoBehaviour, IInteracting
     {
         if (canRotate && playerTransform != null)
         {
+            playerMove.rotatingObject = this;
             if (stopMoveCoroutine == null)
             {
                 stopMoveCoroutine = StartCoroutine(StopMovement());
 
             }
-            Vector3 directionToCenter = (centerPoint.position - playerTransform.position);
-            directionToCenter.y = 0f; // flatten the direction so no vertical tilt
-
-            if (directionToCenter != Vector3.zero)
+            Vector3 dirToCenter = transform.position - playerMove.Capsule.position;
+            dirToCenter.y = 0f; // Optional: flatten to horizontal
+            if (dirToCenter != Vector3.zero)
             {
-                playerTransform.forward = directionToCenter.normalized;
+                playerMove.Capsule.rotation = Quaternion.LookRotation(dirToCenter);
             }
-
             if (canMove)
             {
                 if (!cameraWasDisabled)
@@ -66,21 +65,19 @@ public class RotatingObject : MonoBehaviour, IInteracting
                 float direction = Vector3.Cross(toPlayer, input).y;
                 Value = direction * pullSpeed * Time.deltaTime;
 
+                
+
                 transform.RotateAround(centerPoint.position, Vector3.up, Value);
                 playerTransform.RotateAround(centerPoint.position, Vector3.up, Value);
                 mainCamera.transform.RotateAround(centerPoint.position, Vector3.up, Value);
-
             }
-
-
         }
         else
         {
             isStoppingMovement = false; // Reset here so it can run again next time
-
+            playerMove.GetComponent<PlayerMovement>().PushBlock = null;
             canMove = false;
             cameraWasDisabled = false;
-            playerMove.GetComponent<PlayerMovement>().PushBlock = null;
             if (playerTransform != null)
             {
                 cameraCin.enabled = true;
@@ -143,9 +140,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     public void InteractNotInRange()
     {
-        cameraCin.enabled = true;
-        cameraCin.Follow = playerTransform;
-        cameraCin.LookAt = playerTransform;
         canMove = false;
         script.DisebleUIHold();
         outlineScript.enabled = false;
