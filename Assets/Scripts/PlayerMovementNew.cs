@@ -35,6 +35,9 @@ public class PlayerMovementNew : MonoBehaviour
 
     [SerializeField] private bool isGrounded;
 
+    [Header("Player falling")]
+    public LayerMask abyssMask;
+
     [Header("Camera")]
 
     private Vector3 cachedCameraForward;
@@ -55,6 +58,8 @@ public class PlayerMovementNew : MonoBehaviour
     [SerializeField] float stepHeight;
     [SerializeField] float value;
 
+    private SceneManagement sceneManagement;
+
     private void Start()
     {
         Cursor.visible = false;
@@ -67,6 +72,7 @@ public class PlayerMovementNew : MonoBehaviour
     {
         orbitalFollow = virtualCamera.GetComponent<CinemachineOrbitalFollow>();
         stepUpHigher.transform.position = new Vector3(stepUpHigher.transform.position.x, stepHeight, stepUpHigher.transform.position.z);
+        sceneManagement = FindFirstObjectByType<SceneManagement>();
     }
     private void Update()
     {
@@ -224,10 +230,10 @@ public class PlayerMovementNew : MonoBehaviour
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, currentSpeed, acceleration * Time.deltaTime);
         }
-       /* else
-        {
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, groundDrag * Time.deltaTime);
-        }*/
+        /* else
+         {
+             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, groundDrag * Time.deltaTime);
+         }*/
 
         Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
@@ -262,6 +268,15 @@ public class PlayerMovementNew : MonoBehaviour
         {
             //PushBlock = null;
 
+        }
+    }
+
+    // Player falls
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+        {
+            sceneManagement.OnDeath();
         }
     }
 }
