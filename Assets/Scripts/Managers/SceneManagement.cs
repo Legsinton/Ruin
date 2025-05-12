@@ -6,8 +6,12 @@ using UnityEngine.UI;
 
 public class SceneManagement : MonoBehaviour
 {
+    public string sceneToLoad;
+    [Header("Game over UI")]
     public Image overlay;
     public TMP_Text gameOverText;
+
+
 
     public void OnDeath()
     {
@@ -20,7 +24,7 @@ public class SceneManagement : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
         gameOverText.gameObject.SetActive(false);
-        SceneManager.LoadScene("Playtest_1");
+        SceneManager.LoadScene("sceneToLoad");
     }
 
 
