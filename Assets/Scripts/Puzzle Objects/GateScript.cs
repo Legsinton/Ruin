@@ -12,6 +12,7 @@ public class GateScript : MonoBehaviour
     public float pressDepth;
     public float moveSpeed;
     bool played;
+    bool playedCutScene;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -20,7 +21,6 @@ public class GateScript : MonoBehaviour
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
 
-
     private void Start()
     {
         originalPosition = transform.position;
@@ -28,16 +28,17 @@ public class GateScript : MonoBehaviour
 
     void Update()
     {
-        if (Switches >= switchAmount)
+        if (Switches == switchAmount)
         {
             if (!played)
             {
                 PlaySoundFX();
                 played = true;
-                if (cutSceneCamera != null)
+                if (cutSceneCamera != null && !playedCutScene)
                 {
                     ActivateCamera();
                     Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
             }
             targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -58,7 +59,7 @@ public class GateScript : MonoBehaviour
     void ActivateCamera()
     {
         playerCamera.enabled = false;
-        cutSceneCamera.enabled = true; 
+        cutSceneCamera.enabled = true;
     }
 
     void DisableActiveCamera()
