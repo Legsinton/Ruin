@@ -1,5 +1,3 @@
-using Unity.Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GateScript : MonoBehaviour
@@ -13,21 +11,15 @@ public class GateScript : MonoBehaviour
     public bool solved;
     public float pressDepth;
     public float moveSpeed;
-    public PlayerMovement playerMovement;
     bool played;
 
     [Header("Settings For Cameras")]
-
-    [SerializeField] bool canSwitch;
-    [SerializeField] float switchSeconds;
-    [SerializeField] float switchBackSeconds;
+    [SerializeField] float cutSceneLength;
 
     [Header("Camera References")]
+    [SerializeField] Camera playerCamera;
+    [SerializeField] Camera cutSceneCamera;
 
-    [SerializeField] SwitchCamera switchCam;
-    [SerializeField] private bool switchCam1;
-    [SerializeField] private bool switchCam2;
-    [SerializeField] private bool switchCam3;
 
     private void Start()
     {
@@ -42,7 +34,11 @@ public class GateScript : MonoBehaviour
             {
                 PlaySoundFX();
                 played = true;
-                Invoke(nameof(CameraSwitch), switchSeconds);
+                if (cutSceneCamera != null)
+                {
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                }
             }
             targetPosition = originalPosition - Vector3.up * pressDepth;
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
@@ -59,45 +55,16 @@ public class GateScript : MonoBehaviour
         }
     }
 
-    void UnSwitch()
+    void ActivateCamera()
     {
-        if (switchCam1 || switchCam2 || switchCam3)
-        {
-            playerMovement.enabled = true;
-            playerMovement.movement = new Vector3(0, 0, 0);
-            switchCam.SetCamera(0);
-        }
+        playerCamera.enabled = false;
+        cutSceneCamera.enabled = true; 
     }
 
-    void CameraSwitch()
+    void DisableActiveCamera()
     {
-        if (switchCam != null)
-        {
-            if (switchCam1)
-            {
-                playerMovement.movement = new Vector3(0, 0, 0);
-                playerMovement.enabled = false;
-                switchCam.SetCamera(1);
-            }
-            else if (switchCam2)
-            {
-                playerMovement.movement = new Vector3(0, 0, 0);
-                playerMovement.enabled = false;
-                switchCam.SetCamera(2);
-            }
-            else if (switchCam3)
-            {
-                playerMovement.movement = new Vector3(0, 0, 0);
-                playerMovement.enabled = false;
-                switchCam.SetCamera(3);
-            }
-            else
-            {
-
-            }
-            Invoke(nameof(UnSwitch), switchBackSeconds);
-
-        }
+        playerCamera.enabled = true;
+        cutSceneCamera.enabled = false;
     }
 
     void PlaySoundFX()

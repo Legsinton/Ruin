@@ -103,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        Debug.Log(PushBlock);
         if (PushBlock != null)
         {
             if (forwardMoveDisabled && movementInput.y > 0)
@@ -125,6 +126,9 @@ public class PlayerMovement : MonoBehaviour
             //movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
             movement = movementInput.y * capsule.transform.forward;
 
+            //SoundFXManager.Instance.Start3DLoop(SoundType.Roll, transform.position);
+            //SoundFXManager.Instance.StopLoop();
+
             if (!PushBlock.movedPlayerToTargetPos)
             {
                 movement = Vector2.zero;
@@ -139,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
         playerMoveDir = movement.normalized;
 
 
-        if (PushBlock != null && PushBlock.IsAttached && movement.magnitude > 0)
+        if (PushBlock != null && movement.magnitude > 0)
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
@@ -155,7 +159,6 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
 
