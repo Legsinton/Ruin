@@ -56,6 +56,8 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Rolling") },
 
                 //AudioClips
+                { SoundType.Break, Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
+
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
                 { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
                 { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
