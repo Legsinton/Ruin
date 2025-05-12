@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.Collections;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 
 public class RotatingObject : MonoBehaviour, IInteracting
 {
@@ -12,12 +9,9 @@ public class RotatingObject : MonoBehaviour, IInteracting
     [SerializeField] PlayerMovement playerMove;
     [SerializeField] Transform playerTransform;
     Transform playerRotation;
-    bool canRotate;
-    bool isStoppingMovement = false;
-    [SerializeField] Camera mainCamera;
-    [SerializeField] CinemachineCamera cameraCin;
-    bool cameraWasDisabled = false;
     Coroutine stopMoveCoroutine;
+    bool canRotate;
+    bool isStoppingMovement;
 
 
     float Value;
@@ -28,7 +22,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
     public Interact interact;
     private void Awake()
     {
-        mainCamera = Camera.main;
         script = FindAnyObjectByType<UIScript>();
         playerMove = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();
@@ -53,13 +46,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
             }
             if (canMove)
             {
-                if (!cameraWasDisabled)
-                {
-                    cameraCin.enabled = false;
-                    cameraCin.Follow = null;
-                    cameraCin.LookAt = null;
-                    cameraWasDisabled = true;
-                }
                 Vector3 toPlayer = (playerTransform.position - centerPoint.position).normalized;
                 Vector3 input = new Vector3(playerMove.movement.x, 0f, playerMove.movement.z).normalized;
                 float direction = Vector3.Cross(toPlayer, input).y;
@@ -69,7 +55,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
                 transform.RotateAround(centerPoint.position, Vector3.up, Value);
                 playerTransform.RotateAround(centerPoint.position, Vector3.up, Value);
-                mainCamera.transform.RotateAround(centerPoint.position, Vector3.up, Value);
             }
         }
         else
@@ -77,13 +62,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
             isStoppingMovement = false; // Reset here so it can run again next time
             playerMove.GetComponent<PlayerMovement>().PushBlock = null;
             canMove = false;
-            cameraWasDisabled = false;
-            if (playerTransform != null)
-            {
-                cameraCin.enabled = true;
-                cameraCin.Follow = playerTransform;
-                cameraCin.LookAt = playerTransform;
-            }
         }
     }
     private void OnCollisionStay(Collision other)
@@ -117,9 +95,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
     public void ReleaseInteract()
     {
         canRotate = false;
-        cameraCin.enabled = true;
-        cameraCin.Follow = playerTransform;
-        cameraCin.LookAt = playerTransform;
         canMove = false;
         if (stopMoveCoroutine != null)
         {
