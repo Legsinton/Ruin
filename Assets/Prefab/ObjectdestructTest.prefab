@@ -10731,7 +10731,8 @@ GameObject:
   - component: {fileID: 3177910836920648737}
   - component: {fileID: 114508605820746544}
   - component: {fileID: 1976963089004876059}
-  m_Layer: 0
+  - component: {fileID: -58300421748921088}
+  m_Layer: 10
   m_Name: ObjectdestructTest
   m_TagString: BreakablePot
   m_Icon: {fileID: 0}
@@ -11023,6 +11024,8 @@ MonoBehaviour:
   - {fileID: 0}
   rbMesh: []
   isBroken: 0
+  collision: {fileID: 1976963089004876059}
+  outlineScript: {fileID: -58300421748921088}
 --- !u!136 &1976963089004876059
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11038,7 +11041,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -11046,6 +11049,24 @@ CapsuleCollider:
   m_Height: 3.04
   m_Direction: 1
   m_Center: {x: 0.02, y: 0.35, z: 0.02}
+--- !u!114 &-58300421748921088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4885807165415587575}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &4913286128697533226
 GameObject:
   m_ObjectHideFlags: 0
