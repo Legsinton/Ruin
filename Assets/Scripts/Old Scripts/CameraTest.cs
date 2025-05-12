@@ -16,11 +16,13 @@ public class CameraTest : MonoBehaviour
     [SerializeField] Transform cameraTransform;
 
     Vector3 focusTarget;
+    Vector3 previousPlayerPos;
     Vector2 mouseDelta;
     Vector2 currentRotation;
 
     void Start()
     {
+        previousPlayerPos = transform.position;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -42,11 +44,17 @@ public class CameraTest : MonoBehaviour
 
         currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
 
-        // Calculated the next camera position
+        // Lerped position offset
+        Vector3 smoothedPlayerPos = Vector3.Lerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
+        Vector3 playerOffset = smoothedPlayerPos - transform.position;
+        previousPlayerPos = smoothedPlayerPos;
+
+        // Instant rotation offset
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
+        Vector3 rotatedOffset = rotation * (cameraPlayerOffset.normalized * targetCameraDistance);
 
-        Vector3 newCameraOffset = rotation * cameraPlayerOffset.normalized * targetCameraDistance;
-
+        // Final camera position and offset
+        Vector3 newCameraOffset = playerOffset + rotatedOffset;
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
         // Check wall collision
@@ -58,13 +66,10 @@ public class CameraTest : MonoBehaviour
         }
 
         // Update camera position
-        //cameraTransform.position = Vector3.Slerp(cameraTransform.position, newCameraPos, smoothTime * Time.deltaTime);
         cameraTransform.position = newCameraPos;
 
         // Update focus point position
         Vector3 newFocusPos = transform.position - newCameraOffset + cameraFocusOffset;
-
-        //focusTarget = Vector3.Slerp(focusTarget, newFocusPos, smoothTime * Time.deltaTime);
         focusTarget = newFocusPos;
     }
 
