@@ -103,7 +103,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        Debug.Log(PushBlock);
         if (PushBlock != null)
         {
             if (forwardMoveDisabled && movementInput.y > 0)

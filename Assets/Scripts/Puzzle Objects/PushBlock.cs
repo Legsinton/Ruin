@@ -76,7 +76,7 @@ public class PushBlock : MonoBehaviour , IInteracting
             }
             else if (isAttached)
             {
-                player.GetComponent<PlayerMovement>().PushBlock = null;
+                playerMovement.PushBlock = null;
                 movedPlayerToTargetPos = false;
                 isAttached = false;
             }
