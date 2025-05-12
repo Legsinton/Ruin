@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -48,8 +47,6 @@ public class PlayerMovement : MonoBehaviour
     public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
 
-    public CinemachineCamera virtualCamera;
-    CinemachineOrbitalFollow orbitalFollow;
     private void Start()
     {
         Cursor.visible = false;
@@ -58,10 +55,6 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
     }
 
-    private void Awake()
-    {
-        orbitalFollow = virtualCamera.GetComponent<CinemachineOrbitalFollow>();
-    }
     private void Update()
     {
         //SetCamera();
@@ -101,76 +94,6 @@ public class PlayerMovement : MonoBehaviour
     private void GroundCheck()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, distToGround, groundMask);
-    }
-
-    private void SetCamera()
-    {
-        if (PushBlock != null)
-        {
-            Quaternion targetRotation = virtualCamera.transform.rotation;
-            //virtualCamera.LookAt = null;
-            if (movementInput.y > 0.5f && movement.x > 0.5)
-            {
-                targetRotation = Quaternion.Euler(21, 91, 4);
-                orbitalFollow.HorizontalAxis.Value = 82;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movementInput.y > 0.5f && movement.x < -0.5f)
-            {
-                targetRotation = Quaternion.Euler(17, -89, 0);
-
-                orbitalFollow.HorizontalAxis.Value = -104;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movementInput.y > 0.5f && movement.z > 0.5f)
-            {
-                targetRotation = Quaternion.Euler(14, 1, 0);
-                orbitalFollow.HorizontalAxis.Value = 8;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movementInput.y > 0.5f && movement.z < -0.5f)
-            {
-                targetRotation = Quaternion.Euler(20, 181, 0);
-                orbitalFollow.HorizontalAxis.Value = 148;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            if (movementInput.y < -0.5f && movement.z > 0.5f)
-            {
-                targetRotation = Quaternion.Euler(20, 181, 0);
-                orbitalFollow.HorizontalAxis.Value = 148;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-            else if (movementInput.y < -0.5f && movement.z < -0.5f)
-            {
-                targetRotation = Quaternion.Euler(14, 1, 0);
-                orbitalFollow.HorizontalAxis.Value = 8;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-
-            }
-            else if (movementInput.y < -0.5f && movement.x < -0.5f)
-            {
-                targetRotation = Quaternion.Euler(21, 91, 4);
-                orbitalFollow.HorizontalAxis.Value = 82;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-
-            }
-            else if (movementInput.y < -0.5f && movement.x > 0.5f)
-            {
-                targetRotation = Quaternion.Euler(17, -89, 0);
-
-                orbitalFollow.HorizontalAxis.Value = -104;
-                orbitalFollow.VerticalAxis.Value = 17.5f;
-            }
-
-            virtualCamera.transform.rotation = Quaternion.Lerp(
-                virtualCamera.transform.rotation,
-                targetRotation,
-                Time.deltaTime * 3);
-        }
-        else
-        {
-            virtualCamera.LookAt = capsule;
-        }
     }
 
     public void ResetPlayerVelocity()
