@@ -1,4 +1,6 @@
+﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static Unity.VisualScripting.Member;
@@ -12,11 +14,27 @@ public class SoundFXManager : MonoBehaviour
     private Dictionary<SoundType, object> soundFXDict;
     [SerializeField] private List<SoundVolumeEntry> soundVolumeList;
     private Dictionary<SoundType, float> soundVolumeDict;
-    AudioSource source;
+    /*AudioSource source;
+    float fadeDuration = 0;
+    float fadeTimer = 2;
+    bool stop;*/
 
-    private float timer = 0;
-    private const float MinTime = 0.05f;
+    public class LoopSoundInstance
+    {
+        public AudioSource source;
+        public GameObject obj;          // The GameObject holding the AudioSource
+        public float fadeTimer = 2;
+        public float fadeDuration = 0;
+        public bool stop;
+    }
 
+    private Dictionary<GameObject, LoopSoundInstance> activeLoopsByObject = new Dictionary<GameObject, LoopSoundInstance>();
+
+    public void StopLoop(LoopSoundInstance instance)
+    {
+        if (instance != null)
+            instance.stop = true;
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -27,6 +45,7 @@ public class SoundFXManager : MonoBehaviour
         InitializeSounds();
 
     }
+
     [System.Serializable]
     public class SoundVolumeEntry
     {
@@ -54,15 +73,16 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
                 { SoundType.Coin, Resources.Load<AudioClip>("Sounds/Effects/Coin") },
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
+                { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollOther") },
+                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
+
 
                 //AudioClips
                 { SoundType.Break, Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
-
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
                 { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
                 { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
                 { SoundType.Bonk, Resources.LoadAll<AudioClip>("Sounds/Effects/Bonk") },
-                { SoundType.Chain, Resources.LoadAll<AudioClip>("Sounds/Effects/Chain") },
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
                 { SoundType.Slash, Resources.LoadAll<AudioClip>("Sounds/Effects/Slash") }
 
@@ -71,7 +91,59 @@ public class SoundFXManager : MonoBehaviour
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        /* timer += Time.deltaTime;
+         if (source != null && !stop)
+         {
+             fadeTimer = Mathf.Clamp(fadeTimer, 0f, fadeDuration);
+             fadeTimer += Time.deltaTime;
+             float t = fadeTimer / fadeDuration;
+             source.volume = Mathf.Clamp01(t);
+         }
+         if (source != null && stop)
+         {
+             fadeTimer = Mathf.Clamp(fadeTimer, 0f, fadeDuration);
+             fadeTimer -= Time.deltaTime;
+             float t = fadeTimer / fadeDuration;
+             source.volume = Mathf.Clamp01(t);
+         }*/
+        // Update fading for each active loop
+        List<GameObject> objectsToRemove = new List<GameObject>(); // List to store objects to be removed
+
+        foreach (var entry in activeLoopsByObject)
+        {
+            LoopSoundInstance loop = entry.Value;
+
+            if (!loop.stop)
+            {
+                loop.fadeTimer += Time.deltaTime;
+            }
+            else
+            {
+                loop.fadeTimer -= Time.deltaTime;
+            }
+
+            // Clamp fadeTimer to avoid it going out of bounds
+            loop.fadeTimer = Mathf.Clamp(loop.fadeTimer, 0f, loop.fadeDuration);
+
+            // Calculate volume based on fade
+            float t = loop.fadeTimer / loop.fadeDuration;
+            loop.source.volume = Mathf.Clamp01(t);
+
+            // If fade-out is complete, stop and mark the object for later removal
+            if (loop.stop && loop.fadeTimer <= 0f)
+            {
+                loop.source.Stop();
+                Destroy(loop.obj); // Clean up the temporary GameObject
+                objectsToRemove.Add(entry.Key); // ✅ ONLY mark for removal here
+            }
+        }
+
+        // ✅ Now safe to remove from dictionary *after* iteration
+        foreach (var obj in objectsToRemove)
+        {
+            activeLoopsByObject.Remove(obj);
+        }
+
     }
 
     public void PlaySoundFX(SoundType type, Vector3? position = null)
@@ -106,35 +178,34 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    private void SetupLoopingAudioSources()
+   /* public void Start3DLoop(SoundType type, Vector3 position, Transform parent = null)
     {
-        loopFXSources = new AudioSource[3]; // Create 3 AudioSource components, for example
-
-        // Add AudioSource components to the SoundManager GameObject
-        for (int i = 0; i < loopFXSources.Length; i++)
-        {
-            loopFXSources[i] = gameObject.AddComponent<AudioSource>();  // Add an AudioSource to this object
-            loopFXSources[i].loop = true; // Set them to loop
-        }
-    }
-
-    public AudioSource Start3DLoop(SoundType type, Vector3 position)
-    {
-        // Load clip directly just to be 100% sure it�s valid
+        // Load clip directly just to be 100% sure it’s valid
         AudioClip clip = Resources.Load<AudioClip>($"Sounds/Effects/{type}");
 
         if (clip == null)
         {
             Debug.LogError($"[SoundFXManager] AudioClip not found for: {type}");
-            return null;
+            return;
         }
 
         GameObject tempGO = new GameObject("3D_Loop_" + type);
-        tempGO.transform.position = position;
+        if (parent != null)
+        {
+            tempGO.transform.SetParent(parent);
+            tempGO.transform.localPosition = Vector3.zero; // So it's centered on parent
+        }
+        else
+        {
+            tempGO.transform.position = position;
+        }
+
 
         source = tempGO.AddComponent<AudioSource>();
+        //source.volume = 0;
         source.clip = clip;
         source.loop = true;
+
         source.spatialBlend = 1f;
         source.minDistance = 1f;
         source.maxDistance = 50f;
@@ -142,53 +213,107 @@ public class SoundFXManager : MonoBehaviour
 
         source.Play();
 
-        return source;
-    }
-
-    /*public void StartLoop(SoundType type, Vector3 position)
-    {
-        if (!soundFXDict.ContainsKey(type)) return null;
-
-        if (soundFXDict[type] is AudioClip singleClip)
+        LoopSoundInstance instance = new LoopSoundInstance
         {
-            GameObject tempGO = new GameObject("3D_LoopingSound_" + type);
-            tempGO.transform.position = position;
-            AudioSource aSource = tempGO.AddComponent<AudioSource>();
-            aSource.clip = singleClip;
-            aSource.loop = true;
-            aSource.spatialBlend = 1.0f; // Fully 3D
-            aSource.Play();
-            return aSource;
-        }
+            source = source,
+            obj = tempGO,
+            fadeTimer = 0f,
+            stop = false,
+            fadeDuration = 1f // or pass this in if needed
+        };
 
-        return null;
+        activeLoops.Add(instance);
+
+        //return source;
     }*/
 
-    public void StopLoop()
+    public void StartLoopFor(GameObject owner, SoundType type, Vector3 position, Transform parent = null)
     {
-        if (source != null)
+        if (activeLoopsByObject.ContainsKey(owner)) return; // If there's already a loop for this object, don't start another
+
+        // Load clip
+        AudioClip clip = Resources.Load<AudioClip>($"Sounds/Effects/{type}");
+        if (clip == null)
         {
-            source.Stop();
-            Destroy(source.gameObject);
+            Debug.LogError($"[SoundFXManager] AudioClip not found for: {type}");
+            return;
         }
+
+        // Create new GameObject for the sound
+        GameObject tempGO = new GameObject($"3D_Loop_{owner.name}_{type}");
+        if (parent != null)
+        {
+            tempGO.transform.SetParent(parent);
+            tempGO.transform.localPosition = Vector3.zero; // So it's centered on parent
+        }
+        else
+        {
+            tempGO.transform.position = position;
+        }
+        AudioSource source = tempGO.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.loop = true;
+        source.spatialBlend = 1f;
+        source.minDistance = 1f;
+        source.maxDistance = 50f;
+        source.playOnAwake = false;
+        source.Play();
+
+        // Create a LoopSoundInstance to store the sound state
+        LoopSoundInstance instance = new LoopSoundInstance
+        {
+            source = source,
+            obj = tempGO,
+            fadeTimer = 0f,
+            fadeDuration = 0.1f, // Adjust this value as needed for fade-in time
+            stop = false
+        };
+
+        // Add the LoopSoundInstance to the dictionary
+        activeLoopsByObject.Add(owner, instance);
     }
 
-    private void StopLoop(SoundType type)
+    public void StopLoopFor(GameObject owner)
     {
-        if (!soundFXDict.ContainsKey(type)) return;
+        if (!activeLoopsByObject.ContainsKey(owner)) return; // No loop found for this object
 
-        if (soundFXDict[type] is AudioClip singleClip)
-        {
-            foreach (var audioSource in loopFXSources)
-            {
-                if (audioSource.clip == singleClip)
-                {
-                    audioSource.Stop();
-                    audioSource.loop = false;
-                }
-            }
-        }
+        LoopSoundInstance instance = activeLoopsByObject[owner];
+        instance.stop = true; // Mark it for stopping (fade out)
     }
+
+    /* public void StopLoop()
+     {
+         if (source != null)
+         {
+             stop = true;
+             StartCoroutine(DestroyObject());
+         }
+     }*/
+
+    /* IEnumerator DestroyObject()
+     {
+         yield return new WaitUntil(() => fadeTimer <= 0f);
+         stop = false;
+         source.Stop();
+         Destroy(source.gameObject);
+     }*/
+
+    /* private void StopLoop(SoundType type)
+     {
+         if (!soundFXDict.ContainsKey(type)) return;
+
+         if (soundFXDict[type] is AudioClip singleClip)
+         {
+             foreach (var audioSource in loopFXSources)
+             {
+                 if (audioSource.clip == singleClip)
+                 {
+                     audioSource.Stop();
+                     audioSource.loop = false;
+                 }
+             }
+         }
+     }*/
 }
 
 public enum SoundType
@@ -205,6 +330,7 @@ public enum SoundType
     Chain,
     Slash,
     Walk,
-    Roll
+    Roll,
+    RollingOther
 }
 

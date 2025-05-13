@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 movement;
     public float acceleration;
     public float groundDrag;
-    [SerializeField] float rotateSpeed;
     public bool DisableRotation { get; set; }
 
     [SerializeField] float currentSpeed = 8;
@@ -17,13 +16,12 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public PushBlock PushBlock;
     public RotatingObject rotatingObject;
 
-    Vector2 movementInput;
+    [HideInInspector] public Vector2 movementInput;
     Vector3 playerMoveDir;
     [SerializeField] private float stepRateAtFullSpeed = 0.4f;
     private float stepTimer = 0f;
     [HideInInspector] public float currentVelocity;
     float gravityForce;
-    bool interact;
 
     [HideInInspector] public bool rightMoveDisabled;
     [HideInInspector] public bool leftMoveDisabled;
@@ -146,10 +144,9 @@ public class PlayerMovement : MonoBehaviour
         {
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
-        else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
+        else if (rotatingObject != null)
         {
-            Debug.Log("Rotating");
-            currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
+            currentVelocity = 0;
         }
         else if (movement.magnitude > 0)
         {
@@ -165,21 +162,21 @@ public class PlayerMovement : MonoBehaviour
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
 
-        if (playerMoveDir != Vector3.zero && !interact && PushBlock == null)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
-        }
-        else if (PushBlock != null)
+        if (PushBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
-       /* else if (rotatingObject != null)
+        else if (rotatingObject != null)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(rotatingObject.transform.position - capsule.transform.position);
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
-        }*/
+            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(rotatingObject.transform.position.x, 0, rotatingObject.transform.position.z) - new Vector3(capsule.transform.position.x, 0, capsule.transform.position.z));
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation,  5 * Time.deltaTime);
+        }
+        else if (playerMoveDir != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
+        }
     }
 
     void PlayWalkingSound()
@@ -200,14 +197,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             stepTimer = 0f;
-        }
-    }
-
-    private void OnCollisionEnter(Collision hit)
-    {
-        if (hit.gameObject.CompareTag("RotatingTag"))
-        {
-            rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
         }
     }
 }

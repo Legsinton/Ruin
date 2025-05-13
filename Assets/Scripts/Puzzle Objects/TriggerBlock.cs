@@ -10,14 +10,18 @@ public class TriggerBlock : MonoBehaviour
     public MovingPlatform[] platforms;
     Vector3 targetPosition;
     Vector3 originalPosition;
+    Vector3 previousPosition;
     public float pressDepth;
     public float moveSpeed;
     bool added = false;
     public PlayerMovement playerMovement;
+    float movementThreshold = 0.001f;
+    bool played;
 
     private void Start()
     {
         originalPosition = transform.position;
+        previousPosition = transform.position;
     }
 
     private void Update()
@@ -32,11 +36,32 @@ public class TriggerBlock : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
+        // Check movement
+        Vector3 movement = transform.position - previousPosition;
+
+        // Play sound only when moving downward
+        if (movement.magnitude > movementThreshold) // Small threshold to avoid false positives
+        {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther,transform.position);
+            }
+        }
+        else 
+        {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+        }
+
+        previousPosition = transform.position;
     }
 
     void EnablePlayer()
     {
-        SoundFXManager.Instance.StopLoop();
         playerMovement.enabled = true;
     }
 
@@ -44,10 +69,8 @@ public class TriggerBlock : MonoBehaviour
     {
         if (other.gameObject.CompareTag("RotatingTag"))
         {
-
             if (!added)
             {
-                SoundFXManager.Instance.Start3DLoop(SoundType.Roll, transform.position);
                 triggerd = true;
                 added = true;
                 playerMovement.enabled = false;
@@ -61,7 +84,6 @@ public class TriggerBlock : MonoBehaviour
                 {
                     gate[i].Switches++;
                 }
-
             }
         }
     }
