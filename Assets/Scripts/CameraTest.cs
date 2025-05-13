@@ -15,6 +15,8 @@ public class CameraTest : MonoBehaviour
     [Header("Reference")]
     [SerializeField] Transform cameraTransform;
 
+    int layerMask;
+
     Vector3 focusTarget;
     Vector3 previousPlayerPos;
     Vector2 mouseDelta;
@@ -23,8 +25,7 @@ public class CameraTest : MonoBehaviour
     void Start()
     {
         previousPlayerPos = transform.position;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        layerMask = LayerMask.GetMask("Wall", "whatIsGround");
     }
 
     private void OnLook(InputValue lookValue)
@@ -60,7 +61,7 @@ public class CameraTest : MonoBehaviour
         // Check wall collision
         Vector3 direction = transform.position - newCameraPos;
         float distance = Vector3.Distance(transform.position, newCameraPos);
-        if (Physics.Raycast(transform.position, -direction.normalized, out RaycastHit hit1, distance + wallDistance, LayerMask.GetMask("Wall")))
+        if (Physics.Raycast(transform.position, -direction.normalized, out RaycastHit hit1, distance + wallDistance, layerMask))
         {
             newCameraPos = new Vector3(hit1.point.x, newCameraPos.y, hit1.point.z) + direction.normalized * wallDistance;
         }
