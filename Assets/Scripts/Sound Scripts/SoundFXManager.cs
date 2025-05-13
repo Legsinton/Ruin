@@ -74,6 +74,7 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.Coin, Resources.Load<AudioClip>("Sounds/Effects/Coin") },
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
                 { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollOther") },
+                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
 
 
                 //AudioClips
@@ -82,7 +83,6 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
                 { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
                 { SoundType.Bonk, Resources.LoadAll<AudioClip>("Sounds/Effects/Bonk") },
-                { SoundType.Chain, Resources.LoadAll<AudioClip>("Sounds/Effects/Chain") },
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
                 { SoundType.Slash, Resources.LoadAll<AudioClip>("Sounds/Effects/Slash") }
 
