@@ -174,10 +174,10 @@ MonoBehaviour:
   movement: {x: 0, y: 0, z: 0}
   acceleration: 17
   groundDrag: 21.05
-  rotateSpeed: 0
   currentSpeed: 8
   PushBlock: {fileID: 0}
   rotatingObject: {fileID: 0}
+  movementInput: {x: 0, y: 0}
   stepRateAtFullSpeed: 0.4
   currentVelocity: 0
   rightMoveDisabled: 0
@@ -230,11 +230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57aa54458bf04545878bfb82b366a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraPlayerOffset: {x: 1, y: 1.2, z: 0}
+  cameraPlayerOffset: {x: 0, y: 1, z: 0}
   cameraFocusOffset: {x: 0, y: 2, z: 0}
   smoothTime: 8
   rotationSpeed: 0.2
-  rotationClamp: {x: 0, y: 110}
+  rotationClamp: {x: 40, y: 100}
   targetCameraDistance: 3
   wallDistance: 0.1
   cameraTransform: {fileID: 0}
