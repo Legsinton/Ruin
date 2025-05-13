@@ -4,6 +4,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
 {
     [Header("Settings")]
     [SerializeField] float rotateSpeed;
+    [SerializeField] float offsetToPlayer;
 
     [Header("Reference")]
     [SerializeField] Transform playerTransform;
@@ -13,6 +14,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
     PlayerMovement playerMovement;
     bool move;
     bool inRange;
+    bool playerAttached;
 
     void Awake()
     {
@@ -21,24 +23,35 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (inRange)
+        if (!inRange) return;
+
+        if (move)
         {
-            if (move)
+            if (!playerAttached)
             {
+                playerMovement.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.None;
+                playerTransform.SetParent(centerPoint);
                 playerMovement.rotatingObject = this;
-
-                float input = playerMovement.movementInput.y;
-
-                float angle = -input * rotateSpeed * Time.deltaTime;
-
-                centerPoint.RotateAround(centerPoint.position, Vector3.up, angle);
-                playerTransform.RotateAround(centerPoint.position, Vector3.up, angle);
+                playerAttached = true;
             }
-            else
-            {
-                playerMovement.rotatingObject = null;
-            }
+
+            float input = playerMovement.movementInput.y;
+            float angle = -input * rotateSpeed * Time.deltaTime;
+            centerPoint.Rotate(Vector3.up, angle);
         }
+        else if (playerAttached)
+        {
+            StopPlayer();
+        }
+    }
+
+    void StopPlayer()
+    {
+        
+        playerMovement.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Interpolate;
+        playerTransform.SetParent(null);
+        playerMovement.rotatingObject = null;
+        playerAttached = false;
     }
 
     public void PressInteract()
@@ -59,8 +72,10 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     public void InteractNotInRange()
     {
+        Debug.Log("TEEEST");
+        
         inRange = false;
-        playerMovement.rotatingObject = null;
+        StopPlayer();
         outlineScript.enabled = false;
     }
 }
