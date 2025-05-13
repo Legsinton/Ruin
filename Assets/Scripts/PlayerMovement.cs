@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
     [HideInInspector] public PushBlock PushBlock;
-    public RotatingObject rotatingObject;
+    [HideInInspector] public RotatingObject rotatingObject;
 
     [HideInInspector] public Vector2 movementInput;
     Vector3 playerMoveDir;
@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //SetCamera();
+        RotatePlayer();
         PlayWalkingSound();
     }
     private void LateUpdate()
@@ -69,11 +69,11 @@ public class PlayerMovement : MonoBehaviour
         cachedCameraRight.y = 0;
         cachedCameraRight.Normalize();
     }
+
     private void FixedUpdate()
     {
-        MovePlayer();
-
         GroundCheck();
+        MovePlayer();
 
         if (!isGrounded)
         {
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (rotatingObject != null)
         {
-            currentVelocity = 0;
+            //currentVelocity = 0;
         }
         else if (movement.magnitude > 0)
         {
@@ -161,7 +161,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
+    }
 
+    void RotatePlayer()
+    {
         if (PushBlock != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
@@ -169,8 +172,9 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (rotatingObject != null)
         {
+            /*
             Quaternion targetRotation = Quaternion.LookRotation(new Vector3(rotatingObject.transform.position.x, 0, rotatingObject.transform.position.z) - new Vector3(capsule.transform.position.x, 0, capsule.transform.position.z));
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation,  5 * Time.deltaTime);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation,  5 * Time.deltaTime);*/
         }
         else if (playerMoveDir != Vector3.zero)
         {
