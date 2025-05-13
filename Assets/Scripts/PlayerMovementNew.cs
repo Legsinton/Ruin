@@ -216,13 +216,11 @@ public class PlayerMovementNew : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            Debug.Log("PushBlack");
             currentVelocity = Mathf.MoveTowards(currentVelocity, 1, acceleration * Time.deltaTime);
 
         }
-        else if (rotatingObject != null && movement.magnitude > 0 && rotatingObject.CanRotate)
+        else if (rotatingObject != null && movement.magnitude > 0)
         {
-            Debug.Log("Rotating");
             currentVelocity = Mathf.MoveTowards(currentVelocity, rotateSpeed, acceleration * Time.deltaTime);
 
         }

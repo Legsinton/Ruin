@@ -1,119 +1,66 @@
-using System.Collections;
 using UnityEngine;
 
 public class RotatingObject : MonoBehaviour, IInteracting
 {
-    float pullSpeed = 30;
-    UIScript script;
-    [SerializeField] bool canMove;
-    [SerializeField] PlayerMovement playerMove;
+    [Header("Settings")]
+    [SerializeField] float rotateSpeed;
+
+    [Header("Reference")]
     [SerializeField] Transform playerTransform;
-    Transform playerRotation;
-    Coroutine stopMoveCoroutine;
-    bool canRotate;
-    bool isStoppingMovement;
-
-
-    float Value;
-    public bool CanRotate { get { return canRotate; } set { canRotate = value; } }
-    [SerializeField] Outline outlineScript;
-    [SerializeField] float buffer;
     [SerializeField] Transform centerPoint;
-    public Interact interact;
-    private void Awake()
+    [SerializeField] Outline outlineScript;
+
+    PlayerMovement playerMovement;
+    bool move;
+    bool inRange;
+
+    void Awake()
     {
-        script = FindAnyObjectByType<UIScript>();
-        playerMove = FindAnyObjectByType<PlayerMovement>();
-        interact = FindAnyObjectByType<Interact>();
-        playerRotation = playerMove.transform.GetChild(0).transform;
+        playerMovement = playerTransform.GetComponent<PlayerMovement>();
     }
 
-    private void FixedUpdate()
+    void Update()
     {
-        if (canRotate && playerTransform != null)
+        if (inRange)
         {
-            playerMove.rotatingObject = this;
-            if (stopMoveCoroutine == null)
+            if (move)
             {
-                stopMoveCoroutine = StartCoroutine(StopMovement());
+                playerMovement.rotatingObject = this;
 
-            }
-            Vector3 dirToCenter = transform.position - playerMove.Capsule.position;
-            dirToCenter.y = 0f; // Optional: flatten to horizontal
-            if (dirToCenter != Vector3.zero)
-            {
-                playerMove.Capsule.rotation = Quaternion.LookRotation(dirToCenter);
-            }
-            if (canMove)
-            {
-                Vector3 toPlayer = (playerTransform.position - centerPoint.position).normalized;
-                Vector3 input = new Vector3(playerMove.movement.x, 0f, playerMove.movement.z).normalized;
-                float direction = Vector3.Cross(toPlayer, input).y;
-                Value = direction * pullSpeed * Time.deltaTime;
+                float input = playerMovement.movementInput.y;
 
-                transform.RotateAround(centerPoint.position, Vector3.up, Value);
-                playerTransform.RotateAround(centerPoint.position, Vector3.up, Value);
+                float angle = -input * rotateSpeed * Time.deltaTime;
+
+                centerPoint.RotateAround(centerPoint.position, Vector3.up, angle);
+                playerTransform.RotateAround(centerPoint.position, Vector3.up, angle);
+            }
+            else
+            {
+                playerMovement.rotatingObject = null;
             }
         }
-        else
-        {
-            isStoppingMovement = false; // Reset here so it can run again next time
-            canMove = false;
-        }
-    }
-    private void OnCollisionStay(Collision other)
-    {
-        playerTransform = other.gameObject.transform;
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        playerTransform = null;
-    }
-
-    IEnumerator StopMovement()
-    {
-        isStoppingMovement = true;
-        playerMove.ResetPlayerVelocity();
-        yield return new WaitForSeconds(1);
-        canMove = true;
-        stopMoveCoroutine = null;
-
-    }
-    public void SetPlayer(Transform player)
-    {
-        playerTransform = player;
-
-    }
     public void PressInteract()
     {
-        canRotate = true;
+        move = true;
     }
+
     public void ReleaseInteract()
     {
-        canRotate = false;
-        canMove = false;
-        if (stopMoveCoroutine != null)
-        {
-            StopCoroutine(stopMoveCoroutine);
-            stopMoveCoroutine = null;
-        }
-        isStoppingMovement = false; 
+        move = false;
     }
 
     public void InteractInRange()
     {
-        script.EnableUIHold();
-        if (!canRotate)
-        {
-            outlineScript.enabled = true;
-        }
+        inRange = true;
+        outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        canMove = false;
-        script.DisebleUIHold();
+        inRange = false;
+        playerMovement.rotatingObject = null;
         outlineScript.enabled = false;
     }
 }
