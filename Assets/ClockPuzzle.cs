@@ -18,6 +18,7 @@ public class ClockPuzzle : MonoBehaviour
 
     bool puzzleComplete;
     [SerializeField] int buttonID;
+    [SerializeField] bool small;
     [SerializeField] ClockPuzzleManager puzzleManager;
 
     private void Start()

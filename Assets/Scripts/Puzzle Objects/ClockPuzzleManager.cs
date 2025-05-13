@@ -66,4 +66,18 @@ public class ClockPuzzleManager : MonoBehaviour
         }
     }
 }
+[System.Serializable]
+public struct ButtonPress
+{
+    public int buttonID;
+    public bool isSmallCursor; // true = small, false = big
+
+    public ButtonPress(int id, bool small)
+    {
+        buttonID = id;
+        isSmallCursor = small;
+    }
+
+    // Optional: override Equals and GetHashCode if you want to compare ButtonPress objects easily
+}
 

@@ -13621,6 +13621,7 @@ MonoBehaviour:
   moveSpeed: 0.51
   playerMovement: {fileID: 2073873397}
   buttonID: 10
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &68866723
 GameObject:
@@ -15082,6 +15083,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 1
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &100113278
 GameObject:
@@ -16438,15 +16440,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: soundVolumeList.Array.data[0].volume
-      value: 0.15
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: soundVolumeList.Array.data[1].volume
-      value: 1
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: soundVolumeList.Array.data[2].volume
-      value: 1
+      value: 0.61
       objectReference: {fileID: 0}
     - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: soundVolumeList.Array.data[3].volume
@@ -19644,7 +19646,7 @@ GameObject:
   - component: {fileID: 279195459}
   - component: {fileID: 279195458}
   m_Layer: 0
-  m_Name: GameObject (2)
+  m_Name: SongChangerAnother
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19662,7 +19664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278d4f777d8525645b6350404d87ff6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  music: Calm
+  music: Scary
 --- !u!65 &279195459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19693,7 +19695,7 @@ Transform:
   m_GameObject: {fileID: 279195457}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 116.3, y: 0, z: 5.12}
+  m_LocalPosition: {x: 116.3, y: 0.45, z: 5.12}
   m_LocalScale: {x: 1, y: 1, z: 0.48502}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57755,6 +57757,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 11
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &477243603
 GameObject:
@@ -57802,9 +57805,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracks:
   - trackName: Scary
-    clip: {fileID: 8300000, guid: 8fd22074c74cbff43b0b02af8e2a626a, type: 3}
+    clip: {fileID: 8300000, guid: 96753533f10364647bed03e188336ba4, type: 3}
   - trackName: Calm
-    clip: {fileID: 8300000, guid: fd39f8763da2e5b46b88c7ebd5aa896d, type: 3}
+    clip: {fileID: 8300000, guid: 721eb7d7c1fb3a44f94c4f14d85b6fb5, type: 3}
   - trackName: Song1
     clip: {fileID: 8300000, guid: 5f7fb3b7bd2b05149bc3d361b5802c71, type: 3}
   - trackName: Song2
@@ -59916,7 +59919,7 @@ GameObject:
   - component: {fileID: 578332173}
   - component: {fileID: 578332176}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: SongChanger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59970,7 +59973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278d4f777d8525645b6350404d87ff6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  music: Song1
+  music: Calm
 --- !u!43 &578678685
 Mesh:
   m_ObjectHideFlags: 0
@@ -83400,7 +83403,7 @@ GameObject:
   - component: {fileID: 742012181}
   - component: {fileID: 742012180}
   - component: {fileID: 742012179}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (64)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100700,73 +100703,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &897842599
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 897842601}
-  - component: {fileID: 897842600}
-  - component: {fileID: 897842602}
-  m_Layer: 3
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &897842600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 897842599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a75108065836e8c45bfb8e2d1b95b0f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tracks: []
---- !u!4 &897842601
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 897842599}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 97.89, y: 0, z: -7.24}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &897842602
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 897842599}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.6563492, y: 2.8301687, z: 4.7413254}
-  m_Center: {x: -0.22547531, y: 0.9150846, z: -1.8706627}
 --- !u!43 &909250929
 Mesh:
   m_ObjectHideFlags: 0
@@ -117824,6 +117760,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 3
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!65 &1093168098
 BoxCollider:
@@ -118782,6 +118719,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 9
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!43 &1113862723
 Mesh:
@@ -134664,7 +134602,7 @@ GameObject:
   - component: {fileID: 1299341887}
   - component: {fileID: 1299341886}
   - component: {fileID: 1299341885}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146070,6 +146008,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 4
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!65 &1360535825
 BoxCollider:
@@ -147077,6 +147016,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 2
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!65 &1405050450
 BoxCollider:
@@ -148960,6 +148900,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 6
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!4 &1473452802 stripped
 Transform:
@@ -168423,6 +168364,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 5
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &1541901642
 GameObject:
@@ -181015,6 +180957,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 7
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &1686088783
 GameObject:
@@ -182017,7 +181960,7 @@ GameObject:
   - component: {fileID: 1700714360}
   - component: {fileID: 1700714359}
   - component: {fileID: 1700714358}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (65)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196265,6 +196208,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 12
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1 &1838457759
 GameObject:
@@ -204129,6 +204073,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1940837730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1940837733}
+  - component: {fileID: 1940837732}
+  - component: {fileID: 1940837731}
+  m_Layer: 0
+  m_Name: SongChanger (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1940837731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940837730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 278d4f777d8525645b6350404d87ff6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  music: Calm
+--- !u!65 &1940837732
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940837730}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.6563492, y: 2.8301687, z: 4.7413254}
+  m_Center: {x: -0.22547531, y: 0.9150846, z: -1.8706627}
+--- !u!4 &1940837733
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940837730}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 92.28, y: 0, z: -54.14}
+  m_LocalScale: {x: 1, y: 1, z: 0.48502}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944525797
 GameObject:
   m_ObjectHideFlags: 0
@@ -210860,6 +210871,7 @@ MonoBehaviour:
   moveSpeed: 0.5
   playerMovement: {fileID: 2073873397}
   buttonID: 8
+  small: 0
   puzzleManager: {fileID: 1326297048}
 --- !u!1001 &7031322743799437189
 PrefabInstance:
@@ -211106,8 +211118,8 @@ SceneRoots:
   - {fileID: 375112543}
   - {fileID: 650035839}
   - {fileID: 1068451128}
-  - {fileID: 897842601}
   - {fileID: 578332175}
+  - {fileID: 1940837733}
   - {fileID: 279195460}
   - {fileID: 1525210258}
   - {fileID: 1481393568}
