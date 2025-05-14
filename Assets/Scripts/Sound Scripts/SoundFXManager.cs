@@ -46,7 +46,7 @@ public class SoundFXManager : MonoBehaviour
     public class SoundVolumeEntry
     {
         public SoundType soundType;  // The sound effect type (key)
-        public float volume;         // The volume level (value)
+        [Range(0,1)]public float volume;         // The volume level (value)
     }
 
     private void OnValidate()

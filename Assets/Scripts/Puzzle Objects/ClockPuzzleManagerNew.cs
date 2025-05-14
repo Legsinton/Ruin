@@ -10,31 +10,31 @@ public class ClockPuzzleManagerNew : MonoBehaviour
     bool Solved;
     [SerializeField] Transform rotatingObjectBigTransform;
     [SerializeField] Transform rotatingObjectSmallTransform;
-    [SerializeField] Quaternion Big;
-    [SerializeField] Quaternion Small;
-    [SerializeField] float smallValueLittle;
-    [SerializeField] float bigValueLittle;
-    [SerializeField] float smallValueBig;
-    [SerializeField] float bigValueBig;
+    [SerializeField] float bigMin, bigMax;
+    [SerializeField] float smallMin, smallMax;
 
     private void Update()
     {
-        Big = rotatingObjectBigTransform.rotation;
-        Small = rotatingObjectSmallTransform.rotation;
+        float bigY = rotatingObjectBigTransform.eulerAngles.y;
+        float smallY = rotatingObjectSmallTransform.eulerAngles.y;
 
-        if (Small.y < smallValueLittle && Small.y > bigValueLittle && Big.y < smallValueBig && Big.y > bigValueBig)
+        if (bigY >= bigMin && bigY <= bigMax && smallY >= smallMin && smallY <= smallMax)
         {
-            PuzzleSolved();
+            if (!Solved)
+            {
+                PuzzleSolved();
+            }
         }
         else
         {
-            PuzzleUnsolved();
+            if (Solved)
+            {
+                PuzzleUnsolved();
+            }
         }
     }
-
     private void PuzzleSolved()
     {
-     
         Solved = true;
         if (gate != null)
         {
@@ -46,7 +46,6 @@ public class ClockPuzzleManagerNew : MonoBehaviour
             plat.AddSwitch();
         }
     }
-
     private void PuzzleUnsolved()
     {
         if (Solved)

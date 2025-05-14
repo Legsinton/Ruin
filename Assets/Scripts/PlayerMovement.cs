@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
 
+    bool played;
+
     [Header("GroundCheck")]
 
     public LayerMask groundMask;
@@ -142,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther, transform.position, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null)
@@ -155,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            SoundFXManager.Instance.StopLoopFor(gameObject);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
 
