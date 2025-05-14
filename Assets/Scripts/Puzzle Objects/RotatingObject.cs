@@ -1,4 +1,4 @@
-using Unity.AppUI.UI;
+using System;
 using UnityEngine;
 
 public class RotatingObject : MonoBehaviour, IInteracting
@@ -15,14 +15,15 @@ public class RotatingObject : MonoBehaviour, IInteracting
     [SerializeField] Transform centerPoint;
     [SerializeField] public Transform interactPoint;
     [SerializeField] Outline outlineScript;
-
     PlayerMovement playerMovement;
-    [HideInInspector] public float currentAngle;
+
     Vector3 targetPos;
     bool interact;
     bool inInteractRange;
     bool playerAttached;
     bool calculatedPlayerPos;
+
+    [HideInInspector] public event Action<float> UpdateTriggerBlocks;
 
     void Awake()
     {
@@ -91,7 +92,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
                 }
 
                 centerPoint.Rotate(Vector3.up, angle);
-                currentAngle = centerPoint.rotation.eulerAngles.y;
+                UpdateTriggerBlocks?.Invoke(centerPoint.rotation.eulerAngles.y);
             }
         }
         else if (playerAttached)

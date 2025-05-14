@@ -1,100 +1,52 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class TriggerBlock : MonoBehaviour
 {
+    [SerializeField] float correctAngle;
 
-    public bool triggerd = false;
-    public GateScript[] gate;
-    public MovingPlatform[] platforms;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
-    Vector3 previousPosition;
-    public float pressDepth;
-    public float moveSpeed;
-    bool added = false;
-    public PlayerMovement playerMovement;
-    float movementThreshold = 0.001f;
-    bool played;
+    [SerializeField] RotatingObject rotatingObject;
+    [SerializeField] GateScript[] gate;
+    [SerializeField] MovingPlatform[] platforms;
 
-    private void Start()
+    bool isAligned;
+
+    void OnEnable()
     {
-        originalPosition = transform.position;
-        previousPosition = transform.position;
+        rotatingObject.UpdateTriggerBlocks += checkIfObjectAligned;
     }
 
-    private void Update()
+    void OnDisable()
     {
-        if (triggerd)
-        {
-            targetPosition = originalPosition - Vector3.up * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        rotatingObject.UpdateTriggerBlocks -= checkIfObjectAligned;
+    }
 
-        }
-        else if (!triggerd)
+    void checkIfObjectAligned(float currentAngle)
+    {
+        if (Mathf.Round(currentAngle) == correctAngle)
         {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-        }
-        // Check movement
-        Vector3 movement = transform.position - previousPosition;
-
-        // Play sound only when moving downward
-        if (movement.magnitude > movementThreshold) // Small threshold to avoid false positives
-        {
-            if (!played)
+            if (!isAligned)
             {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther,transform.position);
+                for (int i = 0; i < gate.Length; i++)
+                    gate[i].Switches++;
+
+                for (int i = 0; i < platforms.Length; i++)
+                    platforms[i].Switches++;
+
+                isAligned = true;
             }
         }
-        else 
+        else
         {
-            if (played)
+            if (isAligned)
             {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
-        }
+                for (int i = 0; i < gate.Length; i++)
+                    gate[i].Switches--;
 
-        previousPosition = transform.position;
-    }
+                for (int i = 0; i < platforms.Length; i++)
+                    platforms[i].Switches--;
 
-    void EnablePlayer()
-    {
-        playerMovement.enabled = true;
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.CompareTag("RotatingTag"))
-        {
-            if (!added)
-            {
-                triggerd = true;
-                added = true;
-                playerMovement.enabled = false;
-                playerMovement.movement = new Vector3(0, 0, 0);
-                Invoke(nameof(EnablePlayer), 1);
-                
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("RotatingTag"))
-        {
-            if (added)
-            {
-                triggerd = false;
-                added = false;
+                isAligned = false;
             }
         }
     }
 }
-
-
-
-
-
