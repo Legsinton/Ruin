@@ -5,18 +5,22 @@ public class RotatingObject : MonoBehaviour, IInteracting
 {
     [Header("Settings")]
     [SerializeField] float rotateSpeed;
-    [SerializeField] float offsetToPlayer;
+    [SerializeField] float playerOffset;
     [SerializeField] float correctPlayerPosSpeed;
+    [SerializeField] float interactRange;
+    [SerializeField] Vector2 clampRotation;
 
     [Header("Reference")]
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform centerPoint;
+    [SerializeField] public Transform interactPoint;
     [SerializeField] Outline outlineScript;
 
     PlayerMovement playerMovement;
+    [HideInInspector] public float currentAngle;
     Vector3 targetPos;
     bool interact;
-    bool inRange;
+    bool inInteractRange;
     bool playerAttached;
     bool calculatedPlayerPos;
 
@@ -27,7 +31,9 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     void Update()
     {
-        if (!inRange) return;
+        if (!inInteractRange) return;
+
+        if (!CheckIfPlayerInRange()) return;
 
         if (interact)
         {
@@ -39,28 +45,27 @@ public class RotatingObject : MonoBehaviour, IInteracting
                     playerTransform.SetParent(centerPoint);
                     playerMovement.rotatingObject = this;
 
-                    Vector3 toPlayer = playerTransform.position - transform.position;
-                    Vector3 localToPlayer = transform.InverseTransformDirection(toPlayer);
+                    Vector3 toPlayer = playerTransform.position - interactPoint.position;
+                    Vector3 localToPlayer = interactPoint.InverseTransformDirection(toPlayer);
 
                     if (localToPlayer.x < 0)
                     {
-                        rotateSpeed = Mathf.Abs(rotateSpeed);
-                        offsetToPlayer = -Mathf.Abs(offsetToPlayer);
+                        rotateSpeed = -Mathf.Abs(rotateSpeed);
+                        playerOffset = -Mathf.Abs(playerOffset);
                     }
                     else
                     {
-                        rotateSpeed = -Mathf.Abs(rotateSpeed);
-                        offsetToPlayer = Mathf.Abs(offsetToPlayer);
+                        rotateSpeed = Mathf.Abs(rotateSpeed);
+                        playerOffset = Mathf.Abs(playerOffset);
                     }
 
-                    Vector3 offset = transform.right * Mathf.Sign(localToPlayer.x) * Mathf.Abs(offsetToPlayer);
-                    targetPos = transform.position + offset;
+                    Vector3 offset = interactPoint.right * Mathf.Sign(localToPlayer.x) * Mathf.Abs(playerOffset);
+                    targetPos = interactPoint.position + offset;
 
                     calculatedPlayerPos = true;
                 }
                 else
                 {
-                    Debug.Log(Vector3.Distance(playerTransform.position, targetPos));
                     if (Vector3.Distance(playerTransform.position, targetPos) > 0.1)
                     {
                         playerTransform.position = Vector3.Lerp(playerTransform.position, targetPos, correctPlayerPosSpeed * Time.deltaTime);
@@ -75,7 +80,18 @@ public class RotatingObject : MonoBehaviour, IInteracting
             {
                 float input = playerMovement.movementInput.y;
                 float angle = -input * rotateSpeed * Time.deltaTime;
+
+                if (centerPoint.rotation.eulerAngles.y + angle > clampRotation.y)
+                {
+                    angle = clampRotation.y - centerPoint.rotation.eulerAngles.y;
+                }
+                else if (centerPoint.rotation.eulerAngles.y + angle < clampRotation.x)
+                {
+                    angle = clampRotation.x - centerPoint.rotation.eulerAngles.y;
+                }
+
                 centerPoint.Rotate(Vector3.up, angle);
+                currentAngle = centerPoint.rotation.eulerAngles.y;
             }
         }
         else if (playerAttached)
@@ -94,6 +110,19 @@ public class RotatingObject : MonoBehaviour, IInteracting
         playerTransform.localScale = Vector3.one;
     }
 
+    bool CheckIfPlayerInRange()
+    {
+        if (Vector3.Distance(transform.position, playerTransform.position) < interactRange)
+        {
+            outlineScript.enabled = true;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void PressInteract()
     {
         interact = true;
@@ -107,14 +136,13 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        inRange = true;
-        outlineScript.enabled = true;
+        inInteractRange = true;
     }
 
     public void InteractNotInRange()
     {
-        inRange = false;
         StopPlayer();
+        inInteractRange = false;
         outlineScript.enabled = false;
     }
 }
