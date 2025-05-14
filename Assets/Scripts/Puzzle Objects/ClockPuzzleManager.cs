@@ -34,7 +34,7 @@ public class ClockPuzzleManager : MonoBehaviour
     {
         foreach (var button in buttons)
         {
-            button.PuzzleComplete();
+            //button.PuzzleComplete();
         }
         Solved = true;
         if (gate != null)

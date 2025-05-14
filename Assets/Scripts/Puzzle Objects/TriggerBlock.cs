@@ -8,39 +8,45 @@ public class TriggerBlock : MonoBehaviour
     [SerializeField] GateScript[] gate;
     [SerializeField] MovingPlatform[] platforms;
 
-    void Start()
+    bool isAligned;
+
+    void OnEnable()
     {
-        
+        rotatingObject.UpdateTriggerBlocks += checkIfObjectAligned;
     }
 
-    void checkIfObjectAligned()
+    void OnDisable()
     {
-        if (correctAngle == rotatingObject.currentAngle)
+        rotatingObject.UpdateTriggerBlocks -= checkIfObjectAligned;
+    }
+
+    void checkIfObjectAligned(float currentAngle)
+    {
+        if (Mathf.Round(currentAngle) == correctAngle)
         {
-            for (int i = 0; i < gate.Length; i++)
+            if (!isAligned)
             {
-                gate[i].Switches++;
-            }
-            for (int i = 0; i < platforms.Length; i++)
-            {
-                platforms[i].Switches++;
+                for (int i = 0; i < gate.Length; i++)
+                    gate[i].Switches++;
+
+                for (int i = 0; i < platforms.Length; i++)
+                    platforms[i].Switches++;
+
+                isAligned = true;
             }
         }
         else
         {
-            for (int i = 0; i < gate.Length; i++)
+            if (isAligned)
             {
-                gate[i].Switches--;
-            }
-            for (int i = 0; i < platforms.Length; i++)
-            {
-                platforms[i].Switches--;
+                for (int i = 0; i < gate.Length; i++)
+                    gate[i].Switches--;
+
+                for (int i = 0; i < platforms.Length; i++)
+                    platforms[i].Switches--;
+
+                isAligned = false;
             }
         }
     }
 }
-
-
-
-
-
