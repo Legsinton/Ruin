@@ -31,7 +31,16 @@ public class Interact : MonoBehaviour
             }
 
             interactInRange = true;
-            currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
+
+            //currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
+            if (currentInteractableObject.TryGetComponent(out IInteracting comp))
+            {
+                comp.InteractInRange();
+            }
+            else
+            {
+                Debug.LogError("Trying to interact with a missing component or something");
+            }
         }
     }
 

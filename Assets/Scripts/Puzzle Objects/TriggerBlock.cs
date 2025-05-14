@@ -76,14 +76,7 @@ public class TriggerBlock : MonoBehaviour
                 playerMovement.enabled = false;
                 playerMovement.movement = new Vector3(0, 0, 0);
                 Invoke(nameof(EnablePlayer), 1);
-                for (int i = 0; i < platforms.Length; i++)
-                {
-                    platforms[i].Switches++;
-                }
-                for (int i = 0; i < gate.Length; i++)
-                {
-                    gate[i].Switches++;
-                }
+                
             }
         }
     }
@@ -96,15 +89,6 @@ public class TriggerBlock : MonoBehaviour
             {
                 triggerd = false;
                 added = false;
-
-                for (int i = 0; i < gate.Length; i++)
-                {
-                    gate[i].Switches--;
-                }
-                for (int i = 0; i < platforms.Length; i++)
-                {
-                    platforms[i].Switches--;
-                }
             }
         }
     }
