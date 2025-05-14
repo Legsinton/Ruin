@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class ChestScript : MonoBehaviour,IInteracting
+public class ChestScript : MonoBehaviour, IInteracting
 {
     [Header("Settings")]
     [SerializeField] float openSpeed;
@@ -14,6 +14,13 @@ public class ChestScript : MonoBehaviour,IInteracting
     bool isDoorOpen;
     Quaternion closedRotation;
     Quaternion openRotation;
+    bool spawned;
+    GameObject spawnedItem;
+
+    public Transform spawnPoisition;
+    public Transform spawnPoint; // Assign the SpawnPoint in Inspector
+    public GameObject itemPrefab; // Assign your item prefab
+    public float launchForce = 5f; // Tune for the desired "pop" effect
 
     void Start()
     {
@@ -24,24 +31,39 @@ public class ChestScript : MonoBehaviour,IInteracting
 
     void Update()
     {
-        if (!isDoorOpen)
-        {
-            CloseDoor();
-        }
-        else if (isDoorOpen)
+        if (isDoorOpen)
         {
             OpenDoor();
+            if (!spawned)
+            {
+                spawned = true;
+                SpawnItem();
+            }
+
+            MoveItem();
         }
     }
 
-    void CloseDoor()
+    public void SpawnItem()
     {
-        if (Quaternion.Angle(transform.rotation, closedRotation) > 0.5f)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, closedRotation, Time.deltaTime * openSpeed);
-        }
+        spawnedItem = Instantiate(itemPrefab, spawnPoint.position, Quaternion.identity);
     }
 
+    public void MoveItem()
+    {
+        if (spawnedItem != null)
+        {
+            if (spawnedItem.transform.position.y < spawnPoisition.position.y)
+            {
+                spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
+            }
+            else
+            {
+                gameObject.layer = default;
+                this.enabled = false;
+            }
+        }
+    }
     void OpenDoor()
     {
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
@@ -54,7 +76,7 @@ public class ChestScript : MonoBehaviour,IInteracting
     {
         if (!isDoorOpen)
         {
-          isDoorOpen = true;
+            isDoorOpen = true;
         }
         else if (isDoorOpen)
         {
