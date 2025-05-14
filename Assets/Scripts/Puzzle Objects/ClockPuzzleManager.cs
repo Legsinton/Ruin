@@ -66,7 +66,7 @@ public class ClockPuzzleManager : MonoBehaviour
         }
     }
 }
-[System.Serializable]
+/*[System.Serializable]
 public struct ButtonPress
 {
     public int buttonID;
@@ -79,5 +79,5 @@ public struct ButtonPress
     }
 
     // Optional: override Equals and GetHashCode if you want to compare ButtonPress objects easily
-}
+}*/
 

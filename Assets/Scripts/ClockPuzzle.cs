@@ -16,11 +16,6 @@ public class ClockPuzzle : MonoBehaviour
     float movementThreshold = 0.001f;
     bool played;
 
-    bool puzzleComplete;
-    [SerializeField] int buttonID;
-    [SerializeField] bool small;
-    [SerializeField] ClockPuzzleManager puzzleManager;
-
     private void Start()
     {
         originalPosition = transform.position;
@@ -68,12 +63,6 @@ public class ClockPuzzle : MonoBehaviour
         playerMovement.enabled = true;
     }
 
-    public void PuzzleComplete()
-    {
-        puzzleComplete = true;
-    }
-
-
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("RotatingTag"))
@@ -84,8 +73,7 @@ public class ClockPuzzle : MonoBehaviour
                 added = true;
                 playerMovement.enabled = false;
                 playerMovement.movement = new Vector3(0, 0, 0);
-                Invoke(nameof(EnablePlayer), 0.5f);
-                puzzleManager.RegisterButtonPress(buttonID);
+                Invoke(nameof(EnablePlayer), 2f);
             }
         }
     }
@@ -98,7 +86,6 @@ public class ClockPuzzle : MonoBehaviour
             {
                 triggerd = false;
                 added = false;
-                puzzleManager.UnRegisterButtonPress(buttonID);
             }
         }
     }
