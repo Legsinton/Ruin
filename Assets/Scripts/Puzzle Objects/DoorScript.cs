@@ -18,6 +18,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     bool openingDoor;
     bool closingDoor;
     bool isDoorOpen;
+    bool played;
     Quaternion closedRotation;
     Quaternion openRotation;
 
@@ -58,10 +59,16 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     {
         if (Quaternion.Angle(transform.rotation, closedRotation) > 0.5f)
         {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Roll, this.transform);
+            }
             transform.rotation = Quaternion.Lerp(transform.rotation, closedRotation, Time.deltaTime * openSpeed);
         }
         else
         {
+            SoundFXManager.Instance.StopLoopFor(gameObject);
             closingDoor = false;
             isDoorOpen = false;
         }
@@ -71,10 +78,16 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     {
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject,SoundType.Roll,this.transform);
+            }
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
         }
         else
         {
+            SoundFXManager.Instance.StopLoopFor(gameObject);
             openingDoor = false;
             isDoorOpen = true;
         }

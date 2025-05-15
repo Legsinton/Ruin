@@ -63,7 +63,7 @@ public class GateScript : MonoBehaviour
             if (!played)
             {
                 played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform.position, this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
             }
         }
         else
