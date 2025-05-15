@@ -5,28 +5,51 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-
     public bool triggerd = false;
     public GateScript[] gate;
     public MovingPlatform[] platforms;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
     public float pressDepth;
     public float smallPressDepth;
     public float moveSpeed;
-    bool added = false;
     public bool smallTrigger;
     public float buffer;
 
+    Vector3 targetPosition;
+    Vector3 originalPosition;
+    Vector3 previousPosition;
+    float movementThreshold = 0.001f;
+    bool played;
+    bool added = false;
     private void Start()
     { 
         originalPosition = transform.position;
+        previousPosition = transform.position;
     }
 
     private void Update()
     {
         MovementFull();
         MovementSmall();
+
+        Vector3 movement = transform.position - previousPosition;
+        if (movement.magnitude > movementThreshold)
+        {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Roll, transform.position, this.transform);
+            }
+        }
+        else
+        {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+        }
+
+        previousPosition = transform.position;
     }
 
     void MovementSmall()
