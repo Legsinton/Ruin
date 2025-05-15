@@ -25,7 +25,7 @@ public class RandomSoundFX : MonoBehaviour
             {
                 NewRandom();
                 played = true;
-                SoundFXManager.Instance.PlaySoundFX(0.5f, SoundType.RandomScary, playerMovement.transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.RandomScary, playerMovement.transform.position);
                 Invoke(nameof(UnPlay), 0.4f);
             }
         }

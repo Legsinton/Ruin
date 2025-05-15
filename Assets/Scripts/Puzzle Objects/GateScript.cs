@@ -65,7 +65,7 @@ public class GateScript : MonoBehaviour
             if (!played)
             {
                 played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform.position, this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
             }
         }
         else
@@ -94,7 +94,7 @@ public class GateScript : MonoBehaviour
 
     void PlaySoundFX()
     {
-        SoundFXManager.Instance.PlaySoundFX(0.5f, SoundType.Chain, transform.position);
+        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
     }
     public void AddSwitch()
     {

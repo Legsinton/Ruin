@@ -48,8 +48,8 @@ public class ChestScript : MonoBehaviour, IInteracting
             gameObject.layer = default;
             if (!played)
             {
-                SoundFXManager.Instance.PlaySoundFX(0.6f, SoundType.ChestOpen, transform.position);
-                SoundFXManager.Instance.PlaySoundFX(0.5f, SoundType.ChestCreak, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.ChestOpen, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.ChestCreak, transform.position);
                 played = true;
             }
             OpenDoor();

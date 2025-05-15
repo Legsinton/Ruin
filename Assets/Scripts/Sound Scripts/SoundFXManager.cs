@@ -126,11 +126,15 @@ public class SoundFXManager : MonoBehaviour
 
     }
 
-    public void PlaySoundFX( float volume, SoundType type, Vector3? position = null)
+    public void PlaySoundFX( SoundType type, Vector3? position = null)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 
-        //float volume = 1;//soundVolumeDict.ContainsKey(type) ? soundVolumeDict[type] : 1.0f;
+        float volume = 1.0f;
+        if (soundVolumeDict != null && soundVolumeDict.ContainsKey(type))
+        {
+            volume = soundVolumeDict[type];
+        }
         if (soundFXDict[type] is AudioClip singleClip)
         {
             if (position.HasValue)
@@ -158,7 +162,7 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    public void StartLoopFor(GameObject owner, SoundType type, Vector3 position, Transform parent = null)
+    public void StartLoopFor(GameObject owner, SoundType type,Transform parent = null)
     {
         if (activeLoopsByObject.ContainsKey(owner)) return; // If there's already a loop for this object, don't start another
 
@@ -176,10 +180,6 @@ public class SoundFXManager : MonoBehaviour
         {
             tempGO.transform.SetParent(parent);
             tempGO.transform.localPosition = Vector3.zero; // So it's centered on parent
-        }
-        else
-        {
-            tempGO.transform.position = position;
         }
         AudioSource source = tempGO.AddComponent<AudioSource>();
         source.clip = clip;
