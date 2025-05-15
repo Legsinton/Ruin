@@ -33,6 +33,8 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         if (isDoorOpen)
         {
+            outlineScript.enabled = false;
+            gameObject.layer = default;
             OpenDoor();
             if (!spawned)
             {
@@ -47,6 +49,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     public void SpawnItem()
     {
         spawnedItem = Instantiate(itemPrefab, spawnPoint.position, Quaternion.identity);
+        spawnedItem.transform.localScale = Vector3.one; // Force it to correct scale
     }
 
     public void MoveItem()
@@ -59,7 +62,7 @@ public class ChestScript : MonoBehaviour, IInteracting
             }
             else
             {
-                gameObject.layer = default;
+                
                 this.enabled = false;
             }
         }
@@ -78,10 +81,6 @@ public class ChestScript : MonoBehaviour, IInteracting
         {
             isDoorOpen = true;
         }
-        else if (isDoorOpen)
-        {
-            isDoorOpen = false;
-        }
     }
 
     public void ReleaseInteract() { }
@@ -92,7 +91,10 @@ public class ChestScript : MonoBehaviour, IInteracting
         {
             UIScript.EnableUI();
         }
-        outlineScript.enabled = true;
+        if (!isDoorOpen)
+        {
+            outlineScript.enabled = true;
+        }
     }
 
     public void InteractNotInRange()
