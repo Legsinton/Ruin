@@ -152,7 +152,7 @@ public class MovingPlatform : MonoBehaviour
 
     void PlaySoundFX()
     {
-        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
+        SoundFXManager.Instance.PlaySoundFX(0.5f, SoundType.Chain, transform.position);
     }
     public void AddSwitch()
     {

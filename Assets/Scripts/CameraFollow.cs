@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraTest : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] Vector3 cameraPlayerOffset;

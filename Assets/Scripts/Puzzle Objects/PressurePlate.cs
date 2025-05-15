@@ -88,7 +88,7 @@ public class PressurePlate : MonoBehaviour
                 if (!added)
                 {
                     smallTrigger = false;
-                    SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
+                    //SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
                     added = true;                    
 
