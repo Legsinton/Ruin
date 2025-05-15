@@ -128,11 +128,11 @@ public class SoundFXManager : MonoBehaviour
 
     }
 
-    public void PlaySoundFX(SoundType type, Vector3? position = null)
+    public void PlaySoundFX( float volume, SoundType type, Vector3? position = null)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 
-        float volume = 1;//soundVolumeDict.ContainsKey(type) ? soundVolumeDict[type] : 1.0f;
+        //float volume = 1;//soundVolumeDict.ContainsKey(type) ? soundVolumeDict[type] : 1.0f;
         if (soundFXDict[type] is AudioClip singleClip)
         {
             if (position.HasValue)

@@ -197,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (stepTimer <= 0f)
             {
-                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(0.3f,SoundType.Walk, transform.position);
                 stepTimer = stepRate;
             }
         }

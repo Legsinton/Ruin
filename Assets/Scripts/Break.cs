@@ -35,7 +35,7 @@ public class Break : MonoBehaviour,IInteracting
             if (!played)
             {
                 played = true;
-                SoundFXManager.Instance.PlaySoundFX(SoundType.Break, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(0.8f, SoundType.Break, transform.position);
             }
             foreach (Rigidbody r in rb)
             {
