@@ -50,6 +50,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         spawnedItem = Instantiate(itemPrefab, spawnPoint.position, Quaternion.identity);
         spawnedItem.transform.localScale = Vector3.one; // Force it to correct scale
+        spawnedItem.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
     }
 
     public void MoveItem()
