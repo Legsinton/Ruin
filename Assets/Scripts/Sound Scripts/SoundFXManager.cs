@@ -13,7 +13,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private AudioSource[] loopFXSources;  // Array to hold multiple looping audio sources
     private Dictionary<SoundType, object> soundFXDict;
     [SerializeField] private List<SoundVolumeEntry> soundVolumeList;
-    private Dictionary<SoundType, float> soundVolumeDict;
+   // private Dictionary<SoundType, float> soundVolumeDict;
  
     public class LoopSoundInstance
     {
@@ -22,6 +22,8 @@ public class SoundFXManager : MonoBehaviour
         public float fadeTimer = 2;
         public float fadeDuration = 0;
         public bool stop;
+        public float targetVolume;// ✅ THIS LINE WAS MISSING
+
     }
 
     private Dictionary<GameObject, LoopSoundInstance> activeLoopsByObject = new Dictionary<GameObject, LoopSoundInstance>();
@@ -38,8 +40,12 @@ public class SoundFXManager : MonoBehaviour
             Instance = this;
         }
 
-        InitializeSounds();
+        foreach (var entry in volumeList)
+        {
+            soundVolumeDict[entry.soundType] = entry.volume;
+        }
 
+        InitializeSounds();
     }
 
     [System.Serializable]
@@ -48,6 +54,11 @@ public class SoundFXManager : MonoBehaviour
         public SoundType soundType;  // The sound effect type (key)
         [Range(0,1)]public float volume;         // The volume level (value)
     }
+
+    [SerializeField]
+    private List<SoundVolumeEntry> volumeList;
+
+    private Dictionary<SoundType, float> soundVolumeDict = new Dictionary<SoundType, float>();
 
     private void OnValidate()
     {
@@ -75,7 +86,7 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
                 { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
-                { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollOther") },
+                { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollingOther") },
 
                 //AudioClips
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
@@ -107,8 +118,7 @@ public class SoundFXManager : MonoBehaviour
 
             // Calculate volume based on fade
             float t = loop.fadeTimer / loop.fadeDuration;
-            loop.source.volume = Mathf.Clamp01(t);
-
+            loop.source.volume = Mathf.Clamp01(t) * loop.targetVolume;
             // If fade-out is complete, stop and mark the object for later removal
             if (loop.stop && loop.fadeTimer <= 0f)
             {
@@ -143,6 +153,7 @@ public class SoundFXManager : MonoBehaviour
             }
             else
             {
+                Debug.Log("Its fucked");
                 soundFXObject.PlayOneShot(singleClip, volume);
             }
         }
@@ -166,13 +177,39 @@ public class SoundFXManager : MonoBehaviour
     {
         if (activeLoopsByObject.ContainsKey(owner)) return; // If there's already a loop for this object, don't start another
 
+        float volume = 1.0f;
+        if (soundVolumeDict != null && soundVolumeDict.ContainsKey(type))
+        {
+            volume = soundVolumeDict[type];
+        }
+        AudioClip clip = null;
+        if (!soundFXDict.ContainsKey(type))
+        {
+            Debug.LogError($"[SoundFXManager] soundFXDict does not contain key: {type}");
+            return;
+        }
+
+        if (soundFXDict[type] is AudioClip singleClip)
+        {
+            clip = singleClip;
+        }
+        else if (soundFXDict[type] is AudioClip[] clipArray)
+        {
+            clip = clipArray[Random.Range(0, clipArray.Length)];
+        }
+
+        if (clip == null)
+        {
+            Debug.LogError($"[SoundFXManager] AudioClip for {type} is null.");
+            return;
+        }
         // Load clip
-        AudioClip clip = Resources.Load<AudioClip>($"Sounds/Effects/{type}");
+        /*AudioClip clip = Resources.Load<AudioClip>($"Sounds/Effects/{type}");
         if (clip == null)
         {
             Debug.LogError($"[SoundFXManager] AudioClip not found for: {type}");
             return;
-        }
+        }*/
 
         // Create new GameObject for the sound
         GameObject tempGO = new GameObject($"3D_Loop_{owner.name}_{type}");
@@ -187,17 +224,18 @@ public class SoundFXManager : MonoBehaviour
         source.spatialBlend = 1f;
         source.minDistance = 1f;
         source.maxDistance = 50f;
+        source.volume = volume;
         source.playOnAwake = false;
         source.Play();
 
-        // Create a LoopSoundInstance to store the sound state
         LoopSoundInstance instance = new LoopSoundInstance
         {
             source = source,
             obj = tempGO,
             fadeTimer = 0f,
-            fadeDuration = 0.1f, // Adjust this value as needed for fade-in time
-            stop = false
+            fadeDuration = 0.1f,
+            stop = false,
+            targetVolume = volume // ✅ Now volume is accessible
         };
 
         // Add the LoopSoundInstance to the dictionary

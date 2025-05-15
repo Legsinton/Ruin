@@ -3,14 +3,12 @@ using UnityEngine;
 
 public class RandomSoundFX : MonoBehaviour
 {
-    PlayerMovement playerMovement;
     [SerializeField] float timer;
     bool played;
     float random;
 
     private void Awake()
     {
-        playerMovement = FindAnyObjectByType<PlayerMovement>();
         random = UnityEngine.Random.Range(60f, 100f);
     }
 
@@ -25,7 +23,7 @@ public class RandomSoundFX : MonoBehaviour
             {
                 NewRandom();
                 played = true;
-                SoundFXManager.Instance.PlaySoundFX(SoundType.RandomScary, playerMovement.transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.RandomScary, this.transform.position);
                 Invoke(nameof(UnPlay), 0.4f);
             }
         }
