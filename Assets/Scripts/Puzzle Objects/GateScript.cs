@@ -35,7 +35,6 @@ public class GateScript : MonoBehaviour
         {
             if (!played)
             {
-                PlaySoundFX();
                 played = true;
                 if (cutSceneCamera != null && !playedCutScene)
                 {
@@ -52,7 +51,6 @@ public class GateScript : MonoBehaviour
         {
             if (played)
             {
-                PlaySoundFX();
                 played = false;
             }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
@@ -92,10 +90,6 @@ public class GateScript : MonoBehaviour
         cutSceneCamera.enabled = false;
     }
 
-    void PlaySoundFX()
-    {
-        SoundFXManager.Instance.PlaySoundFX(0.5f, SoundType.Chain, transform.position);
-    }
     public void AddSwitch()
     {
         switches++;
