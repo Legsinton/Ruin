@@ -53,11 +53,13 @@ public class RotatingObject : MonoBehaviour, IInteracting
                     {
                         rotateSpeed = -Mathf.Abs(rotateSpeed);
                         playerOffset = -Mathf.Abs(playerOffset);
+                        SoundFXManager.Instance.StartLoopFor(gameObject,SoundType.RollingOther, transform.position, this.transform);
                     }
                     else
                     {
                         rotateSpeed = Mathf.Abs(rotateSpeed);
                         playerOffset = Mathf.Abs(playerOffset);
+                        SoundFXManager.Instance.StopLoopFor(gameObject);
                     }
 
                     Vector3 offset = interactPoint.right * Mathf.Sign(localToPlayer.x) * Mathf.Abs(playerOffset);

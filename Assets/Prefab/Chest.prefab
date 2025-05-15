@@ -187,15 +187,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752bc1f8696361144a0456c9584dacd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openSpeed: 1
-  openAngle: 70
+  openSpeed: 0.5
+  openAngle: 80
   UIScript: {fileID: 0}
   outlineScript: {fileID: 3625973442647806532}
   colliderLid: {fileID: 5396839569677369017}
   spawnPoisition: {fileID: 3752432596151242133}
   spawnPoint: {fileID: 3377684329250209130}
   itemPrefab: {fileID: 0}
-  launchForce: 1
+  launchForce: 0.5
+  cutSceneLength: 3.5
+  playerCamera: {fileID: 0}
+  cutSceneCamera: {fileID: 0}
 --- !u!114 &3625973442647806532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1772,8 +1775,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.67, y: 0.67, z: 0.67}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3377684329250209130}
   - {fileID: 3752432596151242133}

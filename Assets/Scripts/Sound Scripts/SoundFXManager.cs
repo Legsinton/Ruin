@@ -66,23 +66,21 @@ public class SoundFXManager : MonoBehaviour
         soundFXDict = new Dictionary<SoundType, object>
             {
                 //Single AudioClips
+                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
+                { SoundType.ChestCreak, Resources.Load<AudioClip>("Sounds/Effects/ChestCreak") },
+                { SoundType.ChestOpen, Resources.Load<AudioClip>("Sounds/Effects/ChestOpen") },
                 { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
-                { SoundType.Coin, Resources.Load<AudioClip>("Sounds/Effects/Coin") },
+                { SoundType.Fire, Resources.Load<AudioClip>("Sounds/Effects/Fire") },
+                { SoundType.KeyFound, Resources.Load<AudioClip>("Sounds/Effects/KeyFound") },
+                { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
+                { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
                 { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollOther") },
-                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
-
 
                 //AudioClips
-                { SoundType.Break, Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
-                {SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
-                { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
-                { SoundType.Boing, Resources.LoadAll<AudioClip>("Sounds/Effects/Boing") },
-                { SoundType.Smack, Resources.LoadAll<AudioClip>("Sounds/Effects/Smack") },
-                { SoundType.Bonk, Resources.LoadAll<AudioClip>("Sounds/Effects/Bonk") },
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
-                { SoundType.Slash, Resources.LoadAll<AudioClip>("Sounds/Effects/Slash") }
-
+                { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
+                { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
             };
     }
 
@@ -219,18 +217,19 @@ public enum SoundType
 {
     // Array Of Sounds
     Break,
-    Bonk,
-    Boing,
-    Coin,
     Death,
     Launch,
-    Smash,
-    Smack,
     Chain,
-    Slash,
     Walk,
     Roll,
     RollingOther,
-    RandomScary
+    RandomScary,
+    ChestCreak,
+    PuzzleSolved,
+    PuzzleSolvedFully,
+    ChestOpen,
+    KeyFound,
+    Fire
+
 }
 
