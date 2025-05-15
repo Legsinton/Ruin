@@ -8,6 +8,8 @@ public class GateScript : MonoBehaviour
     public int switchAmount;
     Vector3 targetPosition;
     Vector3 originalPosition;
+    Vector3 previousPosition;
+    float movementThreshold = 0.001f;
     public bool solved;
     public float pressDepth;
     public float moveSpeed;
@@ -24,6 +26,7 @@ public class GateScript : MonoBehaviour
     private void Start()
     {
         originalPosition = transform.position;
+        previousPosition = transform.position;
     }
 
     void Update()
@@ -54,6 +57,27 @@ public class GateScript : MonoBehaviour
             }
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
+        // Check movement
+        Vector3 movement = transform.position - previousPosition;
+
+        if (movement.magnitude > movementThreshold)
+        {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform.position, this.transform);
+            }
+        }
+        else
+        {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+        }
+
+        previousPosition = transform.position;
     }
 
     void ActivateCamera()
