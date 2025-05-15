@@ -150,6 +150,14 @@ public class PlayerMovement : MonoBehaviour
         else if (rotatingObject != null)
         {
             currentVelocity = 0;
+            if (movementInput.y != 0)
+            {
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther, transform.position, this.rotatingObject.transform);
+            }
+            else
+            {
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
         }
         else if (movement.magnitude > 0)
         {
