@@ -16,6 +16,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     Quaternion openRotation;
     bool spawned;
     GameObject spawnedItem;
+    [SerializeField] Collider colliderLid;
 
     public Transform spawnPoisition;
     public Transform spawnPoint; // Assign the SpawnPoint in Inspector
@@ -26,13 +27,14 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         UIScript = FindAnyObjectByType<UIScript>();
         closedRotation = transform.rotation;
-        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(openAngle, 0, 0));
+        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
     }
 
     void Update()
     {
         if (isDoorOpen)
         {
+            colliderLid.enabled = false;
             outlineScript.enabled = false;
             gameObject.layer = default;
             OpenDoor();
@@ -50,7 +52,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         spawnedItem = Instantiate(itemPrefab, spawnPoint.position, Quaternion.identity);
         spawnedItem.transform.localScale = Vector3.one; // Force it to correct scale
-        spawnedItem.transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        //spawnedItem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
 
     public void MoveItem()
