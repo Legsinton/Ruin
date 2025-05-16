@@ -4,12 +4,15 @@ using UnityEngine;
 public class RandomSoundFX : MonoBehaviour
 {
     [SerializeField] float timer;
+    [SerializeField] float smallVal;
+    [SerializeField] float largeVal;
+
     bool played;
     float random;
 
     private void Awake()
     {
-        random = UnityEngine.Random.Range(60f, 100f);
+        random = UnityEngine.Random.Range(smallVal, largeVal);
     }
 
     private void Update()
@@ -31,7 +34,7 @@ public class RandomSoundFX : MonoBehaviour
 
     void NewRandom()
     {
-        random = UnityEngine.Random.Range(60f, 100f);
+        random = UnityEngine.Random.Range(smallVal, largeVal);
     }
 
     void UnPlay()

@@ -22,8 +22,7 @@ public class SoundFXManager : MonoBehaviour
         public float fadeTimer = 2;
         public float fadeDuration = 0;
         public bool stop;
-        public float targetVolume;// ✅ THIS LINE WAS MISSING
-
+        public float targetVolume;
     }
 
     private Dictionary<GameObject, LoopSoundInstance> activeLoopsByObject = new Dictionary<GameObject, LoopSoundInstance>();
