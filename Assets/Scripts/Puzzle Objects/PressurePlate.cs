@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
@@ -117,7 +114,7 @@ public class PressurePlate : MonoBehaviour
 
                     for (int i = 0; i < gate.Length; i++)
                     {
-                        gate[i].Switches++;
+                        gate[i].AddSwitch(1);
                     }
                     for (int i = 0; i < platforms.Length; i++)
                     {
@@ -144,7 +141,7 @@ public class PressurePlate : MonoBehaviour
                 smallTrigger = false;
                 for (int i = 0; i < gate.Length; i++)
                 {
-                    gate[i].Switches--;
+                    gate[i].RemoveSwitch(1);
                 }
                 for (int i = 0; i < platforms.Length; i++)
                 {
