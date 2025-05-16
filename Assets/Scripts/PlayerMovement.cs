@@ -144,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther, PushBlock.transform);
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null)
@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = 0;
             if (movementInput.y != 0)
             {
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther, this.rotatingObject.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
             }
             else
             {

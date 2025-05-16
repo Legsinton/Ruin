@@ -85,7 +85,7 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
                 { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
                 { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
-                { SoundType.RollingOther, Resources.Load<AudioClip>("Sounds/Effects/RollingOther") },
+                { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
 
                 //AudioClips
                 { SoundType.Launch, Resources.LoadAll<AudioClip>("Sounds/Effects/Launch") },
@@ -135,7 +135,7 @@ public class SoundFXManager : MonoBehaviour
 
     }
 
-    public void PlaySoundFX( SoundType type, Vector3? position = null)
+   /* public void PlaySoundFX( SoundType type, Vector3? position = null)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 
@@ -170,7 +170,51 @@ public class SoundFXManager : MonoBehaviour
                 soundFXObject.PlayOneShot(selectedClip, volume);
             }
         }
+    }*/
+    public void PlaySoundFX(SoundType type, Vector3? position = null, float minDistance = 1f, float maxDistance = 50f, float spatialBlend = 1f)
+    {
+        if (!soundFXDict.ContainsKey(type)) return;
+
+        float volume = 1.0f;
+        if (soundVolumeDict != null && soundVolumeDict.ContainsKey(type))
+        {
+            volume = soundVolumeDict[type];
+        }
+
+        AudioClip clip = null;
+        if (soundFXDict[type] is AudioClip singleClip)
+        {
+            clip = singleClip;
+        }
+        else if (soundFXDict[type] is AudioClip[] clipArray)
+        {
+            clip = clipArray[Random.Range(0, clipArray.Length)];
+        }
+
+        if (clip == null) return;
+
+        if (position.HasValue)
+        {
+            // Manual PlayClipAtPoint with custom size
+            GameObject tempGO = new GameObject($"SFX_{type}");
+            tempGO.transform.position = position.Value;
+
+            AudioSource aSource = tempGO.AddComponent<AudioSource>();
+            aSource.clip = clip;
+            aSource.spatialBlend = spatialBlend;
+            aSource.minDistance = minDistance;
+            aSource.maxDistance = maxDistance;
+            aSource.volume = volume;
+            aSource.Play();
+
+            Object.Destroy(tempGO, clip.length);
+        }
+        else
+        {
+            soundFXObject.PlayOneShot(clip, volume);
+        }
     }
+
 
     public void StartLoopFor(GameObject owner, SoundType type,Transform parent = null)
     {
@@ -259,7 +303,7 @@ public enum SoundType
     Chain,
     Walk,
     Roll,
-    RollingOther,
+    PushBlock,
     RandomScary,
     ChestCreak,
     PuzzleSolved,
