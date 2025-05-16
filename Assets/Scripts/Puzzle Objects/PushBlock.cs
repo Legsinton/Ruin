@@ -59,9 +59,10 @@ public class PushBlock : MonoBehaviour , IInteracting
                 }
                 if (!movedPlayerToTargetPos)
                 {
-                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.025)
+                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.1)
                     {
-                        player.transform.position = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                        Vector3 newPos = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                        player.transform.position = new Vector3(newPos.x, player.transform.position.y, newPos.z);
                     }
                     else
                     {
