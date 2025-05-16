@@ -2,96 +2,98 @@ using UnityEngine;
 
 public class GateScript : MonoBehaviour
 {
-    [SerializeField] int switches;
-    [SerializeField] Outline outlineScript;
-    public int Switches { get { return switches; } set { switches = value; } }
-    public int switchAmount;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
-    Vector3 previousPosition;
-    float movementThreshold = 0.001f;
-    public bool solved;
-    public float pressDepth;
-    public float moveSpeed;
-    bool played;
+    [Header("Settings")]
+    [SerializeField] int switchesNeeded;
+    [SerializeField] float pressDepth;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float arriveThreshold;
+
+    [HideInInspector] public int switches;
     bool playedCutScene;
+    bool moveGate;
+    Vector3 originalPosition;
+    Vector3 targetPos;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
 
-    [Header("Camera References")]
+    [Header("References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] Outline outlineScript;
 
     private void Start()
     {
         originalPosition = transform.position;
-        previousPosition = transform.position;
+        targetPos = originalPosition;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Switches == switchAmount)
+        if (moveGate)
         {
-            if (!played)
-            {
-                played = true;
-                if (cutSceneCamera != null && !playedCutScene)
-                {
-                    ActivateCamera();
-                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                    playedCutScene = true;
-                }
-            }
-            targetPosition = originalPosition - Vector3.up * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            MoveGate();
         }
+    }
 
-        else if (Switches != switchAmount)
-        {
-            if (played)
-            {
-                played = false;
-            }
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-        }
-        // Check movement
-        Vector3 movement = transform.position - previousPosition;
+    void MoveGate()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
 
-        if (movement.magnitude > movementThreshold)
+        if (Vector3.Distance(transform.position, targetPos) <= arriveThreshold)
         {
-            if (!played)
-            {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
-            }
+            transform.position = targetPos;
+            moveGate = false;
+            SoundFXManager.Instance.StopLoopFor(gameObject);
         }
         else
         {
-            if (played)
-            {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform);
         }
-
-        previousPosition = transform.position;
     }
 
     void ActivateCamera()
     {
-        playerCamera.enabled = false;
-        cutSceneCamera.enabled = true;
+        if (playerCamera != null) playerCamera.enabled = false;
+        if (cutSceneCamera != null) cutSceneCamera.enabled = true;
     }
 
     void DisableActiveCamera()
     {
-        playerCamera.enabled = true;
-        cutSceneCamera.enabled = false;
+        if (playerCamera != null) playerCamera.enabled = true;
+        if (cutSceneCamera != null) cutSceneCamera.enabled = false;
     }
 
-    public void AddSwitch()
+    public void AddSwitch(int amount)
     {
-        switches++;
+        switches += amount;
+        OnSwitchCountChanged();
+    }
+
+    public void RemoveSwitch(int amount)
+    {
+        switches -= amount;
+        OnSwitchCountChanged();
+    }
+
+    void OnSwitchCountChanged()
+    {
+        if (switches == switchesNeeded)
+        {
+            if (!playedCutScene && cutSceneCamera != null)
+            {
+                ActivateCamera();
+                Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                playedCutScene = true;
+            }
+
+            targetPos = originalPosition - Vector3.up * pressDepth;
+        }
+        else
+        {
+            targetPos = originalPosition;
+        }
+
+        moveGate = true;
     }
 }

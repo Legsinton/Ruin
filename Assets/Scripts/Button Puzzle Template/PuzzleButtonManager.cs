@@ -60,7 +60,7 @@ public class PuzzleManager : MonoBehaviour
             button.PuzzleComplete();
         }
 
-        gate.AddSwitch();
+        gate.AddSwitch(1);
     }
     
     private void ResetPuzzle()

@@ -10,8 +10,7 @@ public class MusicChange : MonoBehaviour
 
     private void Start()
     {
-        MusicManager.Instance.PlayMusic("Calm");
-
+        MusicManager.Instance.PlayMusic(music);
     }
     private void OnTriggerEnter(Collider other)
     {
