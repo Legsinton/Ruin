@@ -122,11 +122,7 @@ public class PlayerMovement : MonoBehaviour
                 movementInput.x = 0;
             }
 
-            //movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
             movement = movementInput.y * capsule.transform.forward;
-
-            //SoundFXManager.Instance.Start3DLoop(SoundType.Roll, transform.position);
-            //SoundFXManager.Instance.StopLoop();
 
             if (!PushBlock.movedPlayerToTargetPos)
             {
