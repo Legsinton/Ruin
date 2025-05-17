@@ -117,6 +117,7 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
 
                 //AudioClips
+                { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
                 { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
             };
@@ -248,6 +249,7 @@ public enum SoundType
     PushBlock,
     PuzzleSolved,
     PuzzleSolvedFully,
+    PressurePlate,
     Roll,
     RandomScary,
     Walk

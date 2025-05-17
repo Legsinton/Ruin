@@ -34,7 +34,7 @@ public class PressurePlate : MonoBehaviour
             if (!played)
             {
                 played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Roll, this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
             }
         }
         else

@@ -6,6 +6,7 @@ public class MusicManager : MonoBehaviour
     public static MusicManager Instance;
     [SerializeField] MusicLibrary library;
     [SerializeField] AudioSource musicSource;
+    [SerializeField] float soundVolume;
     void Awake()
     {
         if (Instance != null)
@@ -19,15 +20,15 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic(string trackName, float fadeDuration = 0.5f)
+    public void PlayMusic(string trackName, float fadeDuration = 1f)
     {
         StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
     }
 
-    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 0.5f)
+    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 1f)
     {
         float percent = 0;
-        while (percent < 1)
+        while (percent < soundVolume)
         {
             percent += Time.deltaTime * 1/fadeDuration;
             musicSource.volume = Mathf.Lerp(1f,0,percent);
@@ -38,7 +39,7 @@ public class MusicManager : MonoBehaviour
         musicSource.Play();
 
         percent = 0;
-        while (percent < 1)
+        while (percent < soundVolume)
         {
             percent += Time.deltaTime * 1 / fadeDuration;
             musicSource.volume = Mathf.Lerp(0, 1f, percent);

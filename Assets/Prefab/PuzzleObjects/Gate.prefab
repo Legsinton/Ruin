@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 6457410987454458522}
   - component: {fileID: 6142221451716446780}
   - component: {fileID: 2472767530608365469}
+  - component: {fileID: 8817872631342341817}
   - component: {fileID: 8926760632587065877}
   - component: {fileID: 9148964631782439551}
   - component: {fileID: 8205860358761286612}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Gate
   m_TagString: Gate
   m_Icon: {fileID: 0}
@@ -31,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -27.789997, y: 20.7, z: -0.54000187}
-  m_LocalScale: {x: 3.0226145, y: 6.3776236, z: 1}
+  m_LocalScale: {x: 3.02, y: 6.37, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -89,8 +90,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8926760632587065877
-BoxCollider:
+--- !u!64 &8817872631342341817
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -107,9 +108,31 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &8926760632587065877
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839985163773629222}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1.7903662, z: 1}
+  m_Center: {x: 8.95269e-15, y: -1.4051863, z: -2.1068859e-14}
 --- !u!114 &9148964631782439551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,12 +145,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1682ea3187801524e87a970b951f2a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  switches: 0
-  outlineScript: {fileID: 8205860358761286612}
-  switchAmount: 2
-  solved: 0
-  pressDepth: 7
+  switchesNeeded: 1
+  pressDepth: -7
   moveSpeed: 2
+  arriveThreshold: 0.01
+  switches: 0
+  cutSceneLength: 0
+  playerCamera: {fileID: 0}
+  cutSceneCamera: {fileID: 0}
+  outlineScript: {fileID: 8205860358761286612}
 --- !u!114 &8205860358761286612
 MonoBehaviour:
   m_ObjectHideFlags: 0
