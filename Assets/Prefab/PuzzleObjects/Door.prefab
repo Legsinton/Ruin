@@ -51,8 +51,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.11726576, y: 1, z: 16.793852}
+  m_Center: {x: 0.5799967, y: 0, z: -0.020495346}
 --- !u!1 &6437696385884111190
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,10 +104,11 @@ MonoBehaviour:
   openSpeed: 5
   openAngle: 90
   closingDistance: 2
-  locked: 1
+  locked: 0
   itemIdToUnlock: 1
   UIScript: {fileID: 0}
   outlineScript: {fileID: 4360814409197444046}
+  colliderDoor: {fileID: 3734809924026295411}
 --- !u!114 &4360814409197444046
 MonoBehaviour:
   m_ObjectHideFlags: 0

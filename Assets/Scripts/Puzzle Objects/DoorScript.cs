@@ -21,6 +21,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     bool played;
     Quaternion closedRotation;
     Quaternion openRotation;
+    [SerializeField]Collider colliderDoor;
 
     private void Start()
     {
@@ -32,6 +33,14 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     void Update()
     {
+        if (isDoorOpen && !closingDoor && !openingDoor && colliderDoor != null)
+        {
+            colliderDoor.enabled = true;
+        }
+        else if (!isDoorOpen && colliderDoor != null)
+        {
+            colliderDoor.enabled = false;
+        }
         if (locked) return;
 
         if (openingDoor)

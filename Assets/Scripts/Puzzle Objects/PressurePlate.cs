@@ -14,7 +14,7 @@ public class PressurePlate : MonoBehaviour
     Vector3 targetPosition;
     Vector3 originalPosition;
     Vector3 previousPosition;
-    float movementThreshold = 0.001f;
+    readonly float movementThreshold = 0.001f;
     bool played;
     bool added = false;
     private void Start()
