@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SoundFXManager : MonoBehaviour
@@ -11,13 +12,13 @@ public class SoundFXManager : MonoBehaviour
      List<SoundVolumeEntry> volumeList;
 
     Dictionary<SoundType, object> soundFXDict;
-
+    // Dictionary for volume on sounds
     Dictionary<SoundType, float> soundVolumeDict = new Dictionary<SoundType, float>();
-
+    // For Looping soundFX
     Dictionary<GameObject, LoopSoundInstance> activeLoopsByObject = new Dictionary<GameObject, LoopSoundInstance>();
 
     public class LoopSoundInstance
-    {
+    {   // Values for the looping soundfX's
         public AudioSource source;
         public GameObject obj;          // The GameObject holding the AudioSource
         public float fadeTimer = 2;
@@ -49,9 +50,52 @@ public class SoundFXManager : MonoBehaviour
     }
     private void Update()
     {
+        if(activeLoopsByObject.Any(kv => !kv.Value.stop || kv.Value.fadeTimer > 0f))
+        {
+            LoopFade();
+        }
+    }
+
+    private void OnValidate()
+    {   // To change volume while playing
+        if (volumeList != null)
+        {
+            soundVolumeDict = new Dictionary<SoundType, float>();
+            foreach (var entry in volumeList)
+            {
+                soundVolumeDict[entry.soundType] = entry.volume;
+            }
+        }
+    }
+
+    private void InitializeSounds()
+    {   // To find and add soundFX in assets
+        soundFXDict = new Dictionary<SoundType, object>
+            {
+                //Single AudioClips
+                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
+                { SoundType.ChestCreak, Resources.Load<AudioClip>("Sounds/Effects/ChestCreak") },
+                { SoundType.ChestOpen, Resources.Load<AudioClip>("Sounds/Effects/ChestOpen") },
+                { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
+                { SoundType.Fire, Resources.Load<AudioClip>("Sounds/Effects/Fire") },
+                { SoundType.KeyFound, Resources.Load<AudioClip>("Sounds/Effects/KeyFound") },
+                { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
+                { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
+                { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
+                { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
+
+                //AudioClips
+                { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
+                { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
+                { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
+            };
+    }
+
+    private void LoopFade()
+    {
         // Update fading for each active loop
         List<GameObject> objectsToRemove = new List<GameObject>(); // List to store objects to be removed
-
+        
         foreach (var entry in activeLoopsByObject)
         {
             LoopSoundInstance loop = entry.Value;
@@ -79,54 +123,18 @@ public class SoundFXManager : MonoBehaviour
                 objectsToRemove.Add(entry.Key); // ✅ ONLY mark for removal here
             }
         }
-
         // ✅ Now safe to remove from dictionary *after* iteration
         foreach (var obj in objectsToRemove)
         {
             activeLoopsByObject.Remove(obj);
         }
-
     }
-
-    private void OnValidate()
-    {
-        if (volumeList != null)
-        {
-            soundVolumeDict = new Dictionary<SoundType, float>();
-            foreach (var entry in volumeList)
-            {
-                soundVolumeDict[entry.soundType] = entry.volume;
-            }
-        }
-    }
-
-    private void InitializeSounds()
-    {
-        soundFXDict = new Dictionary<SoundType, object>
-            {
-                //Single AudioClips
-                { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
-                { SoundType.ChestCreak, Resources.Load<AudioClip>("Sounds/Effects/ChestCreak") },
-                { SoundType.ChestOpen, Resources.Load<AudioClip>("Sounds/Effects/ChestOpen") },
-                { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
-                { SoundType.Fire, Resources.Load<AudioClip>("Sounds/Effects/Fire") },
-                { SoundType.KeyFound, Resources.Load<AudioClip>("Sounds/Effects/KeyFound") },
-                { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
-                { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
-                { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
-                { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
-
-                //AudioClips
-                { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
-                { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
-                { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
-            };
-    }
-
+                           //SoundType     // Position for soundFX    // soundFX minDistance  // soundFX MaxDistance   // If 2D or 3D
     public void PlaySoundFX(SoundType type, Vector3? position = null, float minDistance = 1f, float maxDistance = 50f, float spatialBlend = 1f)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 
+        // volume if its not in the inspector
         float volume = 1.0f;
         if (soundVolumeDict != null && soundVolumeDict.ContainsKey(type))
         {
@@ -135,11 +143,11 @@ public class SoundFXManager : MonoBehaviour
 
         AudioClip clip = null;
         if (soundFXDict[type] is AudioClip singleClip)
-        {
+        {   // If single soundFX
             clip = singleClip;
         }
         else if (soundFXDict[type] is AudioClip[] clipArray)
-        {
+        {   // If Multible soundFX
             clip = clipArray[Random.Range(0, clipArray.Length)];
         }
 
