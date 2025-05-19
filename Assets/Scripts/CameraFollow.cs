@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraFollow : MonoBehaviour
@@ -7,15 +7,18 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] Vector3 cameraPlayerOffset;
     [SerializeField] Vector3 cameraFocusOffset;
     [SerializeField] float smoothTime;
-    [SerializeField] float rotationSpeed;
+    [SerializeField] float mouseSensitivity;
+    [SerializeField] float controllerSensitivity;
     [SerializeField] Vector2 rotationClamp;
     [SerializeField] float targetCameraDistance;
     [SerializeField] float wallDistance;
 
     [Header("Reference")]
     [SerializeField] Transform cameraTransform;
+    [SerializeField] PlayerInput playerInput;
 
     int layerMask;
+    float sensitivity;
 
     Vector3 focusTarget;
     Vector3 previousPlayerPos;
@@ -28,9 +31,15 @@ public class CameraFollow : MonoBehaviour
         layerMask = LayerMask.GetMask("Wall", "whatIsGround");
     }
 
-    private void OnLook(InputValue lookValue)
+    private void OnLook(InputValue value)
     {
-        mouseDelta = lookValue.Get<Vector2>();
+        mouseDelta = value.Get<Vector2>();
+
+        bool isGamepad = playerInput.currentControlScheme == "Gamepad";
+
+        sensitivity = isGamepad
+            ? controllerSensitivity
+            : mouseSensitivity;
     }
 
     void LateUpdate()
@@ -41,7 +50,7 @@ public class CameraFollow : MonoBehaviour
 
     void UpdateCameraPosition()
     {
-        currentRotation += mouseDelta * rotationSpeed;
+        currentRotation += mouseDelta * sensitivity;
 
         currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
 
