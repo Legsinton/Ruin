@@ -123,7 +123,6 @@ public class SoundFXManager : MonoBehaviour
                 objectsToRemove.Add(entry.Key); // ✅ ONLY mark for removal here
             }
         }
-        Debug.Log("is Running");
         // ✅ Now safe to remove from dictionary *after* iteration
         foreach (var obj in objectsToRemove)
         {
