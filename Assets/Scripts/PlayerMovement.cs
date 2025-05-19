@@ -175,8 +175,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (PushBlock != null)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+            if (!PushBlock.movedPlayerToTargetPos)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
+                capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 15 * Time.deltaTime);
+            }
         }
         else if (rotatingObject != null)
         {
