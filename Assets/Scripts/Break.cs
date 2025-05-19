@@ -54,6 +54,11 @@ public class Break : MonoBehaviour,IInteracting
         rb = null;
         rbMesh = null;
         outlineScript = null;
+        Invoke(nameof(DestroyObject), 1);
+    }
+
+    void DestroyObject()
+    {
         Destroy(gameObject);
     }
 

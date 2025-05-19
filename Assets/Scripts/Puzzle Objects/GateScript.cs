@@ -8,7 +8,7 @@ public class GateScript : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
 
-    [HideInInspector] public int switches;
+    public int switches;
     bool playedCutScene;
     bool moveGate;
     Vector3 originalPosition;
