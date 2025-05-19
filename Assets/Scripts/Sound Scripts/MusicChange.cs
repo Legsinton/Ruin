@@ -2,31 +2,19 @@ using UnityEngine;
 
 public class MusicChange : MonoBehaviour
 {
-    bool played;
-    public bool PlayingCalm { get { return played; } set { played = value; } }
-    bool playedScary;
-    public bool PlayingScary { get { return playedScary; } set { playedScary = value; } }
     [SerializeField] string music;
 
-    private void Start()
-    {
-        MusicManager.Instance.PlayMusic(music);
-    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            if (!PlayingScary)
+            if (!MusicManager.Instance.IsTrackPlaying(music))
             {
-                PlayingScary = true;
-                PlayingCalm = false;
-                MusicManager.Instance.PlayMusic("Calm");
+                MusicManager.Instance.PlayMusic(music);
             }
-            else if (!PlayingCalm)
+            else
             {
-                PlayingCalm = true;
-                PlayingScary = false;
-                MusicManager.Instance.PlayMusic("Scary");
+                Debug.Log("Song already playing");
             }
         }
     }

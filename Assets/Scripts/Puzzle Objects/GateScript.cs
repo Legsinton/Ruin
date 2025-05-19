@@ -7,6 +7,7 @@ public class GateScript : MonoBehaviour
     [SerializeField] float pressDepth;
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
+    PlayerMovement playerMovement;
 
     public int switches;
     bool playedCutScene;
@@ -26,6 +27,7 @@ public class GateScript : MonoBehaviour
     {
         originalPosition = transform.position;
         targetPos = originalPosition;
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
     }
 
     private void Update()
@@ -56,12 +58,22 @@ public class GateScript : MonoBehaviour
     {
         if (playerCamera != null) playerCamera.enabled = false;
         if (cutSceneCamera != null) cutSceneCamera.enabled = true;
+        if(playerMovement != null)
+        {
+            playerMovement.enabled = false;
+            playerMovement.movement = new Vector3 (0, 0, 0);
+        }
     }
 
     void DisableActiveCamera()
     {
         if (playerCamera != null) playerCamera.enabled = true;
         if (cutSceneCamera != null) cutSceneCamera.enabled = false;
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+        }
+        
     }
 
     public void AddSwitch(int amount)

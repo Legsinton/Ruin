@@ -13,11 +13,13 @@ public class ChestScript : MonoBehaviour, IInteracting
     public PlayerMovement PlayerMovement;
 
     bool isDoorOpen;
+    bool doorOpening;
     bool spawned;
     bool played;
     bool playedCutScene;
     Quaternion openRotation;
     GameObject spawnedItem;
+    public bool DoorOpening { get { return doorOpening; }  set { doorOpening = value; } }
 
     [Header("Settings for Item")]
 
@@ -83,13 +85,7 @@ public class ChestScript : MonoBehaviour, IInteracting
             if (spawnedItem.transform.position.y < spawnPoisition.position.y)
             {
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
-                PlayerMovement.enabled = false;
-                PlayerMovement.movement = new Vector3(0, 0, 0);
-            }
-            else
-            {
-                PlayerMovement.enabled = true;
-                this.enabled = false;
+                
             }
         }
     }
@@ -98,7 +94,7 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
-          
+            doorOpening = true;
         }
        
     }
@@ -106,12 +102,17 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
+        PlayerMovement.enabled = false;
+        PlayerMovement.movement = new Vector3(0, 0, 0);
     }
 
     void DisableActiveCamera()
     {
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
+        PlayerMovement.enabled = true;
+        this.enabled = false;
+        doorOpening = false;
     }
 
     public void PressInteract()
