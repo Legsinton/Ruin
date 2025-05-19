@@ -7,8 +7,9 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] List<PuzzleButton> buttons;
     [SerializeField] List<int> correctSequence;
     [SerializeField] GateScript gate;
+    [SerializeField] MovingPlatform movingPlatform;
 
-    List<int> playerInput = new List<int>();
+    readonly List<int> playerInput = new List<int>();
 
     public void RegisterButtonPress(int buttonID)
     {
@@ -52,6 +53,10 @@ public class PuzzleManager : MonoBehaviour
         }
     }
 
+    public void UnRegisterButtonPress(int buttonID)
+    {
+        playerInput.Remove(buttonID);
+    }
     private void PuzzleSolved()
     {
         GetComponent<Renderer>().material.color = Color.green;
@@ -60,9 +65,16 @@ public class PuzzleManager : MonoBehaviour
             button.PuzzleComplete();
         }
 
-        gate.AddSwitch(1);
+        if(gate != null)
+        {
+            gate.AddSwitch(1);
+        }
+
+        if(movingPlatform != null)
+        {
+            movingPlatform.Switches++;
+        }
     }
-    
     private void ResetPuzzle()
     {
         playerInput.Clear();

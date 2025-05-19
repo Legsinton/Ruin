@@ -21,6 +21,10 @@ public class PuzzleButton : MonoBehaviour, IInteracting
         {
             outlineComponent.enabled = true;
         }
+        else if (puzzleComplete)
+        {
+            outlineComponent.enabled = false;
+        }
     }
 
     public void InteractNotInRange()
@@ -30,12 +34,19 @@ public class PuzzleButton : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        if (!puzzleComplete && !buttonPressed)
+        if (!buttonPressed && !puzzleComplete)
         {
-            Press();
+            buttonPressed = true;
+            GetComponent<Renderer>().material.color = Color.black;
+            puzzleManager.RegisterButtonPress(buttonID);
+        }
+        else if (buttonPressed && !puzzleComplete)
+        {
+            buttonPressed = false;
+            GetComponent<Renderer>().material.color = startColor;
+            puzzleManager.UnRegisterButtonPress(buttonID);
         }
     }
-
     public void ReleaseInteract(){}
 
     public void ResetButton()
@@ -47,12 +58,5 @@ public class PuzzleButton : MonoBehaviour, IInteracting
     public void PuzzleComplete() 
     {
         puzzleComplete = true;
-    }
-
-    public void Press()
-    {
-        buttonPressed = true;
-        GetComponent<Renderer>().material.color = Color.black;
-        puzzleManager.RegisterButtonPress(buttonID);
     }
 }

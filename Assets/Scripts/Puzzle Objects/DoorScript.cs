@@ -71,7 +71,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
             if (played)
             {
                 played = false;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Roll, this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.DoorOpen, this.transform);
             }
             transform.rotation = Quaternion.Lerp(transform.rotation, closedRotation, Time.deltaTime * openSpeed);
         }
@@ -90,7 +90,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
             if (!played)
             {
                 played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject,SoundType.Roll,this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject,SoundType.DoorOpen,this.transform);
             }
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
         }

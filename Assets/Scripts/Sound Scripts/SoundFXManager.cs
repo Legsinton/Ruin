@@ -81,7 +81,7 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.KeyFound, Resources.Load<AudioClip>("Sounds/Effects/KeyFound") },
                 { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
                 { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
-                { SoundType.Roll, Resources.Load<AudioClip>("Sounds/Effects/Roll") },
+                { SoundType.DoorOpen, Resources.Load<AudioClip>("Sounds/Effects/DoorOpen") },
                 { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
 
                 //AudioClips
@@ -252,13 +252,13 @@ public enum SoundType
     ChestCreak,
     ChestOpen,
     Death,
+    DoorOpen,
     Fire,
     KeyFound,
     PushBlock,
     PuzzleSolved,
     PuzzleSolvedFully,
     PressurePlate,
-    Roll,
     RandomScary,
     Walk
 }

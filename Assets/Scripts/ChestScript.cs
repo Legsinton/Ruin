@@ -108,6 +108,7 @@ public class ChestScript : MonoBehaviour, IInteracting
 
     void DisableActiveCamera()
     {
+        spawnedItem.GetComponent<KeyInteract>().canInteract = true;
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
