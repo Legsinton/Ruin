@@ -66193,7 +66193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 167.69
+      value: 127.82
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.y
@@ -66201,7 +66201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.29
+      value: 50.99
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalRotation.w
@@ -84116,6 +84116,7 @@ MonoBehaviour:
   - {fileID: 1809880266}
   correctSequence: 010000000400000002000000
   gate: {fileID: 1419486007}
+  movingPlatform: {fileID: 0}
 --- !u!1 &1429880225
 GameObject:
   m_ObjectHideFlags: 0
@@ -107501,6 +107502,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   correctAngle: 0
+  clockPuzzle: 0
+  moveSpeed: 0
+  arriveThreshold: 0
+  angleThreshold: 0
+  pressDepth: 0
+  extraRotatingObject: {fileID: 0}
   rotatingObject: {fileID: 6881984998622250114}
   gate:
   - {fileID: 1385683317}
@@ -132370,6 +132377,7 @@ MonoBehaviour:
   correctPlayerPosSpeed: 10
   interactRange: 1.5
   clampRotation: {x: 0, y: 355}
+  clockPuzzle: 0
   playerTransform: {fileID: 2056709351}
   centerPoint: {fileID: 1773867348226807477}
   interactPoint: {fileID: 1714192256}
