@@ -7,7 +7,7 @@ public class KeyInteract : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        SoundFXManager.Instance.PlaySoundFX(SoundType.Coin, transform.position);
+        SoundFXManager.Instance.PlaySoundFX(SoundType.KeyFound, transform.position);
         Inventory.Instance.AddItem(item.itemId);
         Destroy(gameObject);
     }

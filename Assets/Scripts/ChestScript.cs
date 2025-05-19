@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ChestScript : MonoBehaviour, IInteracting
 {
@@ -10,30 +9,57 @@ public class ChestScript : MonoBehaviour, IInteracting
     [Header("Reference")]
     [SerializeField] UIScript UIScript;
     [SerializeField] Outline outlineScript;
+    [SerializeField] Collider colliderLid;
+    public PlayerMovement PlayerMovement;
 
     bool isDoorOpen;
-    Quaternion closedRotation;
-    Quaternion openRotation;
     bool spawned;
+    bool played;
+    bool playedCutScene;
+    Quaternion openRotation;
     GameObject spawnedItem;
+
+    [Header("Settings for Item")]
 
     public Transform spawnPoisition;
     public Transform spawnPoint; // Assign the SpawnPoint in Inspector
     public GameObject itemPrefab; // Assign your item prefab
     public float launchForce = 5f; // Tune for the desired "pop" effect
 
+    [Header("Settings For Cameras")]
+    [SerializeField] float cutSceneLength;
+
+    [Header("Camera References")]
+    [SerializeField] Camera playerCamera;
+    [SerializeField] Camera cutSceneCamera;
+
     void Start()
     {
         UIScript = FindAnyObjectByType<UIScript>();
-        closedRotation = transform.rotation;
-        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(openAngle, 0, 0));
+        PlayerMovement = FindAnyObjectByType<PlayerMovement>();
+        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
     }
 
     void Update()
     {
         if (isDoorOpen)
         {
+            colliderLid.enabled = false;
+            outlineScript.enabled = false;
+            gameObject.layer = default;
+            if (!played)
+            {
+                SoundFXManager.Instance.PlaySoundFX(SoundType.ChestOpen, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.ChestCreak, transform.position);
+                played = true;
+            }
             OpenDoor();
+            if (cutSceneCamera != null && !playedCutScene)
+            {
+                ActivateCamera();
+                Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                playedCutScene = true;
+            }
             if (!spawned)
             {
                 spawned = true;
@@ -47,6 +73,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     public void SpawnItem()
     {
         spawnedItem = Instantiate(itemPrefab, spawnPoint.position, Quaternion.identity);
+        spawnedItem.transform.localScale = Vector3.one; // Force it to correct scale
     }
 
     public void MoveItem()
@@ -56,10 +83,12 @@ public class ChestScript : MonoBehaviour, IInteracting
             if (spawnedItem.transform.position.y < spawnPoisition.position.y)
             {
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
+                PlayerMovement.enabled = false;
+                PlayerMovement.movement = new Vector3(0, 0, 0);
             }
             else
             {
-                gameObject.layer = default;
+                PlayerMovement.enabled = true;
                 this.enabled = false;
             }
         }
@@ -69,7 +98,20 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
+          
         }
+       
+    }
+    void ActivateCamera()
+    {
+        playerCamera.enabled = false;
+        cutSceneCamera.enabled = true;
+    }
+
+    void DisableActiveCamera()
+    {
+        playerCamera.enabled = true;
+        cutSceneCamera.enabled = false;
     }
 
     public void PressInteract()
@@ -77,10 +119,6 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (!isDoorOpen)
         {
             isDoorOpen = true;
-        }
-        else if (isDoorOpen)
-        {
-            isDoorOpen = false;
         }
     }
 
@@ -92,7 +130,10 @@ public class ChestScript : MonoBehaviour, IInteracting
         {
             UIScript.EnableUI();
         }
-        outlineScript.enabled = true;
+        if (!isDoorOpen)
+        {
+            outlineScript.enabled = true;
+        }
     }
 
     public void InteractNotInRange()

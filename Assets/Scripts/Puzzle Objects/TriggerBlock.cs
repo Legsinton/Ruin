@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class TriggerBlock : MonoBehaviour
 {
+    [Header("Settings")]
     [SerializeField] float correctAngle;
 
+    [Header("References")]
     [SerializeField] RotatingObject rotatingObject;
     [SerializeField] GateScript[] gate;
     [SerializeField] MovingPlatform[] platforms;
@@ -27,7 +29,7 @@ public class TriggerBlock : MonoBehaviour
             if (!isAligned)
             {
                 for (int i = 0; i < gate.Length; i++)
-                    gate[i].Switches++;
+                    gate[i].AddSwitch(1);
 
                 for (int i = 0; i < platforms.Length; i++)
                     platforms[i].Switches++;
@@ -40,7 +42,7 @@ public class TriggerBlock : MonoBehaviour
             if (isAligned)
             {
                 for (int i = 0; i < gate.Length; i++)
-                    gate[i].Switches--;
+                    gate[i].RemoveSwitch(1);
 
                 for (int i = 0; i < platforms.Length; i++)
                     platforms[i].Switches--;

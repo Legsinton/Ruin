@@ -1,32 +1,52 @@
-using System;
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-
     public bool triggerd = false;
     public GateScript[] gate;
     public MovingPlatform[] platforms;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
     public float pressDepth;
     public float smallPressDepth;
     public float moveSpeed;
-    bool added = false;
     public bool smallTrigger;
     public float buffer;
 
+    Vector3 targetPosition;
+    Vector3 originalPosition;
+    Vector3 previousPosition;
+    readonly float movementThreshold = 0.001f;
+    bool played;
+    bool added = false;
     private void Start()
     { 
         originalPosition = transform.position;
+        previousPosition = transform.position;
     }
 
     private void Update()
     {
         MovementFull();
         MovementSmall();
+
+        Vector3 movement = transform.position - previousPosition;
+        if (movement.magnitude > movementThreshold)
+        {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
+            }
+        }
+        else
+        {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+        }
+
+        previousPosition = transform.position;
     }
 
     void MovementSmall()
@@ -88,13 +108,13 @@ public class PressurePlate : MonoBehaviour
                 if (!added)
                 {
                     smallTrigger = false;
-                    SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
+                    //SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
                     added = true;                    
 
                     for (int i = 0; i < gate.Length; i++)
                     {
-                        gate[i].Switches++;
+                        gate[i].AddSwitch(1);
                     }
                     for (int i = 0; i < platforms.Length; i++)
                     {
@@ -121,7 +141,7 @@ public class PressurePlate : MonoBehaviour
                 smallTrigger = false;
                 for (int i = 0; i < gate.Length; i++)
                 {
-                    gate[i].Switches--;
+                    gate[i].RemoveSwitch(1);
                 }
                 for (int i = 0; i < platforms.Length; i++)
                 {

@@ -2,78 +2,98 @@ using UnityEngine;
 
 public class GateScript : MonoBehaviour
 {
-    [SerializeField] int switches;
-    [SerializeField] Outline outlineScript;
-    public int Switches { get { return switches; } set { switches = value; } }
-    public int switchAmount;
-    Vector3 targetPosition;
-    Vector3 originalPosition;
-    public bool solved;
-    public float pressDepth;
-    public float moveSpeed;
-    bool played;
+    [Header("Settings")]
+    [SerializeField] int switchesNeeded;
+    [SerializeField] float pressDepth;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float arriveThreshold;
+
+    [HideInInspector] public int switches;
     bool playedCutScene;
+    bool moveGate;
+    Vector3 originalPosition;
+    Vector3 targetPos;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
 
-    [Header("Camera References")]
+    [Header("References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] Outline outlineScript;
 
     private void Start()
     {
         originalPosition = transform.position;
+        targetPos = originalPosition;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Switches == switchAmount)
+        if (moveGate)
         {
-            if (!played)
-            {
-                PlaySoundFX();
-                played = true;
-                if (cutSceneCamera != null && !playedCutScene)
-                {
-                    ActivateCamera();
-                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                    playedCutScene = true;
-                }
-            }
-            targetPosition = originalPosition - Vector3.up * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            MoveGate();
         }
+    }
 
-        else if (Switches != switchAmount)
+    void MoveGate()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(transform.position, targetPos) <= arriveThreshold)
         {
-            if (played)
-            {
-                PlaySoundFX();
-                played = false;
-            }
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+            transform.position = targetPos;
+            moveGate = false;
+            SoundFXManager.Instance.StopLoopFor(gameObject);
+        }
+        else
+        {
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform);
         }
     }
 
     void ActivateCamera()
     {
-        playerCamera.enabled = false;
-        cutSceneCamera.enabled = true;
+        if (playerCamera != null) playerCamera.enabled = false;
+        if (cutSceneCamera != null) cutSceneCamera.enabled = true;
     }
 
     void DisableActiveCamera()
     {
-        playerCamera.enabled = true;
-        cutSceneCamera.enabled = false;
+        if (playerCamera != null) playerCamera.enabled = true;
+        if (cutSceneCamera != null) cutSceneCamera.enabled = false;
     }
 
-    void PlaySoundFX()
+    public void AddSwitch(int amount)
     {
-        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
+        switches += amount;
+        OnSwitchCountChanged();
     }
-    public void AddSwitch()
+
+    public void RemoveSwitch(int amount)
     {
-        switches++;
+        switches -= amount;
+        OnSwitchCountChanged();
+    }
+
+    void OnSwitchCountChanged()
+    {
+        if (switches == switchesNeeded)
+        {
+            if (!playedCutScene && cutSceneCamera != null)
+            {
+                ActivateCamera();
+                Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                playedCutScene = true;
+            }
+
+            targetPos = originalPosition - Vector3.up * pressDepth;
+        }
+        else
+        {
+            targetPos = originalPosition;
+        }
+
+        moveGate = true;
     }
 }

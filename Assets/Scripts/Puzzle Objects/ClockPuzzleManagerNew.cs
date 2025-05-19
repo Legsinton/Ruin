@@ -38,7 +38,7 @@ public class ClockPuzzleManagerNew : MonoBehaviour
         Solved = true;
         if (gate != null)
         {
-            gate.AddSwitch();
+            gate.AddSwitch(1);
 
         }
         if (plat != null)
@@ -52,7 +52,7 @@ public class ClockPuzzleManagerNew : MonoBehaviour
         {
             if (gate != null)
             {
-                gate.Switches--;
+                gate.switches--;
 
             }
             if (plat != null)

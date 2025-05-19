@@ -9,8 +9,10 @@ public class MovingPlatform : MonoBehaviour
 
     Vector3 targetPosition;
     Vector3 originalPosition;
+    Vector3 previousPosition;
     bool played;
     bool playedCutScene;
+    readonly float movementThreshold = 0.001f;
 
     [Header("Settings To Move Platform")]
 
@@ -30,6 +32,7 @@ public class MovingPlatform : MonoBehaviour
     private void Start()
     {
         originalPosition = transform.position;
+        previousPosition = transform.position;
     }
 
     void Update()
@@ -37,6 +40,25 @@ public class MovingPlatform : MonoBehaviour
         MovementZ();
         MovementX();
         MovementUp();
+        Vector3 movement = transform.position - previousPosition;
+        if (movement.magnitude > movementThreshold)
+        {
+            if (!played)
+            {
+                played = true;
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
+            }
+        }
+        else
+        {
+            if (played)
+            {
+                played = false;
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+        }
+
+        previousPosition = transform.position;
     }
 
     void MovementUp()
@@ -45,16 +67,12 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-                if (!played)
+
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    //PlaySoundFX();
-                    played = true;
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
 
                 targetPosition = originalPosition - Vector3.up * pressDepth;
@@ -63,11 +81,6 @@ public class MovingPlatform : MonoBehaviour
 
             else if (Switches != switchAmount)
             {
-                if (played)
-                {
-                    //PlaySoundFX();
-                    played = false;
-                }
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -79,27 +92,21 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-                if (!played)
+
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    //PlaySoundFX();
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
+
                 targetPosition = originalPosition - Vector3.forward * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-                if (played)
-                {
-                    //PlaySoundFX();
-                    played = false;
-                }
+
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -111,28 +118,22 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-                if (!played)
+
+                played = true;
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    //PlaySoundFX();
-                    played = true;
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
+
                 targetPosition = originalPosition - Vector3.right * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-                if (played)
-                {
-                    //PlaySoundFX();
-                    played = false;
-                }
+
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -148,11 +149,6 @@ public class MovingPlatform : MonoBehaviour
     {
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
-    }
-
-    void PlaySoundFX()
-    {
-        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
     }
     public void AddSwitch()
     {

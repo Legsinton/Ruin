@@ -122,11 +122,7 @@ public class PlayerMovement : MonoBehaviour
                 movementInput.x = 0;
             }
 
-            //movement = movementInput.x * capsule.transform.right + movementInput.y * capsule.transform.forward;
             movement = movementInput.y * capsule.transform.forward;
-
-            //SoundFXManager.Instance.Start3DLoop(SoundType.Roll, transform.position);
-            //SoundFXManager.Instance.StopLoop();
 
             if (!PushBlock.movedPlayerToTargetPos)
             {
@@ -144,12 +140,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.RollingOther, transform.position, PushBlock.transform);
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
         else if (rotatingObject != null)
         {
             currentVelocity = 0;
+            if (movementInput.y != 0)
+            {
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
+            }
+            else
+            {
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
         }
         else if (movement.magnitude > 0)
         {

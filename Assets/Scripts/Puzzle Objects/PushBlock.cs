@@ -1,3 +1,4 @@
+﻿using Unity.VisualScripting;
 using UnityEngine;
 
 public class PushBlock : MonoBehaviour , IInteracting
@@ -19,6 +20,10 @@ public class PushBlock : MonoBehaviour , IInteracting
     bool playerInRange;
     bool moveBlock;
     bool isAttached;
+    bool isfalling;
+
+    bool isResettingRotation = false;
+    [SerializeField] float rotationResetSpeed = 2f; // Adjust for faster/slower reset
 
     [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
@@ -59,9 +64,10 @@ public class PushBlock : MonoBehaviour , IInteracting
                 }
                 if (!movedPlayerToTargetPos)
                 {
-                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.025)
+                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.1)
                     {
-                        player.transform.position = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                        Vector3 newPos = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                        player.transform.position = new Vector3(newPos.x, player.transform.position.y, newPos.z);
                     }
                     else
                     {
@@ -81,6 +87,33 @@ public class PushBlock : MonoBehaviour , IInteracting
                 isAttached = false;
             }
         }
+
+        if (isResettingRotation)
+        {
+            Quaternion currentRot = transform.rotation;
+
+            // Create target rotation with Y = 0
+            Vector3 currentEuler = currentRot.eulerAngles;
+            Quaternion targetRot = Quaternion.Euler(currentEuler.x, 0f, currentEuler.z);
+
+            // Rotate smoothly toward that target using shortest path
+            transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, rotationResetSpeed * Time.deltaTime);
+        }
+
+        if (!IsGroundedBelow())
+        {
+            DetectFallDirection();
+        }
+        else if (IsGroundedBelow())
+        {
+            //rb.constraints = RigidbodyConstraints.FreezePositionY; // You can adjust
+            //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, 0f, transform.eulerAngles.z);
+            if (isfalling)
+            {
+                Invoke(nameof(UnFreeze), 3);
+            }
+        }
+
     }
 
     void CheckIfPlayerInRange()
@@ -151,6 +184,66 @@ public class PushBlock : MonoBehaviour , IInteracting
         {
             moveBlock = false;
         }
+    }
+
+    void UnFreeze()
+    {
+        rb.constraints = RigidbodyConstraints.None;
+        transform.rotation = Quaternion.Euler(0, 0f, 0);
+        isfalling = false;
+    }
+
+    bool IsGroundedBelow()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        return Physics.Raycast(origin, Vector3.down, 1.7f);
+    }
+    void DetectFallDirection()
+    {
+        float checkDistance = 1.7f;
+        Vector3 center = transform.position + Vector3.up * 0.5f;
+        Vector3 halfExtents = new Vector3(0.4f, 0.1f, 0.4f); // A small box per corner
+
+        // Check ground support at each side
+        bool hasSupportFront = Physics.BoxCast(center + new Vector3(0, 0, 0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
+        bool hasSupportBack = Physics.BoxCast(center + new Vector3(0, 0, -0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
+        bool hasSupportLeft = Physics.BoxCast(center + new Vector3(-0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
+        bool hasSupportRight = Physics.BoxCast(center + new Vector3(0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
+
+        // Determine which direction is unsupported
+        bool fallZ = !hasSupportFront || !hasSupportBack;
+        bool fallX = !hasSupportLeft || !hasSupportRight;
+
+        if (fallZ && !fallX)
+        {
+            PausePlayer();
+            Invoke(nameof(UnPausePlayer), 1);
+            
+            // Let it rotate along X axis to fall forward/back
+            isfalling = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+        else if (fallX && !fallZ)
+        {
+            PausePlayer();
+            Invoke(nameof(UnPausePlayer), 1);
+
+            // Let it rotate along Z axis to fall left/right
+            isfalling = true;
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+        }
+    }
+
+    void PausePlayer()
+    {
+        playerMovement.PushBlock = null;
+        playerMovement.enabled = false;
+        playerMovement.movement = new Vector3(0, 0, 0);
+    }
+
+    void UnPausePlayer()
+    {
+        playerMovement.enabled = true;
     }
 
     public void PressInteract()

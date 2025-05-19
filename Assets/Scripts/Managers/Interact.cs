@@ -12,6 +12,7 @@ public class Interact : MonoBehaviour
 
     bool interactInRange = false;
     bool multipleObjectsInRange = false;
+    private bool isChecking = false;
 
     void OnTriggerEnter(Collider other)
     {
@@ -33,13 +34,14 @@ public class Interact : MonoBehaviour
             interactInRange = true;
 
             //currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
-            if (currentInteractableObject.TryGetComponent(out IInteracting comp))
+            // Added stuff here
+            if (currentInteractableObject != null && currentInteractableObject.TryGetComponent(out IInteracting comp))
             {
                 comp.InteractInRange();
             }
             else
             {
-                Debug.LogError("Trying to interact with a missing component or something");
+                Debug.LogWarning("Trying to interact with a missing component or something");
             }
         }
     }
@@ -47,6 +49,38 @@ public class Interact : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.layer == interactLayer)
+        {
+            if (other.gameObject != null && other.gameObject.TryGetComponent(out IInteracting comp))
+            {
+                comp.InteractNotInRange();
+            }
+
+            interactableObjects.Remove(other.gameObject);
+
+            if (interactableObjects.Count == 0)
+            {
+                interactInRange = false;
+                multipleObjectsInRange = false;
+                currentInteractableObject = null;
+            }
+            else if (interactableObjects.Count == 1)
+            {
+                currentInteractableObject = interactableObjects[0];
+                multipleObjectsInRange = false;
+
+                if (currentInteractableObject.TryGetComponent(out IInteracting newComp))
+                {
+                    newComp.InteractInRange();
+                }
+            }
+            else
+            {
+                multipleObjectsInRange = true;
+                GetCurrentObject();
+            }
+        }
+
+        /*if (other.gameObject.layer == interactLayer)
         {
             other.gameObject.GetComponent<IInteracting>().InteractNotInRange();
 
@@ -68,23 +102,39 @@ public class Interact : MonoBehaviour
                 currentInteractableObject = interactableObjects[0];
                 currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
             }
-        }
+        }*/
     }
 
     void Update()
     {
-        if (multipleObjectsInRange)
+        CheckIfObjectStillExists(); // Add this line
+
+        if (multipleObjectsInRange && currentInteractableObject != null)
+        {
+            currentInteractableObject.GetComponent<IInteracting>().InteractNotInRange();
+
+            GetCurrentObject();
+
+            if (currentInteractableObject != null)
+            {
+                currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
+            }
+        }
+
+        /*if (multipleObjectsInRange)
         {
             currentInteractableObject.GetComponent<IInteracting>().InteractNotInRange();
 
             getCurrentObject();
 
             currentInteractableObject.GetComponent<IInteracting>().InteractInRange();
-        }
+        }*/
     }
 
-    void getCurrentObject()
+    void GetCurrentObject()
     {
+        CheckIfObjectStillExists(); // Add this!
+
         RaycastHit hit;
         Vector3 distancePoint;
         float closestDistance = float.PositiveInfinity;
@@ -102,11 +152,16 @@ public class Interact : MonoBehaviour
 
         for (int i = 0; i < interactableObjects.Count; i++)
         {
-            if (Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
+            if (interactableObjects[i] != null && Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
             {
                 closestDistance = Vector3.Distance(distancePoint, interactableObjects[i].transform.position);
                 currentInteractableObject = interactableObjects[i];
+
             }
+
+                /*if (Vector3.Distance(distancePoint, interactableObjects[i].transform.position) < closestDistance)
+            {
+            }*/
         }
     }
 
@@ -129,7 +184,43 @@ public class Interact : MonoBehaviour
 
     void CheckIfObjectStillExists()
     {
-        interactableObjects.RemoveAll(item => item == null);
+        /*interactableObjects.RemoveAll(item => item == null || !item.TryGetComponent<IInteracting>(out _));
+        // Added this
+        if (currentInteractableObject == null || !currentInteractableObject.TryGetComponent<IInteracting>(out _))
+        {
+            currentInteractableObject = null;
+            interactInRange = false;
+            multipleObjectsInRange = false;
+        }*/
+
+
+
+        if (isChecking) return;
+        isChecking = true;
+
+        // Your checking logic here
+
+        
+
+        interactableObjects.RemoveAll(item => item == null || !item.TryGetComponent<IInteracting>(out _));
+
+        if (currentInteractableObject == null || !currentInteractableObject.TryGetComponent<IInteracting>(out _))
+        {
+            currentInteractableObject = null;
+            interactInRange = false;
+            multipleObjectsInRange = interactableObjects.Count > 1;
+
+            if (interactableObjects.Count > 0)
+            {
+                GetCurrentObject(); // Select a new object based on raycast distance
+                if (currentInteractableObject != null && currentInteractableObject.TryGetComponent(out IInteracting comp))
+                {
+                    comp.InteractInRange(); // Notify new object
+                    interactInRange = true;
+                }
+            }
+        }
+        isChecking = false;
     }
 }
 
