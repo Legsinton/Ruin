@@ -10,6 +10,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     [SerializeField] UIScript UIScript;
     [SerializeField] Outline outlineScript;
     [SerializeField] Collider colliderLid;
+    public PlayerMovement PlayerMovement;
 
     bool isDoorOpen;
     bool spawned;
@@ -35,6 +36,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     void Start()
     {
         UIScript = FindAnyObjectByType<UIScript>();
+        PlayerMovement = FindAnyObjectByType<PlayerMovement>();
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
     }
 
@@ -81,10 +83,12 @@ public class ChestScript : MonoBehaviour, IInteracting
             if (spawnedItem.transform.position.y < spawnPoisition.position.y)
             {
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
+                PlayerMovement.enabled = false;
+                PlayerMovement.movement = new Vector3(0, 0, 0);
             }
             else
             {
-                
+                PlayerMovement.enabled = true;
                 this.enabled = false;
             }
         }
@@ -94,7 +98,9 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
+          
         }
+       
     }
     void ActivateCamera()
     {
