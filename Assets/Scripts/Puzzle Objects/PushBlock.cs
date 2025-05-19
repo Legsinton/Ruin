@@ -5,6 +5,7 @@ public class PushBlock : MonoBehaviour, IInteracting
     [Header("Settings")]
     [SerializeField] float minDistanceToPlayer;
     [SerializeField] float rotationResetSpeed;
+    [SerializeField] float minPlayerDistanceToEdge;
 
     [Header("Reference")]
     [SerializeField] Transform[] playerPositionTargets;
@@ -26,7 +27,7 @@ public class PushBlock : MonoBehaviour, IInteracting
     [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
 
-    void Awake()
+    void Start()
     {
         player = GameObject.Find("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
@@ -146,7 +147,7 @@ public class PushBlock : MonoBehaviour, IInteracting
             playerMovement.forwardMoveDisabled = false;
         }
         
-        // Backward
+        // Backward box
         if (Physics.BoxCast(origin, new Vector3(1f, 0.5f, 0.5f), -playerRotation.transform.forward, out RaycastHit hitBack, orientation, rayDistance))
         {
             if (!hitBack.collider.CompareTag("Player"))
@@ -159,24 +160,14 @@ public class PushBlock : MonoBehaviour, IInteracting
             playerMovement.backMoveDisabled = false;
         }
 
-        // Left
-        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), -playerRotation.transform.right, out RaycastHit hitLeft, orientation, rayDistance))
+        // Backward player
+        if (Physics.Raycast(player.transform.position - (playerRotation.transform.forward * minPlayerDistanceToEdge), Vector3.down, 1.5f))
         {
-            playerMovement.leftMoveDisabled = true;
+            playerMovement.backMoveDisabled = false;
         }
         else
         {
-            playerMovement.leftMoveDisabled = false;
-        }
-
-        // Right
-        if (Physics.BoxCast(origin, new Vector3(0.5f, 0.5f, 1f), playerRotation.transform.right, out RaycastHit hitRight, orientation, rayDistance))
-        {
-            playerMovement.rightMoveDisabled = true;
-        }
-        else
-        {
-            playerMovement.rightMoveDisabled = false;
+            playerMovement.backMoveDisabled = true;
         }
 
         // Down
