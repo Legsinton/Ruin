@@ -10,7 +10,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     [SerializeField] UIScript UIScript;
     [SerializeField] Outline outlineScript;
     [SerializeField] Collider colliderLid;
-    public PlayerMovement PlayerMovement;
+    PlayerMovement PlayerMovement;
 
     bool isDoorOpen;
     bool doorOpening;

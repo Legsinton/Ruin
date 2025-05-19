@@ -45,21 +45,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundFXObject: {fileID: 6549751631677413893}
-  loopFXSources: []
-  soundVolumeList:
+  volumeList:
+  - soundType: 0
+    volume: 0.59
+  - soundType: 1
+    volume: 0.798
+  - soundType: 2
+    volume: 0.18
   - soundType: 3
-    volume: 1
-  - soundType: 8
-    volume: 1
+    volume: 0.887
   - soundType: 4
-    volume: 1
-  - soundType: 6
-    volume: 1
+    volume: 0.569
   - soundType: 5
-    volume: 1
+    volume: 0.507
+  - soundType: 6
+    volume: 0.569
   - soundType: 7
+    volume: 0.46
+  - soundType: 8
+    volume: 0.607
+  - soundType: 9
+    volume: 0.479
+  - soundType: 10
     volume: 1
-  volumeList: []
+  - soundType: 11
+    volume: 0.502
+  - soundType: 12
+    volume: 0.588
 --- !u!1 &3259026730935904916
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,10 +117,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracks:
-  - trackName: Calmer
-    clip: {fileID: 8300000, guid: d01d260d52b02ee45804aafe5538d7fe, type: 3}
   - trackName: Calm
-    clip: {fileID: 8300000, guid: a8f33c4071315fd4d950eff9c98dc412, type: 3}
+    clip: {fileID: 8300000, guid: 751daf2ee62052b45b9056c72b481aac, type: 3}
+  - trackName: Calmer
+    clip: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
   - trackName: Song1
     clip: {fileID: 8300000, guid: 5f7fb3b7bd2b05149bc3d361b5802c71, type: 3}
   - trackName: Song2
@@ -163,6 +175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   library: {fileID: 9187656699202761528}
   musicSource: {fileID: 1235989178362088630}
+  soundVolume: 0.6
+  startSong: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
 --- !u!1 &7578512129833590881
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +222,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.128
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -381,7 +395,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
