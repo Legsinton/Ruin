@@ -13,10 +13,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float moveSpeed = 3.5f;
     public Vector3 LastKnownPlayerPosition { get; private set; }
 
-    private bool isChasingPlayer = false;
-    private float memoryTimer = 0f;
+    //private bool isChasingPlayer = false;
+    //private float memoryTimer = 0f;
     [SerializeField]
-    private float memoryDuration = 5f; // Time the enemy remembers the player after losing them
+    //private float memoryDuration = 5f; // Time the enemy remembers the player after losing them
 
     private void Start()
     {
