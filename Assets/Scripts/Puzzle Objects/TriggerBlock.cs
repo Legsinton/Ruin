@@ -88,6 +88,7 @@ public class TriggerBlock : MonoBehaviour
         }
 
         bool newAligned;
+
         if (clockPuzzle)
         {
             bool mainAligned = Mathf.Abs(Mathf.DeltaAngle(rotatingObjectAngle, correctAngle)) <= angleThreshold;
