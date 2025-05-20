@@ -40,7 +40,6 @@ public class PauseMenuScript : MonoBehaviour
         clickAction = actionMap.FindAction("Click");
         clickAction.Enable();
         clickAction.performed += OnClickPerformed;
-
     }
 
     private void OnDisable()
@@ -98,6 +97,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
             Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
             optionsMenu.SetActive(false);
@@ -159,6 +159,7 @@ public class PauseMenuScript : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(true);
         isPausing = true;
