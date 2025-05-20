@@ -57,17 +57,14 @@ public class PauseMenuScript : MonoBehaviour
         {
             if (selected != null && selected.name == "ResumeButton")
             {
-                Debug.Log("Clicked Resume Button via InputAction!");
                 ResumeGame();
             }
             else if (selected != null && selected.name == "OptionsButton")
             {
-                Debug.Log("Clicked Options Button via InputAction!");
                 // Handle options click here
             }
             else if (selected != null && selected.name == "QuitButton")
             {
-                Debug.Log("Clicked Quit Button via InputAction!");
                 // Handle options click here
             }
             else
@@ -101,7 +98,6 @@ public class PauseMenuScript : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
             Cursor.lockState = CursorLockMode.Confined;
-            Debug.Log("Is paused");
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
             optionsMenu.SetActive(false);
@@ -114,14 +110,12 @@ public class PauseMenuScript : MonoBehaviour
         else if (isPaused)
         {
             Cursor.visible = false;
-            Debug.Log("Is not paused");
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             isPausing = false;
             optionsMenu.SetActive(false);
-            Debug.Log("PlayerInput component: " + playerInput);
         }
     }
 
@@ -148,7 +142,6 @@ public class PauseMenuScript : MonoBehaviour
     {
         if (justPaused)
         {
-            Debug.Log("Blocked resume due to immediate pause");
             return;
         }
 
@@ -166,7 +159,6 @@ public class PauseMenuScript : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
-        Debug.Log("Is paused");
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(true);
         isPausing = true;
