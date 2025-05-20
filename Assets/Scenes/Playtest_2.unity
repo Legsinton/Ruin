@@ -107505,7 +107505,7 @@ MonoBehaviour:
   clockPuzzle: 0
   moveSpeed: 0
   arriveThreshold: 0
-  angleThreshold: 0
+  angleThreshold: 2
   pressDepth: 0
   extraRotatingObject: {fileID: 0}
   rotatingObject: {fileID: 6881984998622250114}
@@ -132372,12 +132372,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd2f2ef12a13434faf6ee368c25e1fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clockPuzzle: 0
   rotateSpeed: 50
   playerOffset: 0.75
   correctPlayerPosSpeed: 10
-  interactRange: 1.5
+  minInteractDistance: 2
+  minDistancToRotatingObjectAttached: 1
   clampRotation: {x: 0, y: 355}
-  clockPuzzle: 0
   playerTransform: {fileID: 2056709351}
   centerPoint: {fileID: 1773867348226807477}
   interactPoint: {fileID: 1714192256}
