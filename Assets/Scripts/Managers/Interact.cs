@@ -72,7 +72,6 @@ public class Interact : MonoBehaviour
         if (getClosestObejct && !interacting)
         {
             float closestDistance = float.PositiveInfinity;
-            GameObject closestObject = null;
 
             interactableObjects.RemoveAll(item => item == null);
 
