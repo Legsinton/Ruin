@@ -108,12 +108,15 @@ public class Interact : MonoBehaviour
                 }
                 interacting = true;
             }
-            if (!value.isPressed) // Interact button release
+        }
+        if (!value.isPressed) // Interact button release
+        {
+            if (currentInteractableObject != null)
             {
                 currentInteractableObject.GetComponent<IInteracting>().ReleaseInteract();
-                interacting = false;
-                GetCurrentInteractableObject();
             }
+            interacting = false;
+            GetCurrentInteractableObject();
         }
     }
 
