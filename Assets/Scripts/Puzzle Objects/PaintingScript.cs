@@ -40,4 +40,9 @@ public class PaintingScript : MonoBehaviour, IInteracting
         paintingText.enabled = false;
         background.enabled = false;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }

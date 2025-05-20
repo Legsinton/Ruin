@@ -153,4 +153,9 @@ public class RotatingObject : MonoBehaviour, IInteracting
         inInteractRange = false;
         outlineScript.enabled = false;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }

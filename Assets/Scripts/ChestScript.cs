@@ -48,7 +48,6 @@ public class ChestScript : MonoBehaviour, IInteracting
         {
             colliderLid.enabled = false;
             outlineScript.enabled = false;
-            gameObject.layer = default;
             if (!played)
             {
                 SoundFXManager.Instance.PlaySoundFX(SoundType.ChestOpen, transform.position);
@@ -121,6 +120,7 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (!isDoorOpen)
         {
             isDoorOpen = true;
+            gameObject.layer = default;
         }
     }
 
@@ -147,4 +147,8 @@ public class ChestScript : MonoBehaviour, IInteracting
         outlineScript.enabled = false;
     }
 
+    public bool shouldObjectBeDestroyed()
+    {
+        return true;
+    }
 }

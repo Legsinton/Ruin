@@ -35,4 +35,9 @@ public class KeyInteract : MonoBehaviour, IInteracting
     {
         outlineScript.enabled = false;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return true;
+    }
 }

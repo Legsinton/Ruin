@@ -102,6 +102,10 @@ public class Interact : MonoBehaviour
             if (value.isPressed) // Interact button press
             {
                 currentInteractableObject.GetComponent<IInteracting>().PressInteract();
+                if (currentInteractableObject.GetComponent<IInteracting>().shouldObjectBeDestroyed())
+                {
+                    RemoveObject(currentInteractableObject);
+                }
                 interacting = true;
             }
             if (!value.isPressed) // Interact button release
@@ -116,6 +120,7 @@ public class Interact : MonoBehaviour
     void RemoveObject(GameObject obj)
     {
         interactableObjects.Remove(obj);
+        GetCurrentInteractableObject();
     }
 }
 
@@ -128,4 +133,6 @@ public interface IInteracting
     void InteractInRange();
 
     void InteractNotInRange();
+
+    bool shouldObjectBeDestroyed();
 }

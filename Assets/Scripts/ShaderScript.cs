@@ -50,4 +50,9 @@ public class ShaderScript : MonoBehaviour, IInteracting
     public void InteractInRange() { }
 
     public void InteractNotInRange() { }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }
