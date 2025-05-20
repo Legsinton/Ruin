@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class RotatingObject : MonoBehaviour, IInteracting
 {
+    [Header("Clock Puzzel Settings")]
+    [SerializeField] bool clockPuzzle;
+
     [Header("Settings")]
     [SerializeField] float rotateSpeed;
     [SerializeField] float playerOffset;
     [SerializeField] float correctPlayerPosSpeed;
-    [SerializeField] float interactRange;
+    [SerializeField] float minInteractDistance;
+    [SerializeField] float minDistancToRotatingObjectAttached;
     [SerializeField] Vector2 clampRotation;
-
-    [Header("Clock Puzzel Settings")]
-    [SerializeField] bool clockPuzzle;
 
     [Header("Reference")]
     [SerializeField] Transform playerTransform;
@@ -120,14 +121,28 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     bool CheckIfPlayerInRange()
     {
-        if (Vector3.Distance(transform.position, playerTransform.position) < interactRange)
+        if (!playerAttached)
         {
-            outlineScript.enabled = true;
-            return true;
+            if (Vector3.Distance(interactPoint.position, playerTransform.position) < minInteractDistance)
+            {
+                outlineScript.enabled = true;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            return false;
+            if (Vector3.Distance(interactPoint.position, playerTransform.position) < minDistancToRotatingObjectAttached)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
@@ -149,7 +164,6 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     public void InteractNotInRange()
     {
-        StopPlayer();
         inInteractRange = false;
         outlineScript.enabled = false;
     }
