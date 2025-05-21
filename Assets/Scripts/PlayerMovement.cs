@@ -28,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
 
-    bool played;
-
     [Header("GroundCheck")]
 
     public LayerMask groundMask;
