@@ -1,4 +1,8 @@
+using System;
+using NUnit.Framework.Internal.Commands;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public class MovingPlatform : MonoBehaviour
 {
@@ -13,6 +17,17 @@ public class MovingPlatform : MonoBehaviour
     bool played;
     bool playedCutScene;
     readonly float movementThreshold = 0.001f;
+    bool objectDetected;
+    Vector3 distanceToHit;
+    bool objectCollision;
+    private float stopDistance;
+
+    // Gizmo
+    public bool drawGizmo = true;
+    public Color gizmoColor = Color.red;
+
+    public LayerMask layerMask;
+    Rigidbody rb;
 
     [Header("Settings To Move Platform")]
 
@@ -33,12 +48,37 @@ public class MovingPlatform : MonoBehaviour
     {
         originalPosition = transform.position;
         previousPosition = transform.position;
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
     }
 
     void Update()
     {
         MovementZ();
         MovementX();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!down) return;
+
+        RaycastHit hit;
+        Vector3 halfExtents = transform.localScale * 0.5f;
+        Vector3 direction = -transform.up;
+        Quaternion orientation = transform.rotation;
+
+        if (Physics.BoxCast(transform.position, halfExtents, direction, out hit, orientation, Mathf.Infinity, layerMask))
+        {
+            objectDetected = true;
+            stopDistance = hit.distance - halfExtents.y;
+            stopDistance = Mathf.Max(stopDistance, 0f);
+        }
+        else
+        {
+            objectDetected = false;
+            stopDistance = pressDepth;
+        }
+
         MovementUp();
         Vector3 movement = transform.position - previousPosition;
         if (movement.magnitude > movementThreshold)
@@ -75,16 +115,64 @@ public class MovingPlatform : MonoBehaviour
                     playedCutScene = true;
                 }
 
-                targetPosition = originalPosition - Vector3.up * pressDepth;
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-            }
 
-            else if (Switches != switchAmount)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+                if (Switches == switchAmount)
+                {
+                    if (!played)
+                    {
+                        played = true;
+
+                        if (cutSceneCamera != null && !playedCutScene)
+                        {
+                            ActivateCamera();
+                            Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                            playedCutScene = true;
+                        }
+                    }
+
+                    Vector3 targetPosition = originalPosition - Vector3.up * stopDistance;
+
+                    if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+                    {
+                        rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+                    }
+                }
+                else
+                {
+                    if (played) played = false;
+
+                    Vector3 returnPosition = originalPosition;
+
+                    if (Vector3.Distance(transform.position, returnPosition) > 0.01f)
+                    {
+                        rb.MovePosition(Vector3.MoveTowards(transform.position, returnPosition, moveSpeed * Time.fixedDeltaTime));
+                    }
+                }
             }
         }
+
     }
+
+    //targetPosition = originalPosition - Vector3.up * pressDepth;
+
+    // if (objectDetected)
+    // {
+    //     transform.position = Vector3.MoveTowards(transform.position, targetPosition - distanceToHit, moveSpeed * Time.deltaTime);
+    //     Debug.Log("Move down: " + transform.position);
+    // }
+    // else
+    // {
+    //     objectCollision = true;
+    //     if (!objectCollision)
+    //     {
+    //         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+    //     }
+    // }
+    // if (!objectDetected)
+    // {
+    //     transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+    // }
+
 
     void MovementZ()
     {
@@ -92,21 +180,27 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-
-                if (cutSceneCamera != null && !playedCutScene)
+                if (!played)
                 {
-                    ActivateCamera();
-                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                    playedCutScene = true;
+                    //PlaySoundFX();
+                    if (cutSceneCamera != null && !playedCutScene)
+                    {
+                        ActivateCamera();
+                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                        playedCutScene = true;
+                    }
                 }
-
                 targetPosition = originalPosition - Vector3.forward * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-
+                if (played)
+                {
+                    //PlaySoundFX();
+                    played = false;
+                }
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -118,22 +212,28 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-
-                played = true;
-                if (cutSceneCamera != null && !playedCutScene)
+                if (!played)
                 {
-                    ActivateCamera();
-                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                    playedCutScene = true;
+                    //PlaySoundFX();
+                    played = true;
+                    if (cutSceneCamera != null && !playedCutScene)
+                    {
+                        ActivateCamera();
+                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                        playedCutScene = true;
+                    }
                 }
-
                 targetPosition = originalPosition - Vector3.right * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-
+                if (played)
+                {
+                    //PlaySoundFX();
+                    played = false;
+                }
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -150,8 +250,59 @@ public class MovingPlatform : MonoBehaviour
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
     }
+
+    void PlaySoundFX()
+    {
+        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
+    }
+
+
     public void AddSwitch()
     {
         switches++;
     }
+
+    void OnDrawGizmos()
+    {
+        if (!drawGizmo) return;
+
+        Vector3 halfExtents = transform.localScale * 0.5f;
+        Vector3 direction = -transform.up;
+        Quaternion orientation = transform.rotation;
+
+        // Perform the actual boxcast
+        if (Physics.BoxCast(transform.position, halfExtents, direction, out RaycastHit hit, orientation, Mathf.Infinity, layerMask))
+        {
+            // Draw cast path
+            Gizmos.color = gizmoColor;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, orientation, Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, transform.localScale); // Start box
+
+            // Draw end box at hit point
+            Vector3 castDistance = direction * hit.distance;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position + castDistance, orientation, Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, transform.localScale);
+
+            // Draw line connecting the two boxes
+            Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.DrawLine(transform.position, transform.position + castDistance);
+        }
+    }
+
+
+
+    // void OnCollisionEnter(Collision collision)
+    // {
+    //     if (down)
+    //     {
+
+    //         Vector2 direction = collision.GetContact(0).normal;
+    //         if (direction.y == 1)
+    //         {
+    //             print("up");
+    //             objectCollision = true;
+    //             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
+    //         }
+    //     }
+    // }
 }
