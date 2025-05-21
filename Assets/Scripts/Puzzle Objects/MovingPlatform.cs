@@ -15,10 +15,7 @@ public class MovingPlatform : MonoBehaviour
     bool playedCutScene;
     readonly float movementThreshold = 0.001f;
     bool objectDetected;
-    // Vector3 distanceToHit;
-    // bool objectCollision;
-    private float stopDistance;
-    private float _stopHeight = 0f;
+    private float stopHeight = 0f;
 
     // Gizmo
     public bool drawGizmo = true;
@@ -68,18 +65,16 @@ public class MovingPlatform : MonoBehaviour
         if (Physics.BoxCast(transform.position, halfExtents, direction, out hit, orientation, Mathf.Infinity, layerMask))
         {
             objectDetected = true;
-            // stopDistance = hit.distance - halfExtents.y;
-            // stopDistance = Mathf.Max(stopDistance, 0f);
-            _stopHeight = hit.point.y + halfExtents.y;
-            _stopHeight = Mathf.Max(_stopHeight, 0f);
+            stopHeight = hit.point.y + halfExtents.y;
+            stopHeight = Mathf.Max(stopHeight, 0f);
             Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
-            Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {_stopHeight}");
+            Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {stopHeight}");
         }
         else
         {
             objectDetected = false;
-            _stopHeight = pressDepth;
-            Debug.Log("Agnes: _stopHeight? " + _stopHeight);
+            stopHeight = pressDepth;
+            Debug.Log("Agnes: stopHeight? " + stopHeight);
         }
 
         Debug.Log("Agnes: Object detected? " + objectDetected);
@@ -109,7 +104,7 @@ public class MovingPlatform : MonoBehaviour
 
     void MovementUp()
     {
-        if (down)
+        if (!down) return;
         {
             if (Switches == switchAmount)
             {
@@ -131,11 +126,11 @@ public class MovingPlatform : MonoBehaviour
 
                 if (objectDetected)
                 {
-                    targetPosition = new Vector3(originalPosition.x, _stopHeight, originalPosition.z);
+                    targetPosition = new Vector3(originalPosition.x, stopHeight, originalPosition.z);
                 }
                 else
                 {
-                    targetPosition = new Vector3(originalPosition.x, originalPosition.y - _stopHeight, originalPosition.z);
+                    targetPosition = new Vector3(originalPosition.x, originalPosition.y - stopHeight, originalPosition.z);
                 }
 
                 Debug.Log("targetPos: " + targetPosition);
@@ -165,29 +160,6 @@ public class MovingPlatform : MonoBehaviour
             }
         }
     }
-
-
-
-    //targetPosition = originalPosition - Vector3.up * pressDepth;
-
-    // if (objectDetected)
-    // {
-    //     transform.position = Vector3.MoveTowards(transform.position, targetPosition - distanceToHit, moveSpeed * Time.deltaTime);
-    //     Debug.Log("Move down: " + transform.position);
-    // }
-    // else
-    // {
-    //     objectCollision = true;
-    //     if (!objectCollision)
-    //     {
-    //         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-    //     }
-    // }
-    // if (!objectDetected)
-    // {
-    //     transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-    // }
-
 
     void MovementZ()
     {
@@ -303,21 +275,4 @@ public class MovingPlatform : MonoBehaviour
             Gizmos.DrawLine(transform.position, transform.position + castDistance);
         }
     }
-
-
-
-    // void OnCollisionEnter(Collision collision)
-    // {
-    //     if (down)
-    //     {
-
-    //         Vector2 direction = collision.GetContact(0).normal;
-    //         if (direction.y == 1)
-    //         {
-    //             print("up");
-    //             objectCollision = true;
-    //             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-    //         }
-    //     }
-    // }
 }
