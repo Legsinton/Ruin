@@ -177,8 +177,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!PushBlock.movedPlayerToTargetPos)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
-                capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 15 * Time.deltaTime);
+                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(PushBlock.transform.position.x, 0, PushBlock.transform.position.z) - new Vector3(capsule.transform.position.x, 0, capsule.transform.position.z));
+                capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 20 * Time.deltaTime);
             }
         }
         else if (rotatingObject != null)

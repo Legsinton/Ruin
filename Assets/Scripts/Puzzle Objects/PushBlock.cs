@@ -105,11 +105,11 @@ public class PushBlock : MonoBehaviour, IInteracting
         {
             DetectFallDirection();
         }
-        else if (IsGroundedBelow())
+        else
         {
             if (isfalling)
             {
-                if (rb.linearVelocity.magnitude < 0.05f)
+                if (rb.linearVelocity.magnitude < 0.01f && rb.angularVelocity.magnitude < 0.02f)
                 {
                     UnFreeze();
                 }
