@@ -238,4 +238,9 @@ public class PushBlock : MonoBehaviour, IInteracting
         checkDistanceToPlayer = false;
         outlineScript.enabled = false;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }

@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 
 public class Break : MonoBehaviour,IInteracting
 {
@@ -29,6 +26,7 @@ public class Break : MonoBehaviour,IInteracting
     {
         if (isBroken == true)
         {
+            gameObject.layer = default;
             collision.enabled = false;
             outlineScript.enabled = false;
 
@@ -127,9 +125,11 @@ public class Break : MonoBehaviour,IInteracting
     {
         if (this == null || outlineScript == null) return;
 
-        else if (isBroken )
-        {
-            outlineScript.enabled = false;
-        }
+        outlineScript.enabled = false;
+    }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return true;
     }
 }

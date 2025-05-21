@@ -155,4 +155,9 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
         }
         outlineScript.enabled = false;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }

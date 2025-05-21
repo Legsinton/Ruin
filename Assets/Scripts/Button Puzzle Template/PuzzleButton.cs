@@ -59,4 +59,9 @@ public class PuzzleButton : MonoBehaviour, IInteracting
     {
         puzzleComplete = true;
     }
+
+    public bool shouldObjectBeDestroyed()
+    {
+        return false;
+    }
 }
