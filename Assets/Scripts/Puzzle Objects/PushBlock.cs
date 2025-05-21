@@ -103,7 +103,8 @@ public class PushBlock : MonoBehaviour, IInteracting
 
         if (!IsGroundedBelow())
         {
-            DetectFallDirection();
+            isfalling = true;
+            moveBlock = false;
         }
         else
         {
@@ -169,12 +170,6 @@ public class PushBlock : MonoBehaviour, IInteracting
         {
             playerMovement.backMoveDisabled = true;
         }
-
-        // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.7f))
-        {
-            moveBlock = false;
-        }
     }
 
     void UnFreeze()
@@ -189,33 +184,6 @@ public class PushBlock : MonoBehaviour, IInteracting
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         return Physics.Raycast(origin, Vector3.down, 1.7f);
-    }
-    void DetectFallDirection()
-    {
-        float checkDistance = 1.7f;
-        Vector3 center = transform.position + Vector3.up * 0.5f;
-        Vector3 halfExtents = new Vector3(0.4f, 0.1f, 0.4f); // Create a small box per corner
-
-        // Check ground support at each side
-        bool hasSupportFront = Physics.BoxCast(center + new Vector3(0, 0, 0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportBack = Physics.BoxCast(center + new Vector3(0, 0, -0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportLeft = Physics.BoxCast(center + new Vector3(-0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportRight = Physics.BoxCast(center + new Vector3(0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-
-        // Determine which direction is unsupported
-        bool fallZ = !hasSupportFront || !hasSupportBack;
-        bool fallX = !hasSupportLeft || !hasSupportRight;
-
-        if (fallZ && !fallX)
-        {
-            isfalling = true;
-            rb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-        else if (fallX && !fallZ)
-        {
-            isfalling = true;
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
-        }
     }
 
     public void PressInteract()
