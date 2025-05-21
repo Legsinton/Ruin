@@ -22,7 +22,6 @@ public class PushBlock : MonoBehaviour, IInteracting
     bool moveBlock;
     bool isAttached;
     bool isfalling;
-    bool isResettingRotation;
 
     [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
@@ -63,7 +62,7 @@ public class PushBlock : MonoBehaviour, IInteracting
                 }
                 if (!movedPlayerToTargetPos)
                 {
-                    if (Vector3.Distance(player.transform.position, currentPlayerPosTarget.position) > 0.05)
+                    if (Vector3.Distance(new Vector3(player.transform.position.x, 0, player.transform.position.z), new Vector3(currentPlayerPosTarget.position.x, 0, currentPlayerPosTarget.position.z)) > 0.05)
                     {
                         Vector3 newPos = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
                         player.transform.position = new Vector3(newPos.x, player.transform.position.y, newPos.z);
@@ -91,25 +90,16 @@ public class PushBlock : MonoBehaviour, IInteracting
             }
         }
 
-        if (isResettingRotation)
+        if (!IsGroundedBelow() && !isfalling)
         {
-            Quaternion currentRot = transform.rotation;
-
-            Vector3 currentEuler = currentRot.eulerAngles;
-            Quaternion targetRot = Quaternion.Euler(currentEuler.x, 0f, currentEuler.z);
-
-            transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, rotationResetSpeed * Time.deltaTime);
+            isfalling = true;
+            moveBlock = false;
         }
-
-        if (!IsGroundedBelow())
-        {
-            DetectFallDirection();
-        }
-        else if (IsGroundedBelow())
+        else
         {
             if (isfalling)
             {
-                if (rb.linearVelocity.magnitude < 0.05f)
+                if (rb.linearVelocity.magnitude < 0.01f && rb.angularVelocity.magnitude < 0.01f)
                 {
                     UnFreeze();
                 }
@@ -169,12 +159,6 @@ public class PushBlock : MonoBehaviour, IInteracting
         {
             playerMovement.backMoveDisabled = true;
         }
-
-        // Down
-        if (!Physics.Raycast(origin, -playerRotation.transform.up, out RaycastHit hitDown, 1.7f))
-        {
-            moveBlock = false;
-        }
     }
 
     void UnFreeze()
@@ -189,33 +173,6 @@ public class PushBlock : MonoBehaviour, IInteracting
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
         return Physics.Raycast(origin, Vector3.down, 1.7f);
-    }
-    void DetectFallDirection()
-    {
-        float checkDistance = 1.7f;
-        Vector3 center = transform.position + Vector3.up * 0.5f;
-        Vector3 halfExtents = new Vector3(0.4f, 0.1f, 0.4f); // Create a small box per corner
-
-        // Check ground support at each side
-        bool hasSupportFront = Physics.BoxCast(center + new Vector3(0, 0, 0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportBack = Physics.BoxCast(center + new Vector3(0, 0, -0.5f), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportLeft = Physics.BoxCast(center + new Vector3(-0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-        bool hasSupportRight = Physics.BoxCast(center + new Vector3(0.5f, 0, 0), halfExtents, Vector3.down, Quaternion.identity, checkDistance);
-
-        // Determine which direction is unsupported
-        bool fallZ = !hasSupportFront || !hasSupportBack;
-        bool fallX = !hasSupportLeft || !hasSupportRight;
-
-        if (fallZ && !fallX)
-        {
-            isfalling = true;
-            rb.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-        else if (fallX && !fallZ)
-        {
-            isfalling = true;
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
-        }
     }
 
     public void PressInteract()
