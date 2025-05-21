@@ -126,13 +126,29 @@ public class MovingPlatform : MonoBehaviour
                     }
                 }
 
-                Vector3 targetPosition = new Vector3(originalPosition.x, _stopHeight, originalPosition.z);
+
+                Vector3 targetPosition;
+
+                if (objectDetected)
+                {
+                    targetPosition = new Vector3(originalPosition.x, _stopHeight, originalPosition.z);
+                }
+                else
+                {
+                    targetPosition = new Vector3(originalPosition.x, originalPosition.y - _stopHeight, originalPosition.z);
+                }
+
                 Debug.Log("targetPos: " + targetPosition);
 
                 if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
                 {
                     rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
                 }
+
+                // if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+                // {
+                //     rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+                // }
             }
 
             else if (Switches < switchAmount)
