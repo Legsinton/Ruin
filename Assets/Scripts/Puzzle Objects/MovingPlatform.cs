@@ -1,6 +1,3 @@
-using System;
-using NUnit.Framework.Internal.Commands;
-using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
@@ -18,9 +15,10 @@ public class MovingPlatform : MonoBehaviour
     bool playedCutScene;
     readonly float movementThreshold = 0.001f;
     bool objectDetected;
-    Vector3 distanceToHit;
-    bool objectCollision;
+    // Vector3 distanceToHit;
+    // bool objectCollision;
     private float stopDistance;
+    private float _stopHeight = 0f;
 
     // Gizmo
     public bool drawGizmo = true;
@@ -70,16 +68,24 @@ public class MovingPlatform : MonoBehaviour
         if (Physics.BoxCast(transform.position, halfExtents, direction, out hit, orientation, Mathf.Infinity, layerMask))
         {
             objectDetected = true;
-            stopDistance = hit.distance - halfExtents.y;
-            stopDistance = Mathf.Max(stopDistance, 0f);
+            // stopDistance = hit.distance - halfExtents.y;
+            // stopDistance = Mathf.Max(stopDistance, 0f);
+            _stopHeight = hit.point.y + halfExtents.y;
+            _stopHeight = Mathf.Max(_stopHeight, 0f);
+            Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
+            Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {_stopHeight}");
         }
         else
         {
             objectDetected = false;
-            stopDistance = pressDepth;
+            _stopHeight = pressDepth;
+            Debug.Log("Agnes: _stopHeight? " + _stopHeight);
         }
 
+        Debug.Log("Agnes: Object detected? " + objectDetected);
+
         MovementUp();
+
         Vector3 movement = transform.position - previousPosition;
         if (movement.magnitude > movementThreshold)
         {
@@ -107,51 +113,44 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-
-                if (cutSceneCamera != null && !playedCutScene)
+                // Debug.Log("Move down");
+                if (!played)
                 {
-                    ActivateCamera();
-                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                    playedCutScene = true;
-                }
+                    played = true;
 
-
-                if (Switches == switchAmount)
-                {
-                    if (!played)
+                    if (cutSceneCamera != null && !playedCutScene)
                     {
-                        played = true;
-
-                        if (cutSceneCamera != null && !playedCutScene)
-                        {
-                            ActivateCamera();
-                            Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                            playedCutScene = true;
-                        }
-                    }
-
-                    Vector3 targetPosition = originalPosition - Vector3.up * stopDistance;
-
-                    if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
-                    {
-                        rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+                        ActivateCamera();
+                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                        playedCutScene = true;
                     }
                 }
-                else
+
+                Vector3 targetPosition = new Vector3(originalPosition.x, _stopHeight, originalPosition.z);
+                Debug.Log("targetPos: " + targetPosition);
+
+                if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
                 {
-                    if (played) played = false;
+                    rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
+                }
+            }
 
-                    Vector3 returnPosition = originalPosition;
+            else if (Switches < switchAmount)
+            {
+                Debug.Log("Move up");
+                if (played) played = false;
 
-                    if (Vector3.Distance(transform.position, returnPosition) > 0.01f)
-                    {
-                        rb.MovePosition(Vector3.MoveTowards(transform.position, returnPosition, moveSpeed * Time.fixedDeltaTime));
-                    }
+                Vector3 returnPosition = originalPosition;
+
+                if (Vector3.Distance(transform.position, returnPosition) > 0.01f)
+                {
+                    rb.MovePosition(Vector3.MoveTowards(transform.position, returnPosition, moveSpeed * Time.fixedDeltaTime));
                 }
             }
         }
-
     }
+
+
 
     //targetPosition = originalPosition - Vector3.up * pressDepth;
 
