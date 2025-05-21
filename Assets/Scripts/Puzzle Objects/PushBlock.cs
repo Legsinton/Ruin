@@ -22,7 +22,6 @@ public class PushBlock : MonoBehaviour, IInteracting
     bool moveBlock;
     bool isAttached;
     bool isfalling;
-    bool isResettingRotation;
 
     [HideInInspector] public bool movedPlayerToTargetPos;
     Vector3 offsetToPlayer;
@@ -91,17 +90,7 @@ public class PushBlock : MonoBehaviour, IInteracting
             }
         }
 
-        if (isResettingRotation)
-        {
-            Quaternion currentRot = transform.rotation;
-
-            Vector3 currentEuler = currentRot.eulerAngles;
-            Quaternion targetRot = Quaternion.Euler(currentEuler.x, 0f, currentEuler.z);
-
-            transform.rotation = Quaternion.RotateTowards(currentRot, targetRot, rotationResetSpeed * Time.deltaTime);
-        }
-
-        if (!IsGroundedBelow())
+        if (!IsGroundedBelow() && !isfalling)
         {
             isfalling = true;
             moveBlock = false;
@@ -110,7 +99,7 @@ public class PushBlock : MonoBehaviour, IInteracting
         {
             if (isfalling)
             {
-                if (rb.linearVelocity.magnitude < 0.01f && rb.angularVelocity.magnitude < 0.02f)
+                if (rb.linearVelocity.magnitude < 0.01f && rb.angularVelocity.magnitude < 0.01f)
                 {
                     UnFreeze();
                 }
