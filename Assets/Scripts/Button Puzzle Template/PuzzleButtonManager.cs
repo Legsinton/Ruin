@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class PuzzleManager : MonoBehaviour
                 {
                     if (playerInput[i] != correctSequence[i])
                     {
-                        ResetPuzzle();
+                        Invoke(nameof(ResetPuzzle),1);
                         return;
                     }
                 }
@@ -43,21 +44,19 @@ public class PuzzleManager : MonoBehaviour
                     }
                     if (!foundCorrectButton)
                     {
-                        ResetPuzzle();
+                        Invoke(nameof(ResetPuzzle), 1);
                         return;
                     }
                 }
             }
-
-            PuzzleSolved();
+            StartCoroutine(PuzzleSolved());
         }
     }
-
     public void UnRegisterButtonPress(int buttonID)
     {
         playerInput.Remove(buttonID);
     }
-    private void PuzzleSolved()
+    IEnumerator PuzzleSolved()
     {
         //GetComponent<Renderer>().material.color = Color.green;
         foreach (var button in buttons)
@@ -65,6 +64,11 @@ public class PuzzleManager : MonoBehaviour
             button.PuzzleComplete();
         }
 
+        yield return new WaitForSeconds(1);
+
+        SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+
+        yield return new WaitForSeconds(2);
         if(gate != null)
         {
             gate.AddSwitch(1);
