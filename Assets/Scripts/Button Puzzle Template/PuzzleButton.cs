@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 public class PuzzleButton : MonoBehaviour, IInteracting
@@ -9,63 +8,54 @@ public class PuzzleButton : MonoBehaviour, IInteracting
     public float pressDepth;
     public float moveSpeed;
 
-    bool played;
+    bool move;
+    bool calculateNextPosition;
     bool puzzleComplete;
     bool buttonPressed;
-    //Color startColor;
 
     Vector3 targetPosition;
     Vector3 originalPosition;
-    Vector3 previousPosition;
     readonly float movementThreshold = 0.001f;
 
     void Start()
     {
-        // startColor = GetComponent<Renderer>().material.color;
         originalPosition = transform.position;
-        previousPosition = transform.position;
     }
 
     private void Update()
     {
-        MoveObject();
-        PlaySoundFX();
+        if (move)
+        {
+            MoveObject();
+        }
     }
 
     void MoveObject()
     {
-        Debug.Log("is it moving?");
-        if (buttonPressed)
+        if (!calculateNextPosition)
         {
-            targetPosition = originalPosition - Vector3.left * pressDepth;
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        }
-        else if (!buttonPressed)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-        }
-    }
-
-    void PlaySoundFX()
-    {
-        Vector3 movement = transform.position - previousPosition;
-        if (movement.magnitude > movementThreshold)
-        {
-            if (!played)
+            if (buttonPressed)
             {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
+                targetPosition = originalPosition - Vector3.left * pressDepth;
             }
+            else
+            {
+                targetPosition = originalPosition;
+            }
+            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
+            calculateNextPosition = true;
+        }
+
+        if (Vector3.Distance(transform.position, targetPosition) < movementThreshold)
+        {
+            move = false;
+            calculateNextPosition = false;
+            SoundFXManager.Instance.StopLoopFor(gameObject);
         }
         else
         {
-            if (played)
-            {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
         }
-        previousPosition = transform.position;
     }
 
     public void InteractInRange()
@@ -90,12 +80,13 @@ public class PuzzleButton : MonoBehaviour, IInteracting
         if (!buttonPressed && !puzzleComplete)
         {
             buttonPressed = true;
+            move = true;
             puzzleManager.RegisterButtonPress(buttonID);
         }
         else if (buttonPressed && !puzzleComplete)
         {
             buttonPressed = false;
-            //GetComponent<Renderer>().material.color = startColor;
+            move = true;
             puzzleManager.UnRegisterButtonPress(buttonID);
         }
     }
@@ -103,8 +94,8 @@ public class PuzzleButton : MonoBehaviour, IInteracting
 
     public void ResetButton()
     {
-        //GetComponent<Renderer>().material.color = startColor;
         buttonPressed = false;
+        move = true;
     }
 
     public void PuzzleComplete()
