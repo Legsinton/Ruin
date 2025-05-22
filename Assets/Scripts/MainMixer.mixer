@@ -1,24 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!243 &-4142420277188646146
-AudioMixerGroupController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: SoundFX
-  m_AudioMixer: {fileID: 24100000}
-  m_GroupID: a771813a2d282524bb57d8126e9b21df
-  m_Children: []
-  m_Volume: 04a573d4b87b09e4ab61d39561c3c98e
-  m_Pitch: 46f7d2d798f97c241bb2bf9d5243599c
-  m_Send: 00000000000000000000000000000000
-  m_Effects:
-  - {fileID: 7302840109278888268}
-  m_UserColorIndex: 0
-  m_Mute: 0
-  m_Solo: 0
-  m_BypassEffects: 0
 --- !u!244 &-14806986778084853
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -53,12 +34,9 @@ AudioMixerController:
     name: MasterVolume
   - guid: a3ed98a52b103f54198c61c1256057f9
     name: MusicVolume
-  - guid: 04a573d4b87b09e4ab61d39561c3c98e
-    name: FXVolume
   m_AudioMixerGroupViews:
   - guids:
     - 10c7c5ec90126a342b3a5fc893313493
-    - a771813a2d282524bb57d8126e9b21df
     - 02ba60aea0d38134d9b942e00a1f7983
     name: View
   m_CurrentViewIndex: 0
@@ -73,7 +51,6 @@ AudioMixerGroupController:
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 10c7c5ec90126a342b3a5fc893313493
   m_Children:
-  - {fileID: -4142420277188646146}
   - {fileID: 8863665404254155133}
   m_Volume: 5dd4c44fd334f6149a942a8bfbdf1450
   m_Pitch: 3e1d7e23452a2d44d80d4303a27c782a
@@ -109,20 +86,6 @@ AudioMixerSnapshotController:
   m_SnapshotID: d31502f3bb88c40428e93a0bed3ff497
   m_FloatValues: {}
   m_TransitionOverrides: {}
---- !u!244 &7302840109278888268
-AudioMixerEffectController:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_EffectID: d86bf9531f21cae4db935698dab7d22b
-  m_EffectName: Attenuation
-  m_MixLevel: 5a44ae33bb23b464ebd523f0224f0865
-  m_Parameters: []
-  m_SendTarget: {fileID: 0}
-  m_EnableWetMix: 0
-  m_Bypass: 0
 --- !u!243 &8863665404254155133
 AudioMixerGroupController:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundFXManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SoundFXManager : MonoBehaviour
     AudioSource soundFXObject;
     [SerializeField]
      List<SoundVolumeEntry> volumeList;
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
     Dictionary<SoundType, object> soundFXDict;
     // Dictionary for volume on sounds
@@ -160,6 +162,7 @@ public class SoundFXManager : MonoBehaviour
             tempGO.transform.position = position.Value;
 
             AudioSource aSource = tempGO.AddComponent<AudioSource>();
+            aSource.outputAudioMixerGroup = sfxMixerGroup;
             aSource.clip = clip;
             aSource.spatialBlend = spatialBlend;
             aSource.minDistance = minDistance;
@@ -212,6 +215,7 @@ public class SoundFXManager : MonoBehaviour
             tempGO.transform.localPosition = Vector3.zero; // So it's centered on parent
         }
         AudioSource source = tempGO.AddComponent<AudioSource>();
+        source.outputAudioMixerGroup = sfxMixerGroup;
         source.clip = clip;
         source.loop = true;
         source.spatialBlend = 1f;

@@ -7,15 +7,14 @@ using UnityEngine.InputSystem.Utilities;
 
 public class PauseMenuScript : MonoBehaviour
 {
-    public GameObject pauseMenu, optionsMenu;
+    public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
     [SerializeField] bool pauseButtonWasPressed = false;
-    [SerializeField] GameObject resumeButton;
-    [SerializeField] GameObject backButton;
-    [SerializeField] bool clickButtonWasPressed;
+    [SerializeField] GameObject resumeButton,backButton,backButtonOptions;
     [SerializeField] TextMeshProUGUI creditsText;
     bool isPausing;
+    bool isGamepad;
     private bool justPaused = false;
     public InputActionAsset actions; // Drag in your InputActions asset in inspector
     private InputAction clickAction;
@@ -52,15 +51,23 @@ public class PauseMenuScript : MonoBehaviour
             }
             else if (selected != null && selected.name == "OptionsButton")
             {
-                // Handle options click here
+                Options();
             }
             else if (selected != null && selected.name == "QuitButton")
             {
-                // Handle options click here
+                QuitGame();
+            }
+            else if (selected != null && selected.name == "CreditsButton")
+            {
+                Credits();
+            }
+            else if (selected != null && selected.name == "BackButton")
+            {
+                BackButton();
             }
             else
             {
-                
+
             }
         }
     }
@@ -69,6 +76,9 @@ public class PauseMenuScript : MonoBehaviour
     {
         if (value.isPressed && !pauseButtonWasPressed)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             Debug.Log("Pressed");
             pauseButtonWasPressed = true;
@@ -87,6 +97,7 @@ public class PauseMenuScript : MonoBehaviour
         bool isPaused = pauseMenu.activeInHierarchy;
         if (!isPaused)
         {
+            isGamepad = playerInput.currentControlScheme == "Gamepad";
             EventSystem.current.SetSelectedGameObject(null);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
@@ -98,7 +109,15 @@ public class PauseMenuScript : MonoBehaviour
             Time.timeScale = 0f;
             creditsText.enabled = false;
             justPaused = true; // <- block resume for 1 frame
-            StartCoroutine(SetSelect(resumeButton)); 
+            if (isGamepad)
+            {
+                Debug.LogWarning("Hälloss");
+                StartCoroutine(SetSelect(resumeButton)); 
+            }
+            else if (!isGamepad)
+            {
+                justPaused = false;
+            }
         }
         else if (isPaused)
         {
@@ -142,7 +161,7 @@ public class PauseMenuScript : MonoBehaviour
         }
 
         if (isPausing)
-        {
+        {          
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
             playerMovement.enabled = true;
@@ -157,37 +176,97 @@ public class PauseMenuScript : MonoBehaviour
 
     public void BackButton()
     {
+        ResumeGame();
+    }
+
+    public void SoundMenu()
+    {
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        soundMenu.SetActive(true);
         optionsMenu.SetActive(false);
-        pauseMenu.SetActive(true);
-        isPausing = true;
+        pauseMenu.SetActive(false);
+        controllMenu.SetActive(false);
         Time.timeScale = 0f;
         creditsText.enabled = false;
 
         justPaused = true; // <- block resume for 1 frame
-        StartCoroutine(SetSelect(resumeButton));
+        if (isGamepad)
+        {
+            Cursor.visible = false;
+            StartCoroutine(SetSelect(backButtonOptions));
+        }
+        else if (!isGamepad)
+        {
+            Cursor.visible = true;
+            justPaused = false;
+        }
+    }
+    public void ControllMenu()
+    {
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
+        EventSystem.current.SetSelectedGameObject(null);
+        Cursor.lockState = CursorLockMode.Confined;
+        soundMenu.SetActive(false);
+        optionsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        controllMenu.SetActive(true);
+        Time.timeScale = 0f;
+        creditsText.enabled = false;
+
+        justPaused = true; // <- block resume for 1 frame
+        if (isGamepad)
+        {
+            Cursor.visible = false;
+            StartCoroutine(SetSelect(backButtonOptions));
+        }
+        else if (!isGamepad)
+        {
+            Cursor.visible = true;
+            justPaused = false;
+        }
+    }
+
+    public void BackButtonOptions()
+    {
+        Options();
     }
 
     public void Options()
     {
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
         creditsText.enabled = false;
         Cursor.lockState = CursorLockMode.Confined;
-
+        Cursor.visible = true;
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(true);
-        StartCoroutine(SetSelect(backButton));
+        soundMenu.SetActive(false);
+        controllMenu.SetActive(false);
         Time.timeScale = 0f; 
+        if (isGamepad)
+        {
+            StartCoroutine(SetSelect(backButton));
+        }
+        else if (!isGamepad)
+        {
+            justPaused = false;
+        }
     }
 
     public void QuitGame()
     {
-
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 
     public void Credits()
     {
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
+        if (isGamepad)
+        {
+            StartCoroutine(SetSelect(backButton));
+        }
         creditsText.enabled = !creditsText.enabled;
     }
 }
