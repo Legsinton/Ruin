@@ -59,7 +59,7 @@ public class PuzzleManager : MonoBehaviour
     }
     private void PuzzleSolved()
     {
-        GetComponent<Renderer>().material.color = Color.green;
+        //GetComponent<Renderer>().material.color = Color.green;
         foreach (var button in buttons)
         {
             button.PuzzleComplete();

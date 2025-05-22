@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -13,6 +14,7 @@ public class PauseMenuScript : MonoBehaviour
     [SerializeField] GameObject resumeButton;
     [SerializeField] GameObject backButton;
     [SerializeField] bool clickButtonWasPressed;
+    [SerializeField] TextMeshProUGUI creditsText;
     bool isPausing;
     private bool justPaused = false;
     public InputActionAsset actions; // Drag in your InputActions asset in inspector
@@ -22,17 +24,7 @@ public class PauseMenuScript : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
-    }
-    private void OnClick(InputValue value)
-    {
-        if (value.isPressed && !clickButtonWasPressed)
-        {
-            clickButtonWasPressed = true;
-        }
-        else
-        {
-            clickButtonWasPressed = false;
-        }
+        creditsText.enabled = false;
     }
     private void OnEnable()
     {
@@ -104,11 +96,15 @@ public class PauseMenuScript : MonoBehaviour
             pauseMenu.SetActive(true);
             isPausing = true;
             Time.timeScale = 0f;
+            creditsText.enabled = false;
             justPaused = true; // <- block resume for 1 frame
             StartCoroutine(SetSelect(resumeButton)); 
         }
         else if (isPaused)
         {
+            creditsText.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
+
             Cursor.visible = false;
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
@@ -147,11 +143,15 @@ public class PauseMenuScript : MonoBehaviour
 
         if (isPausing)
         {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
-            optionsMenu.SetActive(false);        
+            optionsMenu.SetActive(false);
+            creditsText.enabled = false;
+
         }
     }
 
@@ -159,17 +159,22 @@ public class PauseMenuScript : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
+        Cursor.visible = true;
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(true);
         isPausing = true;
         Time.timeScale = 0f;
+        creditsText.enabled = false;
+
         justPaused = true; // <- block resume for 1 frame
         StartCoroutine(SetSelect(resumeButton));
     }
 
     public void Options()
     {
+        creditsText.enabled = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(true);
         StartCoroutine(SetSelect(backButton));
@@ -179,5 +184,10 @@ public class PauseMenuScript : MonoBehaviour
     public void QuitGame()
     {
 
+    }
+
+    public void Credits()
+    {
+        creditsText.enabled = !creditsText.enabled;
     }
 }
