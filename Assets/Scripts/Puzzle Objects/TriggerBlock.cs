@@ -50,7 +50,7 @@ public class TriggerBlock : MonoBehaviour
             }
             else
             {
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, transform);
             }            
         }
     }
