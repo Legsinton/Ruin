@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private bool isGrounded;
 
+    [Header("Check Player Falling")]
+    public LayerMask abyssMask;
+
     [Header("Camera")]
 
     private Vector3 cachedCameraForward;
@@ -45,12 +48,16 @@ public class PlayerMovement : MonoBehaviour
     public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
 
+    SceneManagement sceneManagement;
+
+
     private void Start()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        sceneManagement = FindFirstObjectByType<SceneManagement>();
     }
 
     private void Update()
@@ -99,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         currentVelocity = 0;
     }
 
-    private void MovePlayer()
+    public void MovePlayer()
     {
         if (PushBlock != null)
         {
@@ -182,13 +189,23 @@ public class PlayerMovement : MonoBehaviour
         else if (rotatingObject != null)
         {
             Quaternion targetRotation = Quaternion.LookRotation(new Vector3(rotatingObject.interactPoint.position.x, 0, rotatingObject.interactPoint.position.z) - new Vector3(capsule.transform.position.x, 0, capsule.transform.position.z));
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation,  5 * Time.deltaTime);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
         else if (playerMoveDir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
         }
+        else if (PushBlock != null)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
+            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+        }
+        /* else if (rotatingObject != null)
+         {
+             Quaternion targetRotation = Quaternion.LookRotation(rotatingObject.transform.position - capsule.transform.position);
+             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
+         }*/
     }
 
     void PlayWalkingSound()
@@ -209,6 +226,23 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             stepTimer = 0f;
+        }
+    }
+
+    private void OnCollisionEnter(Collision hit)
+    {
+        if (hit.gameObject.CompareTag("RotatingTag"))
+        {
+            rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
+        }
+    }
+
+    // Player falls
+    private void OnTriggerEnter(Collider other)
+    {
+        if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+        {
+            sceneManagement.OnDeath();
         }
     }
 }
