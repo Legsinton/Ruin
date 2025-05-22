@@ -69,14 +69,14 @@ public class MovingPlatform : MonoBehaviour
             objectDetected = true;
             stopHeight = hit.point.y + halfExtents.y;
             stopHeight = Mathf.Max(stopHeight, 0f);
-            Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
-            Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {stopHeight}");
+            //Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
+            //Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {stopHeight}");
         }
         else
         {
             objectDetected = false;
             stopHeight = pressDepth;
-            Debug.Log("Agnes: stopHeight? " + stopHeight);
+           // Debug.Log("Agnes: stopHeight? " + stopHeight);
         }
 
         MovementUp();
