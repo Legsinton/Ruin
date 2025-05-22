@@ -206,6 +206,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   isGrounded: 0
+  abyssMask:
+    serializedVersion: 2
+    m_Bits: 0
   capsule: {fileID: 3169089004556483027}
   cameraTransform: {fileID: 0}
 --- !u!114 &2961865858088359948
@@ -272,12 +275,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
   optionsMenu: {fileID: 0}
+  soundMenu: {fileID: 0}
+  controllMenu: {fileID: 0}
   playerInput: {fileID: 5285071339164778062}
   playerMovement: {fileID: 1130461663377977015}
+  cameraFollow: {fileID: 8199516164004468363}
   pauseButtonWasPressed: 0
   resumeButton: {fileID: 0}
   backButton: {fileID: 0}
-  clickButtonWasPressed: 0
+  backButtonOptions: {fileID: 0}
+  backButtonOptionsSound: {fileID: 0}
+  creditsText: {fileID: 0}
+  sliderControll: {fileID: 0}
+  sliderMouse: {fileID: 0}
   actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
 --- !u!1 &7590501160471171792
 GameObject:

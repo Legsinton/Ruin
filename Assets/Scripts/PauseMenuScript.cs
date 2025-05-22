@@ -4,15 +4,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.UI;
 
 public class PauseMenuScript : MonoBehaviour
 {
     public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
+    public CameraFollow cameraFollow;
     [SerializeField] bool pauseButtonWasPressed = false;
-    [SerializeField] GameObject resumeButton,backButton,backButtonOptions;
+    [SerializeField] GameObject resumeButton,backButton;
+    [SerializeField] GameObject backButtonOptions, backButtonOptionsSound;
     [SerializeField] TextMeshProUGUI creditsText;
+    public Slider sliderControll;
+    public Slider sliderMouse;
     bool isPausing;
     bool isGamepad;
     private bool justPaused = false;
@@ -24,6 +29,8 @@ public class PauseMenuScript : MonoBehaviour
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
         creditsText.enabled = false;
+        soundMenu.SetActive(false);
+        controllMenu.SetActive(false);
     }
     private void OnEnable()
     {
@@ -65,6 +72,22 @@ public class PauseMenuScript : MonoBehaviour
             {
                 BackButton();
             }
+            else if (selected != null && selected.name == "BackButtonOptions")
+            {
+                BackButtonOptions();
+            }
+            else if (selected != null && selected.name == "SoundSettings")
+            {
+                SoundMenu();
+            }
+            else if (selected != null && selected.name == "ControllSettings")
+            {
+                ControllMenu();
+            }
+            else if (selected != null && selected.name == "BackButtonOptionsSound")
+            {
+                BackButtonOptions();
+            }
             else
             {
 
@@ -91,6 +114,14 @@ public class PauseMenuScript : MonoBehaviour
         }
     }
 
+    public void ChangeCameraSensetivetyControl()
+    {
+        cameraFollow.controllerSensitivity = sliderControll.value;
+    }
+    public void ChangeCameraSensetivetyMouse()
+    {
+        cameraFollow.mouseSensitivity = sliderMouse.value;
+    }
     public void PauseUnPause()
     {
         
@@ -174,14 +205,37 @@ public class PauseMenuScript : MonoBehaviour
         }
     }
 
+    public void PauseMenu()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        playerInput.SwitchCurrentActionMap("UI");
+        playerMovement.enabled = false;
+        optionsMenu.SetActive(false);
+        pauseMenu.SetActive(true);
+        isPausing = true;
+        Time.timeScale = 0f;
+        creditsText.enabled = false;
+        justPaused = true; // <- block resume for 1 frame
+        if (isGamepad)
+        {
+            Debug.LogWarning("Hälloss");
+            StartCoroutine(SetSelect(resumeButton));
+        }
+        else if (!isGamepad)
+        {
+            justPaused = false;
+        }
+    }
+
     public void BackButton()
     {
-        ResumeGame();
+        PauseMenu();
     }
 
     public void SoundMenu()
     {
-        isGamepad = playerInput.currentControlScheme == "Gamepad";
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
         soundMenu.SetActive(true);
@@ -195,7 +249,7 @@ public class PauseMenuScript : MonoBehaviour
         if (isGamepad)
         {
             Cursor.visible = false;
-            StartCoroutine(SetSelect(backButtonOptions));
+            StartCoroutine(SetSelect(backButtonOptionsSound));
         }
         else if (!isGamepad)
         {
@@ -205,7 +259,6 @@ public class PauseMenuScript : MonoBehaviour
     }
     public void ControllMenu()
     {
-        isGamepad = playerInput.currentControlScheme == "Gamepad";
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
         soundMenu.SetActive(false);

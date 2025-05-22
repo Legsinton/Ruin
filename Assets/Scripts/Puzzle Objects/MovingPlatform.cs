@@ -79,8 +79,6 @@ public class MovingPlatform : MonoBehaviour
             Debug.Log("Agnes: stopHeight? " + stopHeight);
         }
 
-        Debug.Log("Agnes: Object detected? " + objectDetected);
-
         MovementUp();
 
         Vector3 movement = transform.position - previousPosition;
@@ -130,8 +128,6 @@ public class MovingPlatform : MonoBehaviour
                     targetPosition = new Vector3(originalPosition.x, originalPosition.y - stopHeight, originalPosition.z);
                 }
 
-                Debug.Log("targetPos: " + targetPosition);
-
                 if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
                 {
                     rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
@@ -145,7 +141,6 @@ public class MovingPlatform : MonoBehaviour
 
             else if (Switches < switchAmount)
             {
-                Debug.Log("Move up");
                
                 Vector3 returnPosition = originalPosition;
 
