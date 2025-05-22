@@ -7,8 +7,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] Vector3 cameraPlayerOffset;
     [SerializeField] Vector3 cameraFocusOffset;
     [SerializeField] float smoothTime;
-    [SerializeField] float mouseSensitivity;
-    [SerializeField] float controllerSensitivity;
+    [SerializeField] public float mouseSensitivity;
+    [SerializeField] public float controllerSensitivity;
     [SerializeField] Vector2 rotationClamp;
     [SerializeField] float targetCameraDistance;
     [SerializeField] float wallDistance;
