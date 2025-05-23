@@ -200,6 +200,8 @@ public class PauseMenuScript : MonoBehaviour
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             optionsMenu.SetActive(false);
+            soundMenu.SetActive(false);
+            controllMenu.SetActive(false);
             creditsText.enabled = false;
 
         }
@@ -288,7 +290,6 @@ public class PauseMenuScript : MonoBehaviour
 
     public void Options()
     {
-        isGamepad = playerInput.currentControlScheme == "Gamepad";
         creditsText.enabled = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
@@ -315,7 +316,6 @@ public class PauseMenuScript : MonoBehaviour
 
     public void Credits()
     {
-        isGamepad = playerInput.currentControlScheme == "Gamepad";
         if (isGamepad)
         {
             StartCoroutine(SetSelect(backButton));
