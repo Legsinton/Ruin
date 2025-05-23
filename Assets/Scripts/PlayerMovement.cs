@@ -37,7 +37,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded;
 
     [Header("Check Player Falling")]
-    public LayerMask abyssMask;
+    bool isDead = false;
+    public float deathHeight;
 
     [Header("Camera")]
 
@@ -64,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RotatePlayer();
         PlayWalkingSound();
+        CheckPlayerFalling();
     }
     private void LateUpdate()
     {
@@ -238,10 +240,19 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Player falls
-    private void OnTriggerEnter(Collider other)
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+    //     {
+    //         sceneManagement.OnDeath();
+    //     }
+    // }
+    private void CheckPlayerFalling()
     {
-        if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+        if (isDead == false && transform.position.y < deathHeight)
         {
+            Debug.Log("Agnes: Player dies");
+            isDead = true;
             sceneManagement.OnDeath();
         }
     }
