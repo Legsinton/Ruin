@@ -20,7 +20,6 @@ public class Interact : MonoBehaviour
             interactableObjects.Add(other.gameObject);
 
             GetCurrentInteractableObject();
-            Debug.Log("Agnes: Interact enter");
         }
     }
 

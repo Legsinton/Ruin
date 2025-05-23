@@ -1,16 +1,37 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Inspector : MonoBehaviour
 {
-    // [SerializeField] private Inventory inventory;
-    public Item item;
-    public GameObject itemPrefab;
+    Canvas canvas;
 
-    public void InspectItem()
+    void Awake()
+    {
+        GameObject inspectorCanvas = GameObject.Find("InspectorCanvas");
+        if (inspectorCanvas != null)
+        {
+            canvas = inspectorCanvas.GetComponent<Canvas>();
+            canvas.enabled = false;
+        }
+        else
+        {
+            Debug.Log("Could not locate Canvas component on " + inspectorCanvas.name);
+        }
+    }
+
+    public void InspectItem(ScriptableObject interactableObject)
     {
         Debug.Log("Agnes: Started inspection");
-        itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1000), Quaternion.identity);
+        canvas.enabled = true;
+        Item item = (Item)interactableObject;
+        if (item != null && item.prefab != null)
+        {
+            Instantiate(item.prefab, new Vector3(1000, 1000, 1003), Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("Cannot spawn: Missing component, data, or prefab.");
+        }
     }
 
     public void StopInspection()

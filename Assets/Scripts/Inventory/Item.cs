@@ -5,7 +5,7 @@ public enum SlotTag { Arm, Leg, Eyes, Key }
 [CreateAssetMenu(menuName = "Scriptable Objects/Item")]
 public class Item : ScriptableObject
 {
-    public Texture2D sprite;
+    // public Texture2D sprite;
     public GameObject prefab;
     public SlotTag itemTag;
     public int itemId;

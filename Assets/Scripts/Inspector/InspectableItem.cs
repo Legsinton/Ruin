@@ -1,13 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InspectableItem : MonoBehaviour, IInteracting
 {
     [SerializeField] Outline outlineScript;
-    private Inspector inspector;
+    Inspector inspector;
+    //[SerializeField] Item item;
+    public bool canInteract;
+    public Item item;
+
+    public bool shouldBeDestroyed;
 
     private void Start()
     {
-        //outlineScript = transform.GetComponent<Outline>();
         inspector = FindFirstObjectByType<Inspector>();
     }
 
@@ -23,7 +28,17 @@ public class InspectableItem : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        inspector.InspectItem();
+        if (canInteract)
+        {
+            Debug.Log("Agnes: Can interact");
+            InputHandler.Instance.OnUIOpened();
+        }
+        inspector.InspectItem(item);
+
+        // Logic should be handled from a public sound type
+        // SoundFXManager.Instance.PlaySoundFX(SoundType.KeyFound, transform.position);
+        // Inventory.Instance.AddItem(item.itemId);
+        // Destroy(gameObject);
     }
 
     public void ReleaseInteract()
@@ -33,6 +48,13 @@ public class InspectableItem : MonoBehaviour, IInteracting
 
     public bool shouldObjectBeDestroyed()
     {
-        throw new System.NotImplementedException();
+        if (shouldBeDestroyed)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
