@@ -1,17 +1,14 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
     public static InputHandler Instance { get; private set; }
-    public InputActionAsset inputActions;
-
-    private InputActionMap playerMap;
-    private InputActionMap uiMap;
+    public InputActionAsset InputActions;
 
     private void Awake()
     {
-        Debug.Log("Agnes: Is this thing on?");
         if (Instance == null)
         {
             Instance = this;
@@ -21,22 +18,28 @@ public class InputHandler : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        playerMap = inputActions.FindActionMap("Player");
-        uiMap = inputActions.FindActionMap("UI");
     }
 
-    public void OnUIOpened()
+
+
+    public void OnEnable()
     {
-        playerMap.Disable();
-        Debug.Log("Agnes: Player disabled");
-        uiMap.Enable();
+        InputActions.FindActionMap("UI").Enable();
+        InputSwitch();
         Debug.Log("Agnes: UI enabled");
     }
 
-    public void OnUIClosed()
+    private void InputSwitch()
     {
-        uiMap.Disable();
-        playerMap.Enable();
-        Debug.Log("Agnes: UI disabled");
+        InputActions.FindAction("UI/Navigate");
     }
+
+    // private void OnDisable()
+    // {
+    //     InputActions.FindActionMap("UI").Disable();
+    //     Debug.Log("Agnes: UI disabled");
+
+    // }
+
+
 }

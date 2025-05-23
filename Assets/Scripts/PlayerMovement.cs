@@ -49,7 +49,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform cameraTransform;
 
     SceneManagement sceneManagement;
+    PlayerInput playerInput;
 
+    void Awake()
+    {
+        playerInput.GetComponent<PlayerInput>();
+    }
 
     private void Start()
     {
@@ -244,5 +249,11 @@ public class PlayerMovement : MonoBehaviour
         {
             sceneManagement.OnDeath();
         }
+    }
+
+    // Action map change
+    void OnEnable()
+    {
+        playerInput.SwitchCurrentActionMap("UI");
     }
 }

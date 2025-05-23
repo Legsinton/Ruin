@@ -143,7 +143,7 @@ public class MovingPlatform : MonoBehaviour
 
             else if (Switches < switchAmount)
             {
-                Debug.Log("Move up");
+                // Debug.Log("Move up");
                 if (played) played = false;
 
                 Vector3 returnPosition = originalPosition;
