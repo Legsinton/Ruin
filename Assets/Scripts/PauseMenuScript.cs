@@ -130,8 +130,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             isGamepad = playerInput.currentControlScheme == "Gamepad";
             EventSystem.current.SetSelectedGameObject(null);
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
             optionsMenu.SetActive(false);
@@ -147,6 +146,8 @@ public class PauseMenuScript : MonoBehaviour
             }
             else if (!isGamepad)
             {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
                 justPaused = false;
             }
         }
@@ -167,6 +168,8 @@ public class PauseMenuScript : MonoBehaviour
 
     IEnumerator SetSelect(GameObject gameObject)
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = false;
         yield return new WaitUntil(() =>
         {
             bool startReleased = Gamepad.current == null || !Gamepad.current.startButton.isPressed;
@@ -180,6 +183,7 @@ public class PauseMenuScript : MonoBehaviour
         yield return null; // Let one frame pass
 
         justPaused = false;
+        
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(gameObject);  
     }

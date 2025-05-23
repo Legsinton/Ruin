@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool leftMoveDisabled;
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
+    Gamepad gamepad;
 
     [Header("GroundCheck")]
 
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        gamepad = Gamepad.current;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
@@ -147,6 +149,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
+            if(gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0.005f, 0.005f);
+            }
             SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
@@ -155,10 +161,18 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = 0;
             if (movementInput.y != 0)
             {
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0.0005f, 0.0005f);
+                }
                 SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
             }
             else
             {
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0f, 0f);
+                }
                 SoundFXManager.Instance.StopLoopFor(gameObject);
             }
         }
@@ -169,6 +183,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+            }
             SoundFXManager.Instance.StopLoopFor(gameObject);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
@@ -221,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (stepTimer <= 0f)
             {
-                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk);
                 stepTimer = stepRate;
             }
         }
