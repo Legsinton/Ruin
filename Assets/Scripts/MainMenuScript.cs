@@ -233,7 +233,6 @@ public class MainMenuScript : MonoBehaviour
             justPaused = false;
         }
     }
-
     public void BackButtonOptions()
     {
         Options();
@@ -268,5 +267,9 @@ public class MainMenuScript : MonoBehaviour
     public void CreditsMenu()
     {
         creditsText.enabled = !creditsText.enabled;
+        if (isGamepad)
+        {
+            StartCoroutine(SetSelect(backButton));
+        }
     }
 }
