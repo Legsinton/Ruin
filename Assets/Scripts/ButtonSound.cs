@@ -8,14 +8,6 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
     readonly float soundCooldownSelect = 0.2f; // Cooldown time between sounds
     float nextPlayTimeSelect = 0f;
 
-    void Update()
-    {
-        if (EventSystem.current.currentSelectedGameObject != null)
-        {
-            Debug.Log("Currently selected: " + EventSystem.current.currentSelectedGameObject.name);
-        }
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         PlayButtonSound();

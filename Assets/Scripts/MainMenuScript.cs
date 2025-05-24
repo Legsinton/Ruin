@@ -7,17 +7,16 @@ using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PauseMenuScript : MonoBehaviour
+public class MainMenuScript : MonoBehaviour
 {
-    public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
+    public GameObject mainMenu, optionsMenu, soundMenu, controllMenu;
     public PlayerInput playerInput;
-    public PlayerMovement playerMovement;
     public CameraFollow cameraFollow;
     bool pauseButtonWasPressed = false;
-    [SerializeField] GameObject resumeButton, backButton,backButtonOptions, backButtonOptionsSound;
+    [SerializeField] GameObject creditsButton, startButton, backButton, backButtonOptions, backButtonOptionsSound;
     public Slider sliderControll;
     public Slider sliderMouse;
-    bool isPausing;
+    [SerializeField] TextMeshProUGUI creditsText;
     bool isGamepad;
     private bool justPaused = false;
     public InputActionAsset actions; // Drag in your InputActions asset in inspector
@@ -25,7 +24,6 @@ public class PauseMenuScript : MonoBehaviour
 
     private void Awake()
     {
-        pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
@@ -48,45 +46,48 @@ public class PauseMenuScript : MonoBehaviour
     {
         var selected = EventSystem.current.currentSelectedGameObject;
 
-        if (isPausing)
+       
+        if (selected != null && selected.name == "StartButton")
         {
-            if (selected != null && selected.name == "ResumeButton")
-            {
-                ResumeGame();
-            }
-            else if (selected != null && selected.name == "OptionsButton")
-            {
-                Options();
-            }
-            else if (selected != null && selected.name == "QuitButton")
-            {
-                QuitGame();
-            }
-            else if (selected != null && selected.name == "BackButton")
-            {
-                BackButton();
-            }
-            else if (selected != null && selected.name == "BackButtonOptions")
-            {
-                BackButtonOptions();
-            }
-            else if (selected != null && selected.name == "SoundSettings")
-            {
-                SoundMenu();
-            }
-            else if (selected != null && selected.name == "ControllSettings")
-            {
-                ControllMenu();
-            }
-            else if (selected != null && selected.name == "BackButtonOptionsSound")
-            {
-                BackButtonOptions();
-            }
-            else
-            {
-
-            }
+            StartGame();
         }
+        else if (selected != null && selected.name == "OptionsButton")
+        {
+            Options();
+        }
+        else if (selected != null && selected.name == "QuitButton")
+        {
+            QuitGame();
+        }
+        else if (selected != null && selected.name == "BackButton")
+        {
+            BackButton();
+        }
+        else if (selected != null && selected.name == "BackButtonOptions")
+        {
+            BackButtonOptions();
+        }
+        else if (selected != null && selected.name == "CreditsButton")
+        {
+            CreditsMenu();
+        }
+        else if (selected != null && selected.name == "SoundSettings")
+        {
+            SoundMenu();
+        }
+        else if (selected != null && selected.name == "ControllSettings")
+        {
+            ControllMenu();
+        }
+        else if (selected != null && selected.name == "BackButtonOptionsSound")
+        {
+            BackButtonOptions();
+        }
+        else
+        {
+
+        }
+        
     }
 
     private void OnSubmit(InputValue value)
@@ -99,7 +100,7 @@ public class PauseMenuScript : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Debug.Log("Pressed");
             pauseButtonWasPressed = true;
-            PauseUnPause();
+            BackButton();
         }
         else
         {
@@ -116,50 +117,7 @@ public class PauseMenuScript : MonoBehaviour
     {
         cameraFollow.mouseSensitivity = sliderMouse.value;
     }
-    public void PauseUnPause()
-    {
-        
-        bool isPaused = pauseMenu.activeInHierarchy;
-        if (!isPaused)
-        {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSelect);
-            MusicManager.Instance.musicSource.volume -= 0.05f;  
-            isGamepad = playerInput.currentControlScheme == "Gamepad";
-            EventSystem.current.SetSelectedGameObject(null);
-            
-            playerInput.SwitchCurrentActionMap("UI");
-            playerMovement.enabled = false;
-            optionsMenu.SetActive(false);
-            pauseMenu.SetActive(true);
-            isPausing = true;
-            Time.timeScale = 0f;
-            justPaused = true; 
-            if (isGamepad)
-            {
-                StartCoroutine(SetSelect(resumeButton)); 
-            }
-            else if (!isGamepad)
-            {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
-                justPaused = false;
-            }
-        }
-        else if (isPaused)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            MusicManager.Instance.musicSource.volume += 0.05f;
-
-            Cursor.visible = false;
-            playerMovement.enabled = true;
-            playerInput.SwitchCurrentActionMap("Player");
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1f;
-            isPausing = false;
-            optionsMenu.SetActive(false);
-        }
-    }
-
+   
     IEnumerator SetSelect(GameObject gameObject)
     {
         Cursor.lockState = CursorLockMode.None;
@@ -177,31 +135,29 @@ public class PauseMenuScript : MonoBehaviour
         yield return null; // Let one frame pass
 
         justPaused = false;
-        
+
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(gameObject);  
+        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
-    public void ResumeGame()
+    public void StartGame()
     {
+        SceneManager.LoadScene("Playtest_3");
         if (justPaused)
         {
             return;
         }
 
-        if (isPausing)
-        {          
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = false;
-            playerMovement.enabled = true;
-            playerInput.SwitchCurrentActionMap("Player");
-            pauseMenu.SetActive(false);
-            Time.timeScale = 1f;
-            optionsMenu.SetActive(false);
-            soundMenu.SetActive(false);
-            controllMenu.SetActive(false);
+        creditsText.enabled = false;
 
-        }
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+        playerInput.SwitchCurrentActionMap("Player");
+        mainMenu.SetActive(false);
+        Time.timeScale = 1f;
+        optionsMenu.SetActive(false);
+        soundMenu.SetActive(false);
+        controllMenu.SetActive(false); 
     }
 
     public void PauseMenu()
@@ -210,16 +166,16 @@ public class PauseMenuScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         playerInput.SwitchCurrentActionMap("UI");
-        playerMovement.enabled = false;
         optionsMenu.SetActive(false);
-        pauseMenu.SetActive(true);
-        isPausing = true;
+        mainMenu.SetActive(true);
         Time.timeScale = 0f;
+        creditsText.enabled = false;
+
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
         {
             Debug.LogWarning("Hälloss");
-            StartCoroutine(SetSelect(resumeButton));
+            StartCoroutine(SetSelect(startButton));
         }
         else if (!isGamepad)
         {
@@ -238,9 +194,10 @@ public class PauseMenuScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         soundMenu.SetActive(true);
         optionsMenu.SetActive(false);
-        pauseMenu.SetActive(false);
+        mainMenu.SetActive(false);
         controllMenu.SetActive(false);
         Time.timeScale = 0f;
+        creditsText.enabled = false;
 
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
@@ -260,10 +217,10 @@ public class PauseMenuScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         soundMenu.SetActive(false);
         optionsMenu.SetActive(false);
-        pauseMenu.SetActive(false);
+        mainMenu.SetActive(false);
         controllMenu.SetActive(true);
         Time.timeScale = 0f;
-
+        creditsText.enabled = false;
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
         {
@@ -286,11 +243,12 @@ public class PauseMenuScript : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        pauseMenu.SetActive(false);
+        mainMenu.SetActive(false);
         optionsMenu.SetActive(true);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
-        Time.timeScale = 0f; 
+        Time.timeScale = 0f;
+        creditsText.enabled = false;
         if (isGamepad)
         {
             StartCoroutine(SetSelect(backButton));
@@ -303,6 +261,12 @@ public class PauseMenuScript : MonoBehaviour
 
     public void QuitGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
+    }
+
+    public void CreditsMenu()
+    {
+        creditsText.enabled = !creditsText.enabled;
     }
 }
