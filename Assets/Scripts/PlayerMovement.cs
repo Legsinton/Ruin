@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(gamepad != null)
             {
-                gamepad.SetMotorSpeeds(0.005f, 0.005f);
+                gamepad.SetMotorSpeeds(0.005f, 0.0015f);
             }
             SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
@@ -163,7 +163,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (gamepad != null)
                 {
-                    gamepad.SetMotorSpeeds(0.0005f, 0.0005f);
+                    gamepad.SetMotorSpeeds(0.0005f, 0.0015f);
                 }
                 SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
             }
@@ -221,11 +221,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
-        /* else if (rotatingObject != null)
-         {
-             Quaternion targetRotation = Quaternion.LookRotation(rotatingObject.transform.position - capsule.transform.position);
-             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
-         }*/
     }
 
     void PlayWalkingSound()
@@ -249,13 +244,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision hit)
+    /*private void OnCollisionEnter(Collision hit)
     {
         if (hit.gameObject.CompareTag("RotatingTag"))
         {
             rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
         }
-    }
+    }*/
 
     // Player falls
     // private void OnTriggerEnter(Collider other)

@@ -12,10 +12,8 @@ public class PauseMenuScript : MonoBehaviour
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
     public CameraFollow cameraFollow;
-    [SerializeField] bool pauseButtonWasPressed = false;
-    [SerializeField] GameObject resumeButton,backButton;
-    [SerializeField] GameObject backButtonOptions, backButtonOptionsSound;
-    [SerializeField] TextMeshProUGUI creditsText;
+    bool pauseButtonWasPressed = false;
+    [SerializeField] GameObject resumeButton, backButton,backButtonOptions, backButtonOptionsSound;
     public Slider sliderControll;
     public Slider sliderMouse;
     bool isPausing;
@@ -28,7 +26,6 @@ public class PauseMenuScript : MonoBehaviour
     {
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
-        creditsText.enabled = false;
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
     }
@@ -63,10 +60,6 @@ public class PauseMenuScript : MonoBehaviour
             else if (selected != null && selected.name == "QuitButton")
             {
                 QuitGame();
-            }
-            else if (selected != null && selected.name == "CreditsButton")
-            {
-                Credits();
             }
             else if (selected != null && selected.name == "BackButton")
             {
@@ -128,6 +121,8 @@ public class PauseMenuScript : MonoBehaviour
         bool isPaused = pauseMenu.activeInHierarchy;
         if (!isPaused)
         {
+            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSelect);
+            MusicManager.Instance.musicSource.volume -= 0.05f;  
             isGamepad = playerInput.currentControlScheme == "Gamepad";
             EventSystem.current.SetSelectedGameObject(null);
             
@@ -137,11 +132,9 @@ public class PauseMenuScript : MonoBehaviour
             pauseMenu.SetActive(true);
             isPausing = true;
             Time.timeScale = 0f;
-            creditsText.enabled = false;
-            justPaused = true; // <- block resume for 1 frame
+            justPaused = true; 
             if (isGamepad)
             {
-                Debug.LogWarning("Hälloss");
                 StartCoroutine(SetSelect(resumeButton)); 
             }
             else if (!isGamepad)
@@ -153,8 +146,8 @@ public class PauseMenuScript : MonoBehaviour
         }
         else if (isPaused)
         {
-            creditsText.enabled = false;
             Cursor.lockState = CursorLockMode.None;
+            MusicManager.Instance.musicSource.volume += 0.05f;
 
             Cursor.visible = false;
             playerMovement.enabled = true;
@@ -206,7 +199,6 @@ public class PauseMenuScript : MonoBehaviour
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            creditsText.enabled = false;
 
         }
     }
@@ -222,7 +214,6 @@ public class PauseMenuScript : MonoBehaviour
         pauseMenu.SetActive(true);
         isPausing = true;
         Time.timeScale = 0f;
-        creditsText.enabled = false;
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
         {
@@ -249,7 +240,6 @@ public class PauseMenuScript : MonoBehaviour
         pauseMenu.SetActive(false);
         controllMenu.SetActive(false);
         Time.timeScale = 0f;
-        creditsText.enabled = false;
 
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
@@ -272,7 +262,6 @@ public class PauseMenuScript : MonoBehaviour
         pauseMenu.SetActive(false);
         controllMenu.SetActive(true);
         Time.timeScale = 0f;
-        creditsText.enabled = false;
 
         justPaused = true; // <- block resume for 1 frame
         if (isGamepad)
@@ -294,7 +283,6 @@ public class PauseMenuScript : MonoBehaviour
 
     public void Options()
     {
-        creditsText.enabled = false;
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         pauseMenu.SetActive(false);
@@ -316,14 +304,5 @@ public class PauseMenuScript : MonoBehaviour
     {
         Application.Quit();
         //UnityEditor.EditorApplication.isPlaying = false;
-    }
-
-    public void Credits()
-    {
-        if (isGamepad)
-        {
-            StartCoroutine(SetSelect(backButton));
-        }
-        creditsText.enabled = !creditsText.enabled;
     }
 }

@@ -1,0 +1,54 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IPointerClickHandler, ISubmitHandler
+{
+    readonly float soundCooldown = 0.2f; // Cooldown time between sounds
+    float nextPlayTime = 0f;
+    readonly float soundCooldownSelect = 0.2f; // Cooldown time between sounds
+    float nextPlayTimeSelect = 0f;
+
+    void Update()
+    {
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            Debug.Log("Currently selected: " + EventSystem.current.currentSelectedGameObject.name);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        PlayButtonSound();
+    }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        PlayButtonSelect();
+    }
+
+    public void OnSubmit(BaseEventData eventData) 
+    {
+        PlayButtonSelect();
+    }
+    public void OnSelect(BaseEventData eventData)
+    {
+        PlayButtonSound();
+    }
+
+    void PlayButtonSelect()
+    {
+        if (Time.unscaledTime >= nextPlayTimeSelect)
+        {
+            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSelect);
+            nextPlayTimeSelect = Time.unscaledTime + soundCooldownSelect;
+        }
+    }
+
+    void PlayButtonSound()
+    {
+        if (Time.unscaledTime >= nextPlayTime)
+        {
+            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSound);
+            nextPlayTime = Time.unscaledTime + soundCooldown;
+        }
+    }
+}

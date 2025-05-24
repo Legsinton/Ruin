@@ -5,7 +5,7 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
     [SerializeField] MusicLibrary library;
-    [SerializeField] AudioSource musicSource;
+    public AudioSource musicSource;
     [SerializeField] float soundVolume;
     [SerializeField] AudioClip startSong;
     string currentTrackName;
