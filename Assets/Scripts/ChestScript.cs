@@ -19,7 +19,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     bool playedCutScene;
     Quaternion openRotation;
     GameObject spawnedItem;
-    public bool DoorOpening { get { return doorOpening; }  set { doorOpening = value; } }
+    public bool DoorOpening { get { return doorOpening; } set { doorOpening = value; } }
 
     [Header("Settings for Item")]
 
@@ -27,6 +27,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     public Transform spawnPoint; // Assign the SpawnPoint in Inspector
     public GameObject itemPrefab; // Assign your item prefab
     public float launchForce = 5f; // Tune for the desired "pop" effect
+    [SerializeField] float spinSpeed;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -68,6 +69,8 @@ public class ChestScript : MonoBehaviour, IInteracting
             }
 
             MoveItem();
+
+            SpinKey();
         }
     }
 
@@ -84,8 +87,16 @@ public class ChestScript : MonoBehaviour, IInteracting
             if (spawnedItem.transform.position.y < spawnPoisition.position.y)
             {
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
-                
+
             }
+        }
+    }
+
+    void SpinKey()
+    {
+        if (spawnedItem != null)
+        {
+            spawnedItem.transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
         }
     }
     void OpenDoor()
@@ -95,7 +106,7 @@ public class ChestScript : MonoBehaviour, IInteracting
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
             doorOpening = true;
         }
-       
+
     }
     void ActivateCamera()
     {
@@ -107,7 +118,7 @@ public class ChestScript : MonoBehaviour, IInteracting
 
     void DisableActiveCamera()
     {
-        spawnedItem.GetComponent<KeyInteract>().canInteract = true;
+        spawnedItem.GetComponent<InspectableItem>().canInteract = true;
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;

@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
     SceneManagement sceneManagement;
+    PlayerInput playerInput;
 
     private void Start()
     {
@@ -137,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            if(gamepad != null)
+            if (gamepad != null)
             {
                 gamepad.SetMotorSpeeds(0.005f, 0.0015f);
             }
@@ -251,5 +252,11 @@ public class PlayerMovement : MonoBehaviour
             isDead = true;
             sceneManagement.OnDeath();
         }
+    }
+
+    // Action map change
+    void OnEnable()
+    {
+        playerInput.SwitchCurrentActionMap("UI");
     }
 }
