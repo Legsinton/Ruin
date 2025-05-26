@@ -73,7 +73,10 @@ public class ChestScript : MonoBehaviour, IInteracting
             MoveItem();
 
         }
-        SpinKey();
+        if (spawnedItem != null)
+        {
+            SpinKey();
+        }
     }
 
     public void SpawnItem()
@@ -98,6 +101,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         if (spawnedItem != null)
         {
+            Debug.Log("Hello I am spinning");
             spawnedItem.transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
         }
     }
@@ -125,7 +129,7 @@ public class ChestScript : MonoBehaviour, IInteracting
         interact.disableInteract = false;
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
-        this.enabled = false;
+        //this.enabled = false;
         doorOpening = false;
     }
 
