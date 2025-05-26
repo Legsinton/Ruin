@@ -97,9 +97,7 @@ public class Interact : MonoBehaviour
 
     void OnInteract(InputValue value)
     {
-        if (disableInteract) return;
-
-        if (currentInteractableObject != null)
+        if (currentInteractableObject != null && !disableInteract)
         {
             if (value.isPressed) // Interact button press
             {

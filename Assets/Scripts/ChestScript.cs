@@ -20,7 +20,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     bool playedCutScene;
     Quaternion openRotation;
     GameObject spawnedItem;
-    public bool DoorOpening { get { return doorOpening; }  set { doorOpening = value; } }
+    public bool DoorOpening { get { return doorOpening; } set { doorOpening = value; } }
 
     [Header("Settings for Item")]
 
@@ -89,7 +89,7 @@ public class ChestScript : MonoBehaviour, IInteracting
             if (spawnedItem.transform.position.y < spawnPoisition.position.y)
             {
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
-                
+
             }
         }
     }
@@ -108,7 +108,7 @@ public class ChestScript : MonoBehaviour, IInteracting
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
             doorOpening = true;
         }
-       
+
     }
     void ActivateCamera()
     {
