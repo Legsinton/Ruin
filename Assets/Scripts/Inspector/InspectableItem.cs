@@ -31,7 +31,7 @@ public class InspectableItem : MonoBehaviour, IInteracting
         if (canInteract)
         {
             Debug.Log("Agnes: Can interact");
-            InputHandler.Instance.OnEnable();
+            //InputHandler.Instance.OnEnable();
         }
         inspector.InspectItem(item);
 
