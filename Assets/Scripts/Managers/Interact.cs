@@ -12,6 +12,7 @@ public class Interact : MonoBehaviour
 
     bool interacting;
     bool getClosestObejct;
+    [HideInInspector] public bool disableInteract;
 
     void OnTriggerEnter(Collider other)
     {
@@ -96,6 +97,8 @@ public class Interact : MonoBehaviour
 
     void OnInteract(InputValue value)
     {
+        if (disableInteract) return;
+
         if (currentInteractableObject != null)
         {
             if (value.isPressed) // Interact button press
