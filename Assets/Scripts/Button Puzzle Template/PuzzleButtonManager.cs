@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class PuzzleManager : MonoBehaviour
                 {
                     if (playerInput[i] != correctSequence[i])
                     {
-                        ResetPuzzle();
+                        Invoke(nameof(ResetPuzzle), 1);
                         return;
                     }
                 }
@@ -34,7 +35,7 @@ public class PuzzleManager : MonoBehaviour
                 for (int i = 0; i < playerInput.Count; i++)
                 {
                     foundCorrectButton = false;
-                    for(int j = 0; j < playerInput.Count; j++)
+                    for (int j = 0; j < playerInput.Count; j++)
                     {
                         if (playerInput[i] == correctSequence[j])
                         {
@@ -43,34 +44,37 @@ public class PuzzleManager : MonoBehaviour
                     }
                     if (!foundCorrectButton)
                     {
-                        ResetPuzzle();
+                        Invoke(nameof(ResetPuzzle), 1);
                         return;
                     }
                 }
             }
-
-            PuzzleSolved();
+            StartCoroutine(PuzzleSolved());
         }
     }
-
     public void UnRegisterButtonPress(int buttonID)
     {
         playerInput.Remove(buttonID);
     }
-    private void PuzzleSolved()
+    IEnumerator PuzzleSolved()
     {
-        GetComponent<Renderer>().material.color = Color.green;
+        //GetComponent<Renderer>().material.color = Color.green;
         foreach (var button in buttons)
         {
             button.PuzzleComplete();
         }
 
-        if(gate != null)
+        yield return new WaitForSeconds(1);
+
+        SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+
+        yield return new WaitForSeconds(2);
+        if (gate != null)
         {
             gate.AddSwitch(1);
         }
 
-        if(movingPlatform != null)
+        if (movingPlatform != null)
         {
             movingPlatform.Switches++;
         }

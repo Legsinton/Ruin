@@ -7,6 +7,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] int switches;
     public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
+    public PlayerMovement playerMovement;
 
     Vector3 targetPosition;
     Vector3 originalPosition;
@@ -41,6 +42,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
         originalPosition = transform.position;
         previousPosition = transform.position;
         rb = GetComponent<Rigidbody>();
@@ -104,18 +106,13 @@ public class MovingPlatform : MonoBehaviour
             if (Switches == switchAmount)
             {
                 // Debug.Log("Move down");
-                if (!played)
+
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    played = true;
-
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
-
 
                 Vector3 targetPosition;
 
@@ -127,8 +124,6 @@ public class MovingPlatform : MonoBehaviour
                 {
                     targetPosition = new Vector3(originalPosition.x, originalPosition.y - stopHeight, originalPosition.z);
                 }
-
-                Debug.Log("targetPos: " + targetPosition);
 
                 if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
                 {
@@ -143,8 +138,6 @@ public class MovingPlatform : MonoBehaviour
 
             else if (Switches < switchAmount)
             {
-                // Debug.Log("Move up");
-                if (played) played = false;
 
                 Vector3 returnPosition = originalPosition;
 
@@ -162,27 +155,21 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-                if (!played)
+
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    //PlaySoundFX();
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
+
                 targetPosition = originalPosition - Vector3.forward * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-                if (played)
-                {
-                    //PlaySoundFX();
-                    played = false;
-                }
+
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -194,28 +181,21 @@ public class MovingPlatform : MonoBehaviour
         {
             if (Switches == switchAmount)
             {
-                if (!played)
+
+                if (cutSceneCamera != null && !playedCutScene)
                 {
-                    //PlaySoundFX();
-                    played = true;
-                    if (cutSceneCamera != null && !playedCutScene)
-                    {
-                        ActivateCamera();
-                        Invoke(nameof(DisableActiveCamera), cutSceneLength);
-                        playedCutScene = true;
-                    }
+                    ActivateCamera();
+                    Invoke(nameof(DisableActiveCamera), cutSceneLength);
+                    playedCutScene = true;
                 }
+
                 targetPosition = originalPosition - Vector3.right * pressDepth;
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
             else if (Switches == switchAmount)
             {
-                if (played)
-                {
-                    //PlaySoundFX();
-                    played = false;
-                }
+
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
             }
         }
@@ -223,21 +203,18 @@ public class MovingPlatform : MonoBehaviour
 
     void ActivateCamera()
     {
+        playerMovement.enabled = false;
+        playerMovement.movement = new Vector3(0, 0, 0);
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
     }
 
     void DisableActiveCamera()
     {
+        playerMovement.enabled = true;
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
     }
-
-    void PlaySoundFX()
-    {
-        SoundFXManager.Instance.PlaySoundFX(SoundType.Chain, transform.position);
-    }
-
 
     public void AddSwitch()
     {

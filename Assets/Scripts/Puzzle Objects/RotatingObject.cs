@@ -100,7 +100,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
                 }
 
                 centerPoint.Rotate(Vector3.up, angle);
-                UpdateTriggerBlocks?.Invoke(this, centerPoint.rotation.eulerAngles.y);
+                UpdateTriggerBlocks?.Invoke(this, centerPoint.rotation.eulerAngles.y - 90);
             }
         }
         else if (playerAttached)

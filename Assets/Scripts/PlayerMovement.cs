@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool leftMoveDisabled;
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
+    Gamepad gamepad;
 
     [Header("GroundCheck")]
 
@@ -37,7 +38,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded;
 
     [Header("Check Player Falling")]
-    public LayerMask abyssMask;
+    bool isDead = false;
+    public float deathHeight;
 
     [Header("Camera")]
 
@@ -58,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        gamepad = Gamepad.current;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
@@ -69,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RotatePlayer();
         PlayWalkingSound();
+        CheckPlayerFalling();
     }
     private void LateUpdate()
     {
@@ -150,6 +154,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
+            if(gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0.005f, 0.0015f);
+            }
             SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
         }
@@ -158,10 +166,18 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = 0;
             if (movementInput.y != 0)
             {
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0.0005f, 0.0015f);
+                }
                 SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
             }
             else
             {
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0f, 0f);
+                }
                 SoundFXManager.Instance.StopLoopFor(gameObject);
             }
         }
@@ -172,6 +188,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+            }
             SoundFXManager.Instance.StopLoopFor(gameObject);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
@@ -206,11 +226,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
-        /* else if (rotatingObject != null)
-         {
-             Quaternion targetRotation = Quaternion.LookRotation(rotatingObject.transform.position - capsule.transform.position);
-             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
-         }*/
     }
 
     void PlayWalkingSound()
@@ -224,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (stepTimer <= 0f)
             {
-                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk, transform.position);
+                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk);
                 stepTimer = stepRate;
             }
         }
@@ -234,19 +249,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision hit)
+    /*private void OnCollisionEnter(Collision hit)
     {
         if (hit.gameObject.CompareTag("RotatingTag"))
         {
             rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
         }
-    }
+    }*/
 
     // Player falls
-    private void OnTriggerEnter(Collider other)
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+    //     {
+    //         sceneManagement.OnDeath();
+    //     }
+    // }
+    private void CheckPlayerFalling()
     {
-        if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
+        if (isDead == false && transform.position.y < deathHeight)
         {
+            Debug.Log("Agnes: Player dies");
+            isDead = true;
             sceneManagement.OnDeath();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundFXManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SoundFXManager : MonoBehaviour
     AudioSource soundFXObject;
     [SerializeField]
      List<SoundVolumeEntry> volumeList;
+    [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
     Dictionary<SoundType, object> soundFXDict;
     // Dictionary for volume on sounds
@@ -73,6 +75,7 @@ public class SoundFXManager : MonoBehaviour
         soundFXDict = new Dictionary<SoundType, object>
             {
                 //Single AudioClips
+                { SoundType.ButtonSelect, Resources.Load<AudioClip>("Sounds/Effects/ButtonSelect") },
                 { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
                 { SoundType.ChestCreak, Resources.Load<AudioClip>("Sounds/Effects/ChestCreak") },
                 { SoundType.ChestOpen, Resources.Load<AudioClip>("Sounds/Effects/ChestOpen") },
@@ -83,8 +86,10 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
                 { SoundType.DoorOpen, Resources.Load<AudioClip>("Sounds/Effects/DoorOpen") },
                 { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
-
+                
                 //AudioClips
+                { SoundType.ButtonSound, Resources.LoadAll<AudioClip>("Sounds/Effects/ButtonSound") },
+                { SoundType.Break,Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
                 { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
                 { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
@@ -160,6 +165,7 @@ public class SoundFXManager : MonoBehaviour
             tempGO.transform.position = position.Value;
 
             AudioSource aSource = tempGO.AddComponent<AudioSource>();
+            aSource.outputAudioMixerGroup = sfxMixerGroup;
             aSource.clip = clip;
             aSource.spatialBlend = spatialBlend;
             aSource.minDistance = minDistance;
@@ -212,6 +218,7 @@ public class SoundFXManager : MonoBehaviour
             tempGO.transform.localPosition = Vector3.zero; // So it's centered on parent
         }
         AudioSource source = tempGO.AddComponent<AudioSource>();
+        source.outputAudioMixerGroup = sfxMixerGroup;
         source.clip = clip;
         source.loop = true;
         source.spatialBlend = 1f;
@@ -248,6 +255,8 @@ public enum SoundType
 {
     // Array Of Sounds
     Break,
+    ButtonSound,
+    ButtonSelect,
     Chain,
     ChestCreak,
     ChestOpen,

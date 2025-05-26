@@ -7,6 +7,7 @@ public class GateScript : MonoBehaviour
     [SerializeField] float pressDepth;
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
+    [SerializeField] bool playSound;
     PlayerMovement playerMovement;
 
     public int switches;
@@ -78,6 +79,10 @@ public class GateScript : MonoBehaviour
 
     public void AddSwitch(int amount)
     {
+        if (playSound)
+        {
+            SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+        }
         switches += amount;
         OnSwitchCountChanged();
     }
