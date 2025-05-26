@@ -257,6 +257,6 @@ public class PlayerMovement : MonoBehaviour
     // Action map change
     void OnEnable()
     {
-        playerInput.SwitchCurrentActionMap("UI");
+       // playerInput.SwitchCurrentActionMap("UI");
     }
 }

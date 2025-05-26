@@ -10,7 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1857133113928564503}
   - component: {fileID: 8219774625699365681}
-  m_Layer: 0
+  - component: {fileID: -8096255132874246820}
+  - component: {fileID: -1490104057382335966}
+  m_Layer: 10
   m_Name: Key
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,6 +56,40 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8096255132874246820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7081032089556773846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8043ac4e71299147b811e52fe9a6722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineScript: {fileID: -1490104057382335966}
+  canInteract: 0
+  item: {fileID: 11400000, guid: e15c0e90ffd6cbb45a501d252d12bcd9, type: 2}
+  shouldBeDestroyed: 1
+--- !u!114 &-1490104057382335966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7081032089556773846}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &4931784166788354895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -118,9 +154,45 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8465586024035158207, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8056817917324986991, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8039269629674871522, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7524111205263903965, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -6131134039560273510, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -3592420646564268378, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -447174402076232346, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
       propertyPath: m_Name
       value: Key_skull1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7442053869469547958, guid: 7be690635b5a7184aa3dbf3c0b2b8742, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
