@@ -3,20 +3,27 @@ using UnityEngine.InputSystem;
 
 public class CameraFollow : MonoBehaviour
 {
-    [Header("Settings")]
+    [Header("Camera Offset")]
     [SerializeField] Vector3 cameraPlayerOffset;
     [SerializeField] Vector3 cameraFocusOffset;
+
+    [Header("Camera Sensitivity")]
     [SerializeField] float smoothTime;
     [SerializeField] public float mouseSensitivity;
     [SerializeField] public float controllerSensitivity;
+
+    [Header("Camera Rotation and Wall settings")]
     [SerializeField] Vector2 rotationClamp;
     [SerializeField] float targetCameraDistance;
     [SerializeField] float wallDistance;
 
     [Header("Reference")]
     [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform playerRotation;
     [SerializeField] PlayerInput playerInput;
 
+    [HideInInspector] public bool lockCameraToPlayer;
+    float targetXRotation;
     int layerMask;
     float sensitivity;
 
@@ -50,9 +57,17 @@ public class CameraFollow : MonoBehaviour
 
     void UpdateCameraPosition()
     {
-        currentRotation += mouseDelta * sensitivity;
+        if (lockCameraToPlayer)
+        {
+            currentRotation.x = Mathf.LerpAngle(currentRotation.x, targetXRotation, smoothTime * Time.deltaTime);
+            currentRotation.y = Mathf.Lerp(currentRotation.y, 45f, smoothTime * Time.deltaTime);
+        }
+        else
+        {
+            currentRotation += mouseDelta * sensitivity;
 
-        currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
+            currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
+        }
 
         // Lerped position offset
         Vector3 smoothedPlayerPos = Vector3.Slerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
@@ -92,4 +107,14 @@ public class CameraFollow : MonoBehaviour
         cameraTransform.rotation = targetRotation;
     }
 
+    public void EnableLockCamera(float rotation)
+    {
+        targetXRotation = rotation;
+        lockCameraToPlayer = true;
+    }
+
+    public void DisableLockCamera()
+    {
+        lockCameraToPlayer = false;
+    }
 }
