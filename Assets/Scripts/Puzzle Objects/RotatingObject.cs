@@ -16,10 +16,12 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     [Header("Reference")]
     [SerializeField] Transform playerTransform;
+    [SerializeField] Transform playerRotation;
     [SerializeField] Transform centerPoint;
     [SerializeField] public Transform interactPoint;
     [SerializeField] Outline outlineScript;
     PlayerMovement playerMovement;
+    CameraFollow cameraFollow;
 
     Vector3 targetPos;
     bool interact;
@@ -29,9 +31,10 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
     [HideInInspector] public event Action<RotatingObject, float> UpdateTriggerBlocks;
 
-    void Awake()
+    void Start()
     {
         playerMovement = playerTransform.GetComponent<PlayerMovement>();
+        cameraFollow = playerTransform.GetComponent<CameraFollow>();
     }
 
     void Update()
@@ -71,6 +74,8 @@ public class RotatingObject : MonoBehaviour, IInteracting
                 }
                 else
                 {
+                    cameraFollow.EnableLockCamera(playerRotation.eulerAngles.y);
+
                     if (Vector3.Distance(playerTransform.position, targetPos) > 0.1)
                     {
                         targetPos.y = playerTransform.position.y;
@@ -101,6 +106,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
 
                 centerPoint.Rotate(Vector3.up, angle);
                 UpdateTriggerBlocks?.Invoke(this, centerPoint.rotation.eulerAngles.y - 90);
+                cameraFollow.EnableLockCamera(playerRotation.eulerAngles.y);
             }
         }
         else if (playerAttached)
@@ -117,6 +123,7 @@ public class RotatingObject : MonoBehaviour, IInteracting
         playerAttached = false;
         calculatedPlayerPos = false;
         playerTransform.localScale = Vector3.one;
+        cameraFollow.DisableLockCamera();
     }
 
     bool CheckIfPlayerInRange()

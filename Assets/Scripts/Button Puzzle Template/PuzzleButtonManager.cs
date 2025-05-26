@@ -76,7 +76,7 @@ public class PuzzleManager : MonoBehaviour
 
         if (movingPlatform != null)
         {
-            movingPlatform.Switches++;
+            movingPlatform.AddSwitch();
         }
     }
     private void ResetPuzzle()

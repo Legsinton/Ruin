@@ -23,8 +23,6 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public float currentVelocity;
     float gravityForce;
 
-    [HideInInspector] public bool rightMoveDisabled;
-    [HideInInspector] public bool leftMoveDisabled;
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
     Gamepad gamepad;
@@ -49,9 +47,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform capsule;
     public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
-
     SceneManagement sceneManagement;
-
+    PlayerInput playerInput;
 
     private void Start()
     {
@@ -122,14 +119,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 movementInput.y = 0;
             }
-            if (rightMoveDisabled && movementInput.x > 0)
-            {
-                movementInput.x = 0;
-            }
-            if (leftMoveDisabled && movementInput.x < 0)
-            {
-                movementInput.x = 0;
-            }
 
             movement = movementInput.y * capsule.transform.forward;
 
@@ -149,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (PushBlock != null && movement.magnitude > 0)
         {
-            if(gamepad != null)
+            if (gamepad != null)
             {
                 gamepad.SetMotorSpeeds(0.005f, 0.0015f);
             }
@@ -216,11 +205,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(playerMoveDir);
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
         }
-        else if (PushBlock != null)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(PushBlock.transform.position - capsule.transform.position);
-            capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 5 * Time.deltaTime);
-        }
     }
 
     void PlayWalkingSound()
@@ -268,5 +252,11 @@ public class PlayerMovement : MonoBehaviour
             isDead = true;
             sceneManagement.OnDeath();
         }
+    }
+
+    // Action map change
+    void OnEnable()
+    {
+        playerInput.SwitchCurrentActionMap("UI");
     }
 }

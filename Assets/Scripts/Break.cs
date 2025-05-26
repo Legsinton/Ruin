@@ -28,27 +28,32 @@ public class Break : MonoBehaviour,IInteracting
         {
             gameObject.layer = default;
             collision.enabled = false;
-            outlineScript.enabled = false;
+            if (outlineScript != null)
+            {
+                outlineScript.enabled = false;
+            }
 
             if (!played)
             {
                 played = true;
                 SoundFXManager.Instance.PlaySoundFX(SoundType.Break, transform.position);
             }
-            foreach (Rigidbody r in rb)
+            if(rb != null)
             {
-                r.isKinematic = false; // Let them fall now
+                foreach (Rigidbody r in rb)
+                {
+                    r.isKinematic = false; // Let them fall now
+                }
             }
-
-            StartCoroutine(FadeOut(3));
-            Invoke(nameof(DestroyPiece), 6);
+            //StartCoroutine(FadeOut(3));
+            StartCoroutine(DestroyPiece());
         }
     }
 
-    void DestroyPiece() 
+    IEnumerator DestroyPiece() 
     {
-        played = false;
         // Cleanup to prevent reference issues
+        yield return new WaitForSeconds(6);
         rb = null;
         rbMesh = null;
         outlineScript = null;
@@ -67,11 +72,14 @@ public class Break : MonoBehaviour,IInteracting
             yield return new WaitForSeconds(3);
             float elapsedTime = 0f;
 
-            // Store the original colors
             Color[] startColors = new Color[rbMesh.Length];
             for (int i = 0; i < rbMesh.Length; i++)
             {
-                startColors[i] = rbMesh[i].material.color;
+                if (rbMesh[i] != null && rbMesh[i].material != null)
+                {
+                    SetupMaterialForFade(rbMesh[i].material);
+                    startColors[i] = rbMesh[i].material.color;
+                }
             }
 
             while (elapsedTime < duration)
@@ -81,9 +89,12 @@ public class Break : MonoBehaviour,IInteracting
 
                 for (int i = 0; i < rbMesh.Length; i++)
                 {
-                    Color c = startColors[i];
-                    c.a = newAlpha;
-                    rbMesh[i].material.color = c;
+                    if (rbMesh[i] != null && rbMesh[i].material != null)
+                    {
+                        Color c = startColors[i];
+                        c.a = newAlpha;
+                        rbMesh[i].material.color = c;
+                    }
                 }
 
                 yield return null;
@@ -92,12 +103,29 @@ public class Break : MonoBehaviour,IInteracting
             // Ensure final alpha is 0
             for (int i = 0; i < rbMesh.Length; i++)
             {
-                Color c = rbMesh[i].material.color;
-                c.a = 0f;
-                rbMesh[i].material.color = c;
+                if (rbMesh[i] != null && rbMesh[i].material != null)
+                {
+                    Color c = rbMesh[i].material.color;
+                    c.a = 0f;
+                    rbMesh[i].material.color = c;
+                }
             }
         }
     }
+    void SetupMaterialForFade(Material mat)
+    {
+        if (mat == null) return;
+
+        mat.SetFloat("_Mode", 2); // Fade mode
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.SetInt("_ZWrite", 0);
+        mat.DisableKeyword("_ALPHATEST_ON");
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        mat.renderQueue = 3000;
+    }
+
 
     public void PressInteract()
     {

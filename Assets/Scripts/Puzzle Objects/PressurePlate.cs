@@ -11,6 +11,8 @@ public class PressurePlate : MonoBehaviour
     public bool smallTrigger;
     public float buffer;
 
+    bool move;
+    bool stepedOn;
     Vector3 targetPosition;
     Vector3 originalPosition;
     Vector3 previousPosition;
@@ -25,28 +27,32 @@ public class PressurePlate : MonoBehaviour
 
     private void Update()
     {
-        MovementFull();
-        MovementSmall();
-
-        Vector3 movement = transform.position - previousPosition;
-        if (movement.magnitude > movementThreshold)
+        if (move)
         {
-            if (!played)
-            {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
-            }
-        }
-        else
-        {
-            if (played)
-            {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
-        }
+            MovementFull();
+            MovementSmall();
 
-        previousPosition = transform.position;
+            Vector3 movement = transform.position - previousPosition;
+            if (movement.magnitude > movementThreshold)
+            {
+                if (!played)
+                {
+                    played = true;
+                    SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
+                }
+            }
+            else
+            {
+                if (played)
+                {
+                    move = false;
+                    played = false;
+                    SoundFXManager.Instance.StopLoopFor(gameObject);
+                }
+            }
+
+            previousPosition = transform.position;
+        }
     }
 
     void MovementSmall()
@@ -107,6 +113,7 @@ public class PressurePlate : MonoBehaviour
             {
                 if (!added)
                 {
+                    move = true;
                     smallTrigger = false;
                     //SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
@@ -118,7 +125,7 @@ public class PressurePlate : MonoBehaviour
                     }
                     for (int i = 0; i < platforms.Length; i++)
                     {
-                        platforms[i].Switches++;
+                        platforms[i].AddSwitch();
                     }
                 }
             }
@@ -126,7 +133,13 @@ public class PressurePlate : MonoBehaviour
 
         if (other.CompareTag("Player") && !triggerd)
         {
-            smallTrigger = true;
+            if (!stepedOn)
+            {
+                stepedOn = true;
+                move = true;
+                smallTrigger = true;
+
+            }
         }
     }
 
@@ -136,6 +149,7 @@ public class PressurePlate : MonoBehaviour
         {
             if (added)
             {
+                move = true;
                 triggerd = false;
                 added = false;
                 smallTrigger = false;
@@ -145,13 +159,18 @@ public class PressurePlate : MonoBehaviour
                 }
                 for (int i = 0; i < platforms.Length; i++)
                 {
-                    platforms[i].Switches--;
+                    platforms[i].RemoveSwitch();
                 }
             }
         }
         if (other.CompareTag("Player") && !triggerd)
         {
-            smallTrigger = false;
+            if (stepedOn)
+            {
+                stepedOn = false;
+                move = true;
+                smallTrigger = false;
+            }
         }
     }
 }
