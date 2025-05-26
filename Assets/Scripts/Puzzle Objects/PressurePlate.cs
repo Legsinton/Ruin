@@ -118,7 +118,7 @@ public class PressurePlate : MonoBehaviour
                     }
                     for (int i = 0; i < platforms.Length; i++)
                     {
-                        platforms[i].Switches++;
+                        platforms[i].AddSwitch();
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class PressurePlate : MonoBehaviour
                 }
                 for (int i = 0; i < platforms.Length; i++)
                 {
-                    platforms[i].Switches--;
+                    platforms[i].RemoveSwitch();
                 }
             }
         }
