@@ -27,6 +27,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     public Transform spawnPoint; // Assign the SpawnPoint in Inspector
     public GameObject itemPrefab; // Assign your item prefab
     public float launchForce = 5f; // Tune for the desired "pop" effect
+    [SerializeField] float spinSpeed;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -68,6 +69,8 @@ public class ChestScript : MonoBehaviour, IInteracting
             }
 
             MoveItem();
+
+            SpinKey();
         }
     }
 
@@ -86,6 +89,14 @@ public class ChestScript : MonoBehaviour, IInteracting
                 spawnedItem.transform.position += new Vector3(0, launchForce, 0) * Time.deltaTime;
 
             }
+        }
+    }
+
+    void SpinKey()
+    {
+        if (spawnedItem != null)
+        {
+            spawnedItem.transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
         }
     }
     void OpenDoor()
