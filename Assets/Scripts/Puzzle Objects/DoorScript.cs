@@ -112,7 +112,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
             if (dot > 0)
             {
-                openAngle = -openAngle;
+                openAngle = -Mathf.Abs(openAngle);
             }
             else
             {
