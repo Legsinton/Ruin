@@ -2,11 +2,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : MonoBehaviour, ISwitchManager
 {
     [Header("Switch Settings")]
     [SerializeField] int switches;
-    public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
     public PlayerMovement playerMovement;
 
@@ -115,7 +114,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (down)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
                 // Debug.Log("Move down");
 
@@ -143,7 +142,7 @@ public class MovingPlatform : MonoBehaviour
                 }
             }
 
-            else if (Switches < switchAmount)
+            else if (switches < switchAmount)
             {
                 Vector3 returnPosition = originalPosition;
 
@@ -159,7 +158,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (sideZ)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
                 if (cutSceneCamera != null && !playedCutScene)
                 {
@@ -172,7 +171,7 @@ public class MovingPlatform : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
-            else if (Switches != switchAmount)
+            else if (switches != switchAmount)
             {
 
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
@@ -184,7 +183,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (sideX)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
 
                 if (cutSceneCamera != null && !playedCutScene)
@@ -198,7 +197,7 @@ public class MovingPlatform : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
-            else if (Switches != switchAmount)
+            else if (switches != switchAmount)
             {
 
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
@@ -219,18 +218,6 @@ public class MovingPlatform : MonoBehaviour
         playerMovement.enabled = true;
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;
-    }
-
-    public void AddSwitch()
-    {
-        switches++;
-        move = true;
-    }
-
-    public void RemoveSwitch()
-    {
-        switches--;
-        move = true;
     }
 
     void OnDrawGizmos()
@@ -260,5 +247,17 @@ public class MovingPlatform : MonoBehaviour
             Gizmos.matrix = Matrix4x4.identity;
             Gizmos.DrawLine(castOrigin, castOrigin + castDistance);
         }
+    }
+
+    public void AddSwitch(int amount)
+    {
+        switches += amount;
+        move = true;
+    }
+
+    public void RemoveSwitch(int amount)
+    {      
+        switches -= amount;
+        move = true;
     }
 }

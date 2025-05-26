@@ -1,16 +1,15 @@
 using UnityEngine;
 
-public class GateScript : MonoBehaviour
+public class GateScript : MonoBehaviour, ISwitchManager
 {
     [Header("Settings")]
+    public int switches;
     [SerializeField] int switchesNeeded;
     [SerializeField] float pressDepth;
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
     [SerializeField] bool playSound;
-    PlayerMovement playerMovement;
 
-    public int switches;
     bool playedCutScene;
     bool moveGate;
     Vector3 originalPosition;
@@ -23,6 +22,8 @@ public class GateScript : MonoBehaviour
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
     [SerializeField] Outline outlineScript;
+    PlayerMovement playerMovement;
+
 
     private void Start()
     {
@@ -38,7 +39,6 @@ public class GateScript : MonoBehaviour
             MoveGate();
         }
     }
-
     void MoveGate()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -76,23 +76,6 @@ public class GateScript : MonoBehaviour
         }
         
     }
-
-    public void AddSwitch(int amount)
-    {
-        if (playSound)
-        {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
-        }
-        switches += amount;
-        OnSwitchCountChanged();
-    }
-
-    public void RemoveSwitch(int amount)
-    {
-        switches -= amount;
-        OnSwitchCountChanged();
-    }
-
     void OnSwitchCountChanged()
     {
         if (switches == switchesNeeded)
@@ -112,5 +95,21 @@ public class GateScript : MonoBehaviour
         }
 
         moveGate = true;
+    }
+
+    public void AddSwitch(int amount)
+    {
+        if (playSound)
+        {
+            SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+        }
+        switches += amount;
+        OnSwitchCountChanged();
+    }
+
+    public void RemoveSwitch(int amount)
+    {
+        switches -= amount;
+        OnSwitchCountChanged();
     }
 }

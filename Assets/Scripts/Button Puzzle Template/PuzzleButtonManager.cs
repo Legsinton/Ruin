@@ -7,8 +7,9 @@ public class PuzzleManager : MonoBehaviour
     [SerializeField] bool checkPressSequence;
     [SerializeField] List<PuzzleButton> buttons;
     [SerializeField] List<int> correctSequence;
-    [SerializeField] GateScript gate;
-    [SerializeField] MovingPlatform movingPlatform;
+   /*[SerializeField] GateScript gate;
+    [SerializeField] MovingPlatform movingPlatform;*/
+    public MonoBehaviour[] switchTargets;
 
     readonly List<int> playerInput = new List<int>();
 
@@ -69,14 +70,15 @@ public class PuzzleManager : MonoBehaviour
         SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
 
         yield return new WaitForSeconds(2);
-        if (gate != null)
+        if (switchTargets != null)
         {
-            gate.AddSwitch(1);
-        }
-
-        if (movingPlatform != null)
-        {
-            movingPlatform.AddSwitch();
+            foreach (MonoBehaviour target in switchTargets)
+            {
+                if (target is ISwitchManager switchable)
+                {
+                    switchable.AddSwitch(1);  // or RemoveSwitch(1)
+                }
+            }
         }
     }
     private void ResetPuzzle()

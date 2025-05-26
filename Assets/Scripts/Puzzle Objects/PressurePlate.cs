@@ -3,8 +3,7 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     public bool triggerd = false;
-    public GateScript[] gate;
-    public MovingPlatform[] platforms;
+    public MonoBehaviour[] switchTargets;
     public float pressDepth;
     public float smallPressDepth;
     public float moveSpeed;
@@ -24,7 +23,6 @@ public class PressurePlate : MonoBehaviour
         originalPosition = transform.position;
         previousPosition = transform.position;
     }
-
     private void Update()
     {
         if (move)
@@ -54,7 +52,6 @@ public class PressurePlate : MonoBehaviour
             previousPosition = transform.position;
         }
     }
-
     void MovementSmall()
     {
         if (smallTrigger && !triggerd)
@@ -68,7 +65,6 @@ public class PressurePlate : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
     void MovementFull()
     {
         if (triggerd && !smallTrigger)
@@ -82,7 +78,6 @@ public class PressurePlate : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
     private void OnTriggerStay(Collider other)
     {
         Bounds blockBounds = other.bounds; // The collider bounds of the block
@@ -115,22 +110,18 @@ public class PressurePlate : MonoBehaviour
                 {
                     move = true;
                     smallTrigger = false;
-                    //SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
                     added = true;                    
-
-                    for (int i = 0; i < gate.Length; i++)
+                    foreach (MonoBehaviour target in switchTargets)
                     {
-                        gate[i].AddSwitch(1);
-                    }
-                    for (int i = 0; i < platforms.Length; i++)
-                    {
-                        platforms[i].AddSwitch();
+                        if (target is ISwitchManager switchable)
+                        {
+                            switchable.AddSwitch(1);  // or RemoveSwitch(1)
+                        }
                     }
                 }
             }
         }
-
         if (other.CompareTag("Player") && !triggerd)
         {
             if (!stepedOn)
@@ -142,7 +133,6 @@ public class PressurePlate : MonoBehaviour
             }
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Pullable"))
@@ -153,13 +143,12 @@ public class PressurePlate : MonoBehaviour
                 triggerd = false;
                 added = false;
                 smallTrigger = false;
-                for (int i = 0; i < gate.Length; i++)
+                foreach (MonoBehaviour target in switchTargets)
                 {
-                    gate[i].RemoveSwitch(1);
-                }
-                for (int i = 0; i < platforms.Length; i++)
-                {
-                    platforms[i].RemoveSwitch();
+                    if (target is ISwitchManager switchable)
+                    {
+                        switchable.RemoveSwitch(1);  // or RemoveSwitch(1)
+                    }
                 }
             }
         }

@@ -14,13 +14,11 @@ public class ChestScript : MonoBehaviour, IInteracting
     Interact interact;
 
     bool isDoorOpen;
-    bool doorOpening;
     bool spawned;
     bool played;
     bool playedCutScene;
     Quaternion openRotation;
     GameObject spawnedItem;
-    public bool DoorOpening { get { return doorOpening; } set { doorOpening = value; } }
 
     [Header("Settings for Item")]
 
@@ -44,7 +42,6 @@ public class ChestScript : MonoBehaviour, IInteracting
         interact = FindAnyObjectByType<Interact>();
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
     }
-
     void Update()
     {
         if (isDoorOpen)
@@ -101,7 +98,6 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         if (spawnedItem != null)
         {
-            Debug.Log("Hello I am spinning");
             spawnedItem.transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
         }
     }
@@ -110,9 +106,7 @@ public class ChestScript : MonoBehaviour, IInteracting
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
-            doorOpening = true;
         }
-
     }
     void ActivateCamera()
     {
@@ -130,7 +124,6 @@ public class ChestScript : MonoBehaviour, IInteracting
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
         //this.enabled = false;
-        doorOpening = false;
     }
 
     public void PressInteract()
