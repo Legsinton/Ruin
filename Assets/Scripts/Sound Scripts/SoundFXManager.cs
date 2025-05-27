@@ -10,6 +10,9 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] 
     AudioSource soundFXObject;
     [SerializeField]
+    AudioSource soundFXObjectButton;
+
+    [SerializeField]
      List<SoundVolumeEntry> volumeList;
     [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
@@ -135,7 +138,7 @@ public class SoundFXManager : MonoBehaviour
         }
     }
                            //SoundType     // Position for soundFX    // soundFX minDistance  // soundFX MaxDistance   // If 2D or 3D
-    public void PlaySoundFX(SoundType type, Vector3? position = null, float minDistance = 1f, float maxDistance = 50f, float spatialBlend = 1f)
+    public void PlaySoundFX(SoundType type, Vector3? position = null,float minDistance = 1f, float maxDistance = 50f, float spatialBlend = 1f)
     {
         if (!soundFXDict.ContainsKey(type)) return;
 
@@ -178,6 +181,35 @@ public class SoundFXManager : MonoBehaviour
         else
         {
             soundFXObject.PlayOneShot(clip, volume);
+        }
+    }
+
+    public void PlayButtonSoundFX(SoundType type)
+    {
+        if (!soundFXDict.ContainsKey(type)) return;
+
+        // volume if its not in the inspector
+        float volume = 1.0f;
+        if (soundVolumeDict != null && soundVolumeDict.ContainsKey(type))
+        {
+            volume = soundVolumeDict[type];
+        }
+
+        AudioClip clip = null;
+        if (soundFXDict[type] is AudioClip singleClip)
+        {   // If single soundFX
+            clip = singleClip;
+        }
+        else if (soundFXDict[type] is AudioClip[] clipArray)
+        {   // If Multible soundFX
+            clip = clipArray[Random.Range(0, clipArray.Length)];
+        }
+
+        if (clip == null) return;
+
+        else
+        {
+            soundFXObjectButton.PlayOneShot(clip, volume);
         }
     }
 

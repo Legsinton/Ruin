@@ -1,9 +1,8 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -22,6 +21,8 @@ public class PauseMenuScript : MonoBehaviour
     private bool justPaused = false;
     public InputActionAsset actions; // Drag in your InputActions asset in inspector
     private InputAction clickAction;
+    public AudioMixerSnapshot pausedSnapshot;
+    public AudioMixerSnapshot normalSnapshot;
 
     private void Awake()
     {
@@ -122,15 +123,16 @@ public class PauseMenuScript : MonoBehaviour
         bool isPaused = pauseMenu.activeInHierarchy;
         if (!isPaused)
         {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSelect);
-            MusicManager.Instance.musicSource.volume -= 0.05f;  
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);           
             isGamepad = playerInput.currentControlScheme == "Gamepad";
             EventSystem.current.SetSelectedGameObject(null);
-            
+            pausedSnapshot.TransitionTo(0.2f); // quickly lower volume or apply effect
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
+            soundMenu.SetActive(false);
             optionsMenu.SetActive(false);
             pauseMenu.SetActive(true);
+            controllMenu.SetActive(false);
             isPausing = true;
             Time.timeScale = 0f;
             justPaused = true; 
@@ -147,16 +149,18 @@ public class PauseMenuScript : MonoBehaviour
         }
         else if (isPaused)
         {
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             Cursor.lockState = CursorLockMode.None;
-            MusicManager.Instance.musicSource.volume += 0.05f;
-
             Cursor.visible = false;
             playerMovement.enabled = true;
+            normalSnapshot.TransitionTo(0.2f); // restore normal sound
             playerInput.SwitchCurrentActionMap("Player");
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             isPausing = false;
             optionsMenu.SetActive(false);
+            soundMenu.SetActive(false);
+            controllMenu.SetActive(false);
         }
     }
 
@@ -191,9 +195,10 @@ public class PauseMenuScript : MonoBehaviour
 
         if (isPausing)
         {
-            MusicManager.Instance.musicSource.volume += 0.05f;
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
+            normalSnapshot.TransitionTo(0.2f); // restore normal sound
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
             pauseMenu.SetActive(false);
@@ -208,7 +213,8 @@ public class PauseMenuScript : MonoBehaviour
     public void PauseMenu()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         playerInput.SwitchCurrentActionMap("UI");
         playerMovement.enabled = false;
         optionsMenu.SetActive(false);
@@ -237,7 +243,8 @@ public class PauseMenuScript : MonoBehaviour
     public void SoundMenu()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         soundMenu.SetActive(true);
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
@@ -260,7 +267,8 @@ public class PauseMenuScript : MonoBehaviour
     public void ControllMenu()
     {
         EventSystem.current.SetSelectedGameObject(null);
-        
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         soundMenu.SetActive(false);
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(false);
@@ -293,6 +301,8 @@ public class PauseMenuScript : MonoBehaviour
         optionsMenu.SetActive(true);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         Time.timeScale = 0f; 
         if (isGamepad)
         {
@@ -309,6 +319,8 @@ public class PauseMenuScript : MonoBehaviour
 
     public void QuitGame()
     {
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         SceneManager.LoadScene("MainMenu");
     }
 }

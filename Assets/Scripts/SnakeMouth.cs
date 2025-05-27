@@ -11,6 +11,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     [SerializeField] int switches;
     [SerializeField] int switchesNeeded;
     [SerializeField] bool playSound;
+    bool played;
 
     [Header("References")]
     PlayerMovement PlayerMovement;
@@ -68,8 +69,9 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     }
     public void AddSwitch(int amount)
     {
-        if (playSound)
+        if (playSound && !played)
         {
+            played = true;
             SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
         }
         switches += amount;
