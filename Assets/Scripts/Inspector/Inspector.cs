@@ -1,13 +1,22 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class Inspector : MonoBehaviour
 {
+    [Header("Inspector Sensitivity")]
+    [SerializeField] public float mouseSensitivity;
+    [SerializeField] public float controllerSensitivity;
+
     Canvas canvas;
-    //InputSystem_Actions inspectInput;
+    PostProcessManager postProcessManager;
     PlayerInput playerInput;
     GameObject itemPrefab;
     bool isRotating = false;
+    bool isGamepad = false;
+    float sensitivity;
+    Vector2 currentRotation;
 
 
     void Awake()
@@ -24,6 +33,7 @@ public class Inspector : MonoBehaviour
             Debug.Log("Could not locate Canvas component on " + inspectorCanvas.name);
         }
 
+        postProcessManager = FindFirstObjectByType<PostProcessManager>();
         playerInput = FindFirstObjectByType<PlayerInput>();
 
         if (playerInput == null)
@@ -32,17 +42,24 @@ public class Inspector : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        sensitivity = isGamepad ? controllerSensitivity : mouseSensitivity;
+
+        itemPrefab.transform.Rotate(Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime, Space.World);
+        itemPrefab.transform.Rotate(Vector3.right, currentRotation.y * sensitivity * Time.deltaTime, Space.World);
+    }
+
     public void InspectItem(ScriptableObject interactableObject)
     {
-        Debug.Log("Agnes: Started inspection");
         canvas.enabled = true;
+        postProcessManager.ToggleDepthOfField();
+
         Item item = (Item)interactableObject;
         if (item != null && item.prefab != null)
         {
             playerInput.SwitchCurrentActionMap("Inspector");
             itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), Quaternion.identity);
-            Debug.Log("Agnes: OnEquip in run");
-
         }
         else
         {
@@ -51,14 +68,9 @@ public class Inspector : MonoBehaviour
     }
 
     // ACTION MAPS / INPUT HANDLING
-
     public void StopInspection()
     {
         Debug.Log("Agnes: Stopped inspection");
-        // if (itemPrefab != null)
-        // {
-        //     Destroy(itemPrefab);
-        // }
     }
 
     public void OnRotateStart()
@@ -71,14 +83,17 @@ public class Inspector : MonoBehaviour
         isRotating = false;
     }
 
-    public void OnDelta(InputValue cc)
+    public void OnDelta(InputValue value)
     {
-        if (!isRotating || itemPrefab == null) return;
+        if (playerInput.currentControlScheme == "Gamepad")
+        {
+            isGamepad = true;
+        }
 
-        Vector2 delta = cc.Get<Vector2>();
+        if ((!isGamepad && !isRotating) || itemPrefab == null) return;
 
-        itemPrefab.transform.Rotate(Vector3.up, -delta.x * 0.5f, Space.World);
-        itemPrefab.transform.Rotate(Vector3.right, delta.y * 0.5f, Space.World);
+        currentRotation = value.Get<Vector2>();
+
     }
 
     private void OnBack()
@@ -89,6 +104,7 @@ public class Inspector : MonoBehaviour
             Destroy(itemPrefab);
         }
         canvas.enabled = false;
+        postProcessManager.ToggleDepthOfField();
     }
 
     private void OnEquip()
