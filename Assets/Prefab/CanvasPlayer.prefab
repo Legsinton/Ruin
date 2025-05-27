@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6932652659799483885}
   - component: {fileID: 757889244971077591}
   - component: {fileID: 8410940053584905885}
-  - component: {fileID: 5125128726828829672}
+  - component: {fileID: 3757917250653240084}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: CanvasPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,10 +74,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5125128726828829672
+--- !u!114 &3757917250653240084
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,10 +111,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8436134515380391857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b024ec305a35aa14c8380af70da325af, type: 3}
+  m_Script: {fileID: 11500000, guid: ffc4091dd5663dd428f215710bc2ebd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMesh: {fileID: 0}
-  image: {fileID: 0}
-  textMeshHold: {fileID: 0}
-  imageHold: {fileID: 0}
