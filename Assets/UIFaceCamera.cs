@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class UIFaceCamera : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] Camera mainCamera;
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if (mainCamera != null)
+        {
+            transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
+        }
+        else
+        {
+            Debug.LogError("Assign camera to: " + gameObject.transform.parent.parent.name);
+        }
     }
 }

@@ -10,7 +10,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     [SerializeField] int itemIdToUnlock;
 
     [Header("Reference")]
-    [SerializeField] PlayerUI playerUI;
+    [SerializeField] GameObject[] buttonPrompts;
     [SerializeField] Outline outlineScript;
 
     GameObject player;
@@ -18,13 +18,13 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     bool closingDoor;
     bool isDoorOpen;
     bool played;
+    bool inInteractRange;
     Quaternion closedRotation;
     Quaternion openRotation;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerUI = FindAnyObjectByType<PlayerUI>();
         closedRotation = transform.rotation;
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
     }
@@ -70,6 +70,15 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
             SoundFXManager.Instance.StopLoopFor(gameObject);
             closingDoor = false;
             isDoorOpen = false;
+            if (inInteractRange)
+            {
+                outlineScript.enabled = true;
+
+                foreach (var item in buttonPrompts)
+                {
+                    item.SetActive(true);
+                }
+            }
         }
     }
 
@@ -81,6 +90,10 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
             {
                 played = true;
                 SoundFXManager.Instance.StartLoopFor(gameObject,SoundType.DoorOpen,this.transform);
+                foreach (var item in buttonPrompts)
+                {
+                    item.SetActive(false);
+                }
             }
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
         }
@@ -130,12 +143,28 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        outlineScript.enabled = true;
+        inInteractRange = true;
+
+        if (!isDoorOpen && !openingDoor && !closingDoor)
+        {
+            outlineScript.enabled = true;
+
+            foreach(var item in buttonPrompts)
+            {
+                item.SetActive(true);
+            }
+        }
     }
 
     public void InteractNotInRange()
     {
+        inInteractRange = false;
+
         outlineScript.enabled = false;
+        foreach (var item in buttonPrompts)
+        {
+            item.SetActive(false);
+        }
     }
 
     public bool shouldObjectBeDestroyed()
