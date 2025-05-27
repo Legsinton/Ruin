@@ -30,7 +30,8 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
     {
         if (Time.unscaledTime >= nextPlayTimeSelect)
         {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSelect);
+           
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             nextPlayTimeSelect = Time.unscaledTime + soundCooldownSelect;
         }
     }
@@ -39,7 +40,8 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
     {
         if (Time.unscaledTime >= nextPlayTime)
         {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.ButtonSound);
+           
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSound);
             nextPlayTime = Time.unscaledTime + soundCooldown;
         }
     }
