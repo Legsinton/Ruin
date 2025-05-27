@@ -12,6 +12,8 @@ public class PushBlock : MonoBehaviour, IInteracting
     [SerializeField] Rigidbody rb;
     [SerializeField] Outline outlineScript;
     [SerializeField] CameraFollow cameraFollow;
+    [SerializeField] GameObject buttonPromptSelect;
+    [SerializeField] GameObject buttonPromptMove;
 
     GameObject player;
     PlayerMovement playerMovement;
@@ -60,6 +62,8 @@ public class PushBlock : MonoBehaviour, IInteracting
                     cameraFollow.EnableLockCamera(currentPlayerPosTarget.eulerAngles.y);
 
                     isAttached = true;
+                    buttonPromptSelect.SetActive(false);
+                    buttonPromptMove.SetActive(true);
                     playerMovement.ResetPlayerVelocity();
                 }
                 if (!movedPlayerToTargetPos)
@@ -90,6 +94,8 @@ public class PushBlock : MonoBehaviour, IInteracting
                 playerMovement.PushBlock = null;
                 movedPlayerToTargetPos = false;
                 isAttached = false;
+                buttonPromptSelect.SetActive(true);
+                buttonPromptMove.SetActive(false);
             }
         }
 
@@ -115,12 +121,17 @@ public class PushBlock : MonoBehaviour, IInteracting
         if (Vector3.Distance(transform.position, player.transform.position) < minDistanceToPlayer)
         {
             playerInRange = true;
-            outlineScript.enabled = true;  
+            outlineScript.enabled = true;
+            if (!moveBlock)
+            {
+                buttonPromptSelect.SetActive(true);
+            }
         }
         else
         {
             playerInRange = false;
             outlineScript.enabled = false;
+            buttonPromptSelect.SetActive(false);
         }
     }
 
@@ -197,6 +208,7 @@ public class PushBlock : MonoBehaviour, IInteracting
     {
         checkDistanceToPlayer = false;
         outlineScript.enabled = false;
+        buttonPromptSelect.SetActive(false);
     }
 
     public bool shouldObjectBeDestroyed()
