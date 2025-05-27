@@ -597,17 +597,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7967818232957695525, guid: 6edcf79b2af49534d8d312a228391c98, type: 3}
   m_PrefabInstance: {fileID: 149732347}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &149732352 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4783365738706360100, guid: 6edcf79b2af49534d8d312a228391c98, type: 3}
-  m_PrefabInstance: {fileID: 149732347}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &149732353 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8624266488789310889, guid: 6edcf79b2af49534d8d312a228391c98, type: 3}
@@ -704,6 +693,14 @@ PrefabInstance:
       propertyPath: platforms.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: switchTargets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: 'switchTargets.Array.data[0]'
+      value: 
+      objectReference: {fileID: 438222383}
     - target: {fileID: 5771808414940555179, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_Name
       value: PressurePlate (2)
@@ -740,7 +737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5037219681100125498, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 64.29
+      value: 64.59
       objectReference: {fileID: 0}
     - target: {fileID: 5037219681100125498, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -748,7 +745,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5037219681100125498, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.21
+      value: 1.35
       objectReference: {fileID: 0}
     - target: {fileID: 5037219681100125498, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -784,6 +781,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: 'platforms.Array.data[0]'
+      value: 
+      objectReference: {fileID: 656658209}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: switchTargets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: 'switchTargets.Array.data[0]'
       value: 
       objectReference: {fileID: 656658209}
     - target: {fileID: 5771808414940555179, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
@@ -974,6 +979,11 @@ Mesh:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5492712739383074972, guid: 6edcf79b2af49534d8d312a228391c98, type: 3}
   m_PrefabInstance: {fileID: 149732347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &357589620 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7590501160471171792, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
+  m_PrefabInstance: {fileID: 680103845}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &370076624 stripped
 Transform:
@@ -2160,7 +2170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5634187771405658457, guid: 9403bf25a311cf0429d243b092134de3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 71.2
+      value: 71.34
       objectReference: {fileID: 0}
     - target: {fileID: 5634187771405658457, guid: 9403bf25a311cf0429d243b092134de3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2353,6 +2363,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1130461663377977015, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
+      propertyPath: playerLight
+      value: 
+      objectReference: {fileID: 357589620}
+    - target: {fileID: 1130461663377977015, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 52771934}
@@ -2376,10 +2390,6 @@ PrefabInstance:
       propertyPath: backButton
       value: 
       objectReference: {fileID: 149732351}
-    - target: {fileID: 5836405872222619045, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
-      propertyPath: creditsText
-      value: 
-      objectReference: {fileID: 149732352}
     - target: {fileID: 5836405872222619045, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: optionsMenu
       value: 
@@ -4258,6 +4268,14 @@ PrefabInstance:
       propertyPath: 'gate.Array.data[0]'
       value: 
       objectReference: {fileID: 147665211}
+    - target: {fileID: 6173341867656243493, guid: 5c8c12dae6ce30944a270699a3e8afbb, type: 3}
+      propertyPath: switchTargets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173341867656243493, guid: 5c8c12dae6ce30944a270699a3e8afbb, type: 3}
+      propertyPath: 'switchTargets.Array.data[0]'
+      value: 
+      objectReference: {fileID: 147665211}
     - target: {fileID: 8499280421869914007, guid: 5c8c12dae6ce30944a270699a3e8afbb, type: 3}
       propertyPath: m_Name
       value: ClockPuzzle
@@ -5804,6 +5822,18 @@ PrefabInstance:
       propertyPath: 'platforms.Array.data[0]'
       value: 
       objectReference: {fileID: 664569967}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: switchTargets.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: 'switchTargets.Array.data[0]'
+      value: 
+      objectReference: {fileID: 438222383}
+    - target: {fileID: 5201330680877679720, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
+      propertyPath: 'switchTargets.Array.data[1]'
+      value: 
+      objectReference: {fileID: 664569967}
     - target: {fileID: 5771808414940555179, guid: 2b602d50bf499e641a3a09c0ef8cc11b, type: 3}
       propertyPath: m_Name
       value: PressurePlate (3)
@@ -7030,6 +7060,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1030399343}
+    - target: {fileID: 2071484930941870432, guid: ac69ccdb25e1012459cf935fe1db64f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2156496846601362897, guid: ac69ccdb25e1012459cf935fe1db64f7, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -7037,6 +7071,10 @@ PrefabInstance:
     - target: {fileID: 2156496846601362897, guid: ac69ccdb25e1012459cf935fe1db64f7, type: 3}
       propertyPath: m_VersionIndex
       value: 59165
+      objectReference: {fileID: 0}
+    - target: {fileID: 3249198051315744832, guid: ac69ccdb25e1012459cf935fe1db64f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4078747731956310353, guid: ac69ccdb25e1012459cf935fe1db64f7, type: 3}
       propertyPath: m_Mesh

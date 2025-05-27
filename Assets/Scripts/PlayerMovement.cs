@@ -45,22 +45,23 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 cachedCameraRight;
 
     [SerializeField] Transform capsule;
-    public Transform Capsule => capsule;
     [SerializeField] Transform cameraTransform;
+    CameraFollow cameraFollow;
     SceneManagement sceneManagement;
     PlayerInput playerInput;
 
-    private void Start()
+    void Start()
     {
         gamepad = Gamepad.current;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        cameraFollow = GetComponent<CameraFollow>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         sceneManagement = FindFirstObjectByType<SceneManagement>();
     }
 
-    private void Update()
+    void Update()
     {
         RotatePlayer();
         PlayWalkingSound();
@@ -68,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
     }
     private void LateUpdate()
     {
-        // For the camera to move the capsule so the interaction cast will move based on camera movement
         cachedCameraForward = cameraTransform.forward;
         cachedCameraForward.y = 0;
         cachedCameraForward.Normalize();
@@ -228,27 +228,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    /*private void OnCollisionEnter(Collision hit)
-    {
-        if (hit.gameObject.CompareTag("RotatingTag"))
-        {
-            rotatingObject = hit.gameObject.GetComponent<RotatingObject>();
-        }
-    }*/
-
-    // Player falls
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if ((abyssMask.value & (1 << other.transform.gameObject.layer)) > 0)
-    //     {
-    //         sceneManagement.OnDeath();
-    //     }
-    // }
     private void CheckPlayerFalling()
     {
-        if (isDead == false && transform.position.y < deathHeight)
+        if (!isDead && transform.position.y < deathHeight)
         {
-            Debug.Log("Agnes: Player dies");
+            cameraFollow.StopFollowing();
+            cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
             isDead = true;
             sceneManagement.OnDeath();
         }
