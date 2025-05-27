@@ -8,11 +8,11 @@ public class PaintingScript : MonoBehaviour, IInteracting
     [SerializeField] TextMeshProUGUI paintingText;
     [SerializeField] Image background;
 
-    [SerializeField] UIScript script;
+    //[SerializeField] PlayerUI script;
 
     private void Awake()
     {
-        script = FindAnyObjectByType<UIScript>();
+        //script = FindAnyObjectByType<PlayerUI>();
         paintingText.enabled = false;
         background.enabled = false;
     }
@@ -29,13 +29,13 @@ public class PaintingScript : MonoBehaviour, IInteracting
 
     public void InteractInRange() 
     {
-        script.EnableUI();
+        //script.EnableUI();
         outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        script.DisebleUI();
+        //script.DisebleUI();
         outlineScript.enabled = false;
         paintingText.enabled = false;
         background.enabled = false;

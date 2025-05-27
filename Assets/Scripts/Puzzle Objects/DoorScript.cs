@@ -10,7 +10,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     [SerializeField] int itemIdToUnlock;
 
     [Header("Reference")]
-    [SerializeField] UIScript UIScript;
+    [SerializeField] PlayerUI playerUI;
     [SerializeField] Outline outlineScript;
 
     GameObject player;
@@ -24,7 +24,7 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        UIScript = FindAnyObjectByType<UIScript>();
+        playerUI = FindAnyObjectByType<PlayerUI>();
         closedRotation = transform.rotation;
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
     }
@@ -130,19 +130,11 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        if (UIScript != null)
-        {
-            UIScript.EnableUI();
-        }
         outlineScript.enabled = true;
     }
 
     public void InteractNotInRange()
     {
-        if (UIScript != null)
-        {
-            UIScript.DisebleUI();
-        }
         outlineScript.enabled = false;
     }
 

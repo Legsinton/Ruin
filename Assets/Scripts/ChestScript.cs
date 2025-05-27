@@ -7,7 +7,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     [SerializeField] float openAngle;
 
     [Header("Reference")]
-    [SerializeField] UIScript UIScript;
+    [SerializeField] PlayerUI playerUI;
     [SerializeField] Outline outlineScript;
     [SerializeField] Collider colliderLid;
     PlayerMovement PlayerMovement;
@@ -37,7 +37,7 @@ public class ChestScript : MonoBehaviour, IInteracting
 
     void Start()
     {
-        UIScript = FindAnyObjectByType<UIScript>();
+        playerUI = FindAnyObjectByType<PlayerUI>();
         PlayerMovement = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
@@ -139,10 +139,6 @@ public class ChestScript : MonoBehaviour, IInteracting
 
     public void InteractInRange()
     {
-        if (UIScript != null)
-        {
-            UIScript.EnableUI();
-        }
         if (!isDoorOpen)
         {
             outlineScript.enabled = true;
@@ -151,10 +147,6 @@ public class ChestScript : MonoBehaviour, IInteracting
 
     public void InteractNotInRange()
     {
-        if (UIScript != null)
-        {
-            UIScript.DisebleUI();
-        }
         outlineScript.enabled = false;
     }
 
