@@ -13,7 +13,7 @@ public class Inspector : MonoBehaviour
     void Awake()
     {
         GameObject inspectorCanvas = GameObject.Find("InspectorCanvas");
-        var actions = GetComponent<PlayerInput>().actions;
+
         if (inspectorCanvas != null)
         {
             canvas = inspectorCanvas.GetComponent<Canvas>();
@@ -24,7 +24,6 @@ public class Inspector : MonoBehaviour
             Debug.Log("Could not locate Canvas component on " + inspectorCanvas.name);
         }
 
-        //inspectInput = new InputSystem_Actions();
         playerInput = FindFirstObjectByType<PlayerInput>();
 
         if (playerInput == null)
@@ -40,10 +39,9 @@ public class Inspector : MonoBehaviour
         Item item = (Item)interactableObject;
         if (item != null && item.prefab != null)
         {
-            itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), Quaternion.identity);
-            //InspectInputController.Instance.OnEnable();
-            Debug.Log("Agnes: OnEquip in run");
             playerInput.SwitchCurrentActionMap("Inspector");
+            itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), Quaternion.identity);
+            Debug.Log("Agnes: OnEquip in run");
 
         }
         else
@@ -63,51 +61,39 @@ public class Inspector : MonoBehaviour
         // }
     }
 
-    public void OnEnable()
-    {
-        Debug.Log("Agnes: OnEquip in run");
-        playerInput.SwitchCurrentActionMap("Inspector");
-    }
-    public void OnDisable()
-    {
-        Debug.Log("Agnes: OnBack is run");
-        playerInput.SwitchCurrentActionMap("Player");
-    }
-
-    public void OnRotate(InputAction.CallbackContext context)
+    public void OnRotate()
     {
         Debug.Log("Agnes: OnRotate is run");
 
-        if (context.started || context.performed)
-        {
-            isRotating = true;
-        }
-
-        if (context.canceled)
-        {
-            isRotating = false;
-        }
+        isRotating = true;
     }
-
 
     public void OnDelta(InputValue cc)
     {
-        if (!isRotating || itemPrefab == null) return;
+        Debug.Log("Agnes: OnDelta is run");
+
+        //if (!isRotating || itemPrefab == null) return;
 
         Vector2 delta = cc.Get<Vector2>();
 
-        itemPrefab.transform.Rotate(Vector3.up, -delta.x * 0.1f, Space.World);
-        itemPrefab.transform.Rotate(Vector3.right, delta.y * 0.1f, Space.World);
+        itemPrefab.transform.Rotate(Vector3.up, -delta.x * 0.2f, Space.World);
+        itemPrefab.transform.Rotate(Vector3.right, delta.y * 0.2f, Space.World);
     }
 
 
 
     private void OnBack()
     {
-        OnDisable();
+        playerInput.SwitchCurrentActionMap("Player");
+        if (itemPrefab != null)
+        {
+            Destroy(itemPrefab);
+        }
+        canvas.enabled = false;
     }
+
     private void OnEquip()
     {
-        OnEnable();
+        //TODO: Add equip logic
     }
 }
