@@ -3,62 +3,55 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
+    [Header("Movement Settings")]
+    [SerializeField] float maxSpeed;
+    [SerializeField] float acceleration;
+    [SerializeField] float groundDrag;
+    [SerializeField] float stepRateAtFullSpeed;
+    [SerializeField] bool isGrounded;
 
-    public Vector3 movement;
-    public float acceleration;
-    public float groundDrag;
-    public bool DisableRotation { get; set; }
+    [HideInInspector] public Vector3 movement;
+    Vector3 playerMoveDir;
+    float stepTimer;
+    float gravityForce;
 
-    [SerializeField] float currentSpeed = 8;
-
-    Rigidbody rb;
     [HideInInspector] public PushBlock PushBlock;
     [HideInInspector] public RotatingObject rotatingObject;
 
     [HideInInspector] public Vector2 movementInput;
-    Vector3 playerMoveDir;
-    [SerializeField] private float stepRateAtFullSpeed = 0.4f;
-    private float stepTimer = 0f;
     [HideInInspector] public float currentVelocity;
-    float gravityForce;
 
     [HideInInspector] public bool forwardMoveDisabled;
     [HideInInspector] public bool backMoveDisabled;
     Gamepad gamepad;
 
-    [Header("GroundCheck")]
+    [Header("Movement References")]
+    [SerializeField] Transform capsule;
+    [SerializeField] Rigidbody rb;
 
-    public LayerMask groundMask;
+    [Header("GroundCheck Settings")]
+    [SerializeField] LayerMask groundMask;
+    [SerializeField] float distToGround;
+    [SerializeField] float deathHeight;
 
-    readonly float distToGround = 1.2f;
-
-    [SerializeField] private bool isGrounded;
-
-    [Header("Check Player Falling")]
-    bool isDead = false;
-    public float deathHeight;
+    SceneManagement sceneManagement;
+    bool isDead;
 
     [Header("Camera")]
-
-    private Vector3 cachedCameraForward;
-    private Vector3 cachedCameraRight;
-
-    [SerializeField] Transform capsule;
     [SerializeField] Transform cameraTransform;
     CameraFollow cameraFollow;
-    SceneManagement sceneManagement;
-    PlayerInput playerInput;
+    Vector3 cachedCameraForward;
+    Vector3 cachedCameraRight;
 
     void Start()
     {
         gamepad = Gamepad.current;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
         cameraFollow = GetComponent<CameraFollow>();
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
         sceneManagement = FindFirstObjectByType<SceneManagement>();
+        rb.freezeRotation = true;
     }
 
     void Update()
@@ -67,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         PlayWalkingSound();
         CheckPlayerFalling();
     }
-    private void LateUpdate()
+    void LateUpdate()
     {
         cachedCameraForward = cameraTransform.forward;
         cachedCameraForward.y = 0;
@@ -78,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         cachedCameraRight.Normalize();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         GroundCheck();
         MovePlayer();
@@ -93,11 +86,11 @@ public class PlayerMovement : MonoBehaviour
             gravityForce = 1;
         }
     }
-    private void OnMove(InputValue movementValue)
+    void OnMove(InputValue movementValue)
     {
         movementInput = movementValue.Get<Vector2>();
     }
-    private void GroundCheck()
+    void GroundCheck()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, distToGround, groundMask);
     }
@@ -107,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
         currentVelocity = 0;
     }
 
-    public void MovePlayer()
+    void MovePlayer()
     {
         if (PushBlock != null)
         {
@@ -167,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (movement.magnitude > 0)
         {
-            float targetSpeed = currentSpeed * inputMagnitude;
+            float targetSpeed = maxSpeed * inputMagnitude;
             currentVelocity = Mathf.MoveTowards(currentVelocity, targetSpeed, acceleration * Time.deltaTime);
         }
         else
@@ -213,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
         {
             stepTimer -= Time.deltaTime;
 
-            float normalizedSpeed = currentVelocity / currentSpeed;
+            float normalizedSpeed = currentVelocity / maxSpeed;
             float stepRate = Mathf.Lerp(0.8f, stepRateAtFullSpeed, normalizedSpeed);
 
             if (stepTimer <= 0f)
@@ -228,13 +221,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void CheckPlayerFalling()
+    void CheckPlayerFalling()
     {
         if (!isDead && transform.position.y < deathHeight)
         {
+            isDead = true;
             cameraFollow.StopFollowing();
             cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
-            isDead = true;
             sceneManagement.OnDeath();
         }
     }

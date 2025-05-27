@@ -20,12 +20,11 @@ public class SceneManagement : MonoBehaviour
     {
         yield return StartCoroutine(FadeToBlack(1));
         gameOverText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         gameOverText.gameObject.SetActive(false);
         overlay.gameObject.SetActive(false);
         SceneManager.LoadScene(sceneToLoad);
     }
-
 
     public IEnumerator FadeToBlack(float duration)
     {

@@ -190,23 +190,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {x: 0, y: 0, z: 0}
+  maxSpeed: 6
   acceleration: 17
   groundDrag: 4.1
-  currentSpeed: 6
+  stepRateAtFullSpeed: 0.4
+  isGrounded: 0
+  movement: {x: 0, y: 0, z: 0}
   PushBlock: {fileID: 0}
   rotatingObject: {fileID: 0}
   movementInput: {x: 0, y: 0}
-  stepRateAtFullSpeed: 0.4
   currentVelocity: 0
   forwardMoveDisabled: 0
   backMoveDisabled: 0
+  capsule: {fileID: 3169089004556483027}
+  rb: {fileID: 985773469245848142}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  isGrounded: 0
+  distToGround: 1.2
   deathHeight: -10
-  capsule: {fileID: 3169089004556483027}
   cameraTransform: {fileID: 0}
 --- !u!114 &2961865858088359948
 MonoBehaviour:
