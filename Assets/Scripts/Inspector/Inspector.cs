@@ -61,26 +61,25 @@ public class Inspector : MonoBehaviour
         // }
     }
 
-    public void OnRotate()
+    public void OnRotateStart()
     {
-        Debug.Log("Agnes: OnRotate is run");
-
         isRotating = true;
+    }
+
+    public void OnRotateEnd()
+    {
+        isRotating = false;
     }
 
     public void OnDelta(InputValue cc)
     {
-        Debug.Log("Agnes: OnDelta is run");
-
-        //if (!isRotating || itemPrefab == null) return;
+        if (!isRotating || itemPrefab == null) return;
 
         Vector2 delta = cc.Get<Vector2>();
 
-        itemPrefab.transform.Rotate(Vector3.up, -delta.x * 0.2f, Space.World);
-        itemPrefab.transform.Rotate(Vector3.right, delta.y * 0.2f, Space.World);
+        itemPrefab.transform.Rotate(Vector3.up, -delta.x * 0.5f, Space.World);
+        itemPrefab.transform.Rotate(Vector3.right, delta.y * 0.5f, Space.World);
     }
-
-
 
     private void OnBack()
     {

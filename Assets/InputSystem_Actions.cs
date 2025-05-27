@@ -1067,12 +1067,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Rotate"",
+                    ""name"": ""RotateStart"",
                     ""type"": ""Button"",
                     ""id"": ""6b7bab67-a2b0-4d29-b914-10e485653337"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)"",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""e797fe0f-a159-4a56-98cb-8b9e96d9ed5a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1179,7 +1188,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Rotate"",
+                    ""action"": ""RotateStart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1190,7 +1199,29 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Rotate"",
+                    ""action"": ""RotateStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ac86977-5df8-4cb5-af69-a1d1b072a9af"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""RotateEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9ca833fa-ef37-43af-a506-b6d3806df4a7"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""RotateEnd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1287,7 +1318,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Inspector
         m_Inspector = asset.FindActionMap("Inspector", throwIfNotFound: true);
         m_Inspector_Delta = m_Inspector.FindAction("Delta", throwIfNotFound: true);
-        m_Inspector_Rotate = m_Inspector.FindAction("Rotate", throwIfNotFound: true);
+        m_Inspector_RotateStart = m_Inspector.FindAction("RotateStart", throwIfNotFound: true);
+        m_Inspector_RotateEnd = m_Inspector.FindAction("RotateEnd", throwIfNotFound: true);
         m_Inspector_Equip = m_Inspector.FindAction("Equip", throwIfNotFound: true);
         m_Inspector_Back = m_Inspector.FindAction("Back", throwIfNotFound: true);
     }
@@ -1763,7 +1795,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Inspector;
     private List<IInspectorActions> m_InspectorActionsCallbackInterfaces = new List<IInspectorActions>();
     private readonly InputAction m_Inspector_Delta;
-    private readonly InputAction m_Inspector_Rotate;
+    private readonly InputAction m_Inspector_RotateStart;
+    private readonly InputAction m_Inspector_RotateEnd;
     private readonly InputAction m_Inspector_Equip;
     private readonly InputAction m_Inspector_Back;
     /// <summary>
@@ -1782,9 +1815,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Delta => m_Wrapper.m_Inspector_Delta;
         /// <summary>
-        /// Provides access to the underlying input action "Inspector/Rotate".
+        /// Provides access to the underlying input action "Inspector/RotateStart".
         /// </summary>
-        public InputAction @Rotate => m_Wrapper.m_Inspector_Rotate;
+        public InputAction @RotateStart => m_Wrapper.m_Inspector_RotateStart;
+        /// <summary>
+        /// Provides access to the underlying input action "Inspector/RotateEnd".
+        /// </summary>
+        public InputAction @RotateEnd => m_Wrapper.m_Inspector_RotateEnd;
         /// <summary>
         /// Provides access to the underlying input action "Inspector/Equip".
         /// </summary>
@@ -1822,9 +1859,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Delta.started += instance.OnDelta;
             @Delta.performed += instance.OnDelta;
             @Delta.canceled += instance.OnDelta;
-            @Rotate.started += instance.OnRotate;
-            @Rotate.performed += instance.OnRotate;
-            @Rotate.canceled += instance.OnRotate;
+            @RotateStart.started += instance.OnRotateStart;
+            @RotateStart.performed += instance.OnRotateStart;
+            @RotateStart.canceled += instance.OnRotateStart;
+            @RotateEnd.started += instance.OnRotateEnd;
+            @RotateEnd.performed += instance.OnRotateEnd;
+            @RotateEnd.canceled += instance.OnRotateEnd;
             @Equip.started += instance.OnEquip;
             @Equip.performed += instance.OnEquip;
             @Equip.canceled += instance.OnEquip;
@@ -1845,9 +1885,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Delta.started -= instance.OnDelta;
             @Delta.performed -= instance.OnDelta;
             @Delta.canceled -= instance.OnDelta;
-            @Rotate.started -= instance.OnRotate;
-            @Rotate.performed -= instance.OnRotate;
-            @Rotate.canceled -= instance.OnRotate;
+            @RotateStart.started -= instance.OnRotateStart;
+            @RotateStart.performed -= instance.OnRotateStart;
+            @RotateStart.canceled -= instance.OnRotateStart;
+            @RotateEnd.started -= instance.OnRotateEnd;
+            @RotateEnd.performed -= instance.OnRotateEnd;
+            @RotateEnd.canceled -= instance.OnRotateEnd;
             @Equip.started -= instance.OnEquip;
             @Equip.performed -= instance.OnEquip;
             @Equip.canceled -= instance.OnEquip;
@@ -2123,12 +2166,19 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDelta(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Rotate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "RotateStart" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnRotate(InputAction.CallbackContext context);
+        void OnRotateStart(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateEnd" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateEnd(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Equip" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
