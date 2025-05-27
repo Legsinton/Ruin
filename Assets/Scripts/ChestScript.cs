@@ -11,15 +11,14 @@ public class ChestScript : MonoBehaviour, IInteracting
     [SerializeField] Outline outlineScript;
     [SerializeField] Collider colliderLid;
     PlayerMovement PlayerMovement;
+    Interact interact;
 
     bool isDoorOpen;
-    bool doorOpening;
     bool spawned;
     bool played;
     bool playedCutScene;
     Quaternion openRotation;
     GameObject spawnedItem;
-    public bool DoorOpening { get { return doorOpening; } set { doorOpening = value; } }
 
     [Header("Settings for Item")]
 
@@ -27,6 +26,7 @@ public class ChestScript : MonoBehaviour, IInteracting
     public Transform spawnPoint; // Assign the SpawnPoint in Inspector
     public GameObject itemPrefab; // Assign your item prefab
     public float launchForce = 5f; // Tune for the desired "pop" effect
+    [SerializeField] float spinSpeed;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -39,9 +39,9 @@ public class ChestScript : MonoBehaviour, IInteracting
     {
         UIScript = FindAnyObjectByType<UIScript>();
         PlayerMovement = FindAnyObjectByType<PlayerMovement>();
+        interact = FindAnyObjectByType<Interact>();
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 0, openAngle));
     }
-
     void Update()
     {
         if (isDoorOpen)
@@ -68,6 +68,11 @@ public class ChestScript : MonoBehaviour, IInteracting
             }
 
             MoveItem();
+
+        }
+        if (spawnedItem != null)
+        {
+            SpinKey();
         }
     }
 
@@ -88,31 +93,37 @@ public class ChestScript : MonoBehaviour, IInteracting
             }
         }
     }
+
+    void SpinKey()
+    {
+        if (spawnedItem != null)
+        {
+            spawnedItem.transform.Rotate(0, spinSpeed * Time.deltaTime, 0);
+        }
+    }
     void OpenDoor()
     {
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
-            doorOpening = true;
         }
-
     }
     void ActivateCamera()
     {
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
+        interact.disableInteract = true;
         PlayerMovement.enabled = false;
         PlayerMovement.movement = new Vector3(0, 0, 0);
     }
 
     void DisableActiveCamera()
     {
-        spawnedItem.GetComponent<InspectableItem>().canInteract = true;
         playerCamera.enabled = true;
+        interact.disableInteract = false;
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
-        this.enabled = false;
-        doorOpening = false;
+        //this.enabled = false;
     }
 
     public void PressInteract()

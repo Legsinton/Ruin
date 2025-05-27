@@ -1,28 +1,32 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
-public class MovingPlatform : MonoBehaviour
+public class MovingPlatform : MonoBehaviour, ISwitchManager
 {
     [Header("Switch Settings")]
     [SerializeField] int switches;
-    public int Switches { get { return switches; } set { switches = value; } }
     public int switchAmount;
     public PlayerMovement playerMovement;
 
     Vector3 targetPosition;
     Vector3 originalPosition;
     Vector3 previousPosition;
+
+    bool move;
     bool played;
     bool playedCutScene;
-    readonly float movementThreshold = 0.001f;
     bool objectDetected;
-    private float stopHeight = 0f;
+    readonly float movementThreshold = 0.001f;
+    float stopHeight = 0f;
+    float gizmoValue = 0.42f;
+    Vector3 gizmoOffset = new Vector3(0, 0.1f, 0);
 
     // Gizmo
     public bool drawGizmo = true;
     public Color gizmoColor = Color.red;
-
     public LayerMask layerMask;
+
     Rigidbody rb;
 
     [Header("Settings To Move Platform")]
@@ -49,61 +53,68 @@ public class MovingPlatform : MonoBehaviour
         rb.isKinematic = true;
     }
 
-    void Update()
-    {
-        MovementZ();
-        MovementX();
-    }
-
     private void FixedUpdate()
     {
-        if (!down) return;
-
-        RaycastHit hit;
-        Vector3 halfExtents = transform.localScale * 0.5f;
-        Vector3 direction = -transform.up;
-        Quaternion orientation = transform.rotation;
-
-        if (Physics.BoxCast(transform.position, halfExtents, direction, out hit, orientation, Mathf.Infinity, layerMask))
+        if (move)
         {
-            objectDetected = true;
-            stopHeight = hit.point.y + halfExtents.y;
-            stopHeight = Mathf.Max(stopHeight, 0f);
-        }
-        else
-        {
-            objectDetected = false;
-            stopHeight = pressDepth;
-        }
+            Vector3 castOrigin = transform.position + gizmoOffset;
+            RaycastHit hit;
+            Vector3 halfExtents = transform.localScale * gizmoValue;
+            Vector3 direction = -transform.up;
+            Quaternion orientation = transform.rotation;
 
-        MovementUp();
-
-        Vector3 movement = transform.position - previousPosition;
-        if (movement.magnitude > movementThreshold)
-        {
-            if (!played)
+            if (Physics.BoxCast(castOrigin, halfExtents, direction, out hit, orientation, Mathf.Infinity, layerMask))
             {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
+                objectDetected = true;
+                stopHeight = hit.point.y + halfExtents.y;
+                stopHeight = Mathf.Max(stopHeight, pressDepth);
+                //Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
+                //Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {stopHeight}");
+            }
+            else
+            {
+                objectDetected = false;
+                stopHeight = pressDepth;
+                // Debug.Log("Agnes: stopHeight? " + stopHeight);
             }
         }
-        else
+        if (move)
         {
-            if (played)
-            {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
+            MovementUp();
+            MovementZ();
+            MovementX();
         }
 
-        previousPosition = transform.position;
+        if (move)
+        {
+            Vector3 movement = transform.position - previousPosition;
+            if (movement.magnitude > movementThreshold)
+            {
+                if (!played)
+                {
+                    played = true;
+                    SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.Chain, this.transform);
+                }
+            }
+            else
+            {
+                if (played)
+                {
+                    move = false;
+                    played = false;
+                    SoundFXManager.Instance.StopLoopFor(gameObject);
+                }
+            }
+
+            previousPosition = transform.position;
+        }
     }
 
     void MovementUp()
     {
-        if (!down) return;
+        if (down)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
                 // Debug.Log("Move down");
 
@@ -129,16 +140,10 @@ public class MovingPlatform : MonoBehaviour
                 {
                     rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
                 }
-
-                // if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
-                // {
-                //     rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
-                // }
             }
 
-            else if (Switches < switchAmount)
+            else if (switches < switchAmount)
             {
-
                 Vector3 returnPosition = originalPosition;
 
                 if (Vector3.Distance(transform.position, returnPosition) > 0.01f)
@@ -153,9 +158,8 @@ public class MovingPlatform : MonoBehaviour
     {
         if (sideZ)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
-
                 if (cutSceneCamera != null && !playedCutScene)
                 {
                     ActivateCamera();
@@ -167,7 +171,7 @@ public class MovingPlatform : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
-            else if (Switches == switchAmount)
+            else if (switches != switchAmount)
             {
 
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
@@ -179,7 +183,7 @@ public class MovingPlatform : MonoBehaviour
     {
         if (sideX)
         {
-            if (Switches == switchAmount)
+            if (switches == switchAmount)
             {
 
                 if (cutSceneCamera != null && !playedCutScene)
@@ -193,7 +197,7 @@ public class MovingPlatform : MonoBehaviour
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
             }
 
-            else if (Switches == switchAmount)
+            else if (switches != switchAmount)
             {
 
                 transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
@@ -216,35 +220,44 @@ public class MovingPlatform : MonoBehaviour
         cutSceneCamera.enabled = false;
     }
 
-    public void AddSwitch()
-    {
-        switches++;
-    }
-
     void OnDrawGizmos()
     {
         if (!drawGizmo) return;
 
-        Vector3 halfExtents = transform.localScale * 0.5f;
+        Vector3 castOrigin = transform.position + gizmoOffset;
+        Vector3 halfExtents = transform.localScale * gizmoValue;
         Vector3 direction = -transform.up;
         Quaternion orientation = transform.rotation;
 
         // Perform the actual boxcast
-        if (Physics.BoxCast(transform.position, halfExtents, direction, out RaycastHit hit, orientation, Mathf.Infinity, layerMask))
+
+        if (Physics.BoxCast(castOrigin, halfExtents, direction, out RaycastHit hit, orientation, Mathf.Infinity, layerMask))
         {
             // Draw cast path
             Gizmos.color = gizmoColor;
-            Gizmos.matrix = Matrix4x4.TRS(transform.position, orientation, Vector3.one);
+            Gizmos.matrix = Matrix4x4.TRS(castOrigin, orientation, Vector3.one);
             Gizmos.DrawWireCube(Vector3.zero, transform.localScale); // Start box
 
             // Draw end box at hit point
             Vector3 castDistance = direction * hit.distance;
-            Gizmos.matrix = Matrix4x4.TRS(transform.position + castDistance, orientation, Vector3.one);
+            Gizmos.matrix = Matrix4x4.TRS(castOrigin + castDistance, orientation, Vector3.one);
             Gizmos.DrawWireCube(Vector3.zero, transform.localScale);
 
             // Draw line connecting the two boxes
             Gizmos.matrix = Matrix4x4.identity;
-            Gizmos.DrawLine(transform.position, transform.position + castDistance);
+            Gizmos.DrawLine(castOrigin, castOrigin + castDistance);
         }
+    }
+
+    public void AddSwitch(int amount)
+    {
+        switches += amount;
+        move = true;
+    }
+
+    public void RemoveSwitch(int amount)
+    {      
+        switches -= amount;
+        move = true;
     }
 }

@@ -10,8 +10,8 @@ public class ClockPuzzleManager : MonoBehaviour
     [Header("References")]
     [SerializeField] RotatingObject minuteRotatingObject;
     [SerializeField] RotatingObject hourRotatingObject;
-    [SerializeField] GateScript[] gate;
-    [SerializeField] MovingPlatform[] platforms;
+    public MonoBehaviour[] switchTargets;
+
 
     bool isAligned;
     float minuteRotatingAngle;
@@ -53,19 +53,23 @@ public class ClockPuzzleManager : MonoBehaviour
         {
             if (newAligned)
             {
-                foreach (var g in gate)
-                    g.AddSwitch(1);
-
-                foreach (var p in platforms)
-                    p.Switches++;
+                foreach (MonoBehaviour target in switchTargets)
+                {
+                    if (target is ISwitchManager switchable)
+                    {
+                        switchable.AddSwitch(1);  // or RemoveSwitch(1)
+                    }
+                }
             }
             else
             {
-                foreach (var g in gate)
-                    g.RemoveSwitch(1);
-
-                foreach (var p in platforms)
-                    p.Switches--;
+                foreach (MonoBehaviour target in switchTargets)
+                {
+                    if (target is ISwitchManager switchable)
+                    {
+                        switchable.RemoveSwitch(1);  // or RemoveSwitch(1)
+                    }
+                }
             }
 
             isAligned = newAligned;

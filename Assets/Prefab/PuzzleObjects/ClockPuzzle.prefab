@@ -593,6 +593,7 @@ MonoBehaviour:
   minDistancToRotatingObjectAttached: 0.95
   clampRotation: {x: 0, y: 355}
   playerTransform: {fileID: 0}
+  playerRotation: {fileID: 0}
   centerPoint: {fileID: 6352985345062426642}
   interactPoint: {fileID: 6308812436240232964}
   outlineScript: {fileID: 6124483698108839758}
@@ -608,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2
   precomputeOutline: 0
@@ -1342,6 +1343,7 @@ MonoBehaviour:
   minDistancToRotatingObjectAttached: 0.95
   clampRotation: {x: 0, y: 355}
   playerTransform: {fileID: 0}
+  playerRotation: {fileID: 0}
   centerPoint: {fileID: 4225909078715797224}
   interactPoint: {fileID: 2722384778800765228}
   outlineScript: {fileID: 3327111590873411106}
@@ -1357,7 +1359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   outlineWidth: 2
   precomputeOutline: 0
@@ -2292,19 +2294,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2312,7 +2314,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -2325,7 +2327,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: fb36101f3463401489aebf6c2d4a6ecc, type: 2}
+      objectReference: {fileID: 2100000, guid: 0eb132aa2e6b4f345b4f2e4cbab74b4e, type: 2}
     - target: {fileID: 919132149155446097, guid: 3db65f602bbab194a9163fd51265a777, type: 3}
       propertyPath: m_Name
       value: Time Reference

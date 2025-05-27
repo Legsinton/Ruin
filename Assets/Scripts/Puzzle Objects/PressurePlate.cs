@@ -3,14 +3,15 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     public bool triggerd = false;
-    public GateScript[] gate;
-    public MovingPlatform[] platforms;
+    public MonoBehaviour[] switchTargets;
     public float pressDepth;
     public float smallPressDepth;
     public float moveSpeed;
     public bool smallTrigger;
     public float buffer;
 
+    bool move;
+    bool stepedOn;
     Vector3 targetPosition;
     Vector3 originalPosition;
     Vector3 previousPosition;
@@ -22,33 +23,35 @@ public class PressurePlate : MonoBehaviour
         originalPosition = transform.position;
         previousPosition = transform.position;
     }
-
     private void Update()
     {
-        MovementFull();
-        MovementSmall();
-
-        Vector3 movement = transform.position - previousPosition;
-        if (movement.magnitude > movementThreshold)
+        if (move)
         {
-            if (!played)
-            {
-                played = true;
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
-            }
-        }
-        else
-        {
-            if (played)
-            {
-                played = false;
-                SoundFXManager.Instance.StopLoopFor(gameObject);
-            }
-        }
+            MovementFull();
+            MovementSmall();
 
-        previousPosition = transform.position;
+            Vector3 movement = transform.position - previousPosition;
+            if (movement.magnitude > movementThreshold)
+            {
+                if (!played)
+                {
+                    played = true;
+                    SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PressurePlate, this.transform);
+                }
+            }
+            else
+            {
+                if (played)
+                {
+                    move = false;
+                    played = false;
+                    SoundFXManager.Instance.StopLoopFor(gameObject);
+                }
+            }
+
+            previousPosition = transform.position;
+        }
     }
-
     void MovementSmall()
     {
         if (smallTrigger && !triggerd)
@@ -62,7 +65,6 @@ public class PressurePlate : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
     void MovementFull()
     {
         if (triggerd && !smallTrigger)
@@ -76,7 +78,6 @@ public class PressurePlate : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
         }
     }
-
     private void OnTriggerStay(Collider other)
     {
         Bounds blockBounds = other.bounds; // The collider bounds of the block
@@ -107,51 +108,58 @@ public class PressurePlate : MonoBehaviour
             {
                 if (!added)
                 {
+                    move = true;
                     smallTrigger = false;
-                    //SoundFXManager.Instance.PlaySoundFX(SoundType.Coin,transform.position);
                     triggerd = true;
                     added = true;                    
-
-                    for (int i = 0; i < gate.Length; i++)
+                    foreach (MonoBehaviour target in switchTargets)
                     {
-                        gate[i].AddSwitch(1);
-                    }
-                    for (int i = 0; i < platforms.Length; i++)
-                    {
-                        platforms[i].Switches++;
+                        if (target is ISwitchManager switchable)
+                        {
+                            switchable.AddSwitch(1);  // or RemoveSwitch(1)
+                        }
                     }
                 }
             }
         }
-
         if (other.CompareTag("Player") && !triggerd)
         {
-            smallTrigger = true;
+            if (!stepedOn)
+            {
+                stepedOn = true;
+                move = true;
+                smallTrigger = true;
+
+            }
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Pullable"))
         {
             if (added)
             {
+                move = true;
                 triggerd = false;
                 added = false;
                 smallTrigger = false;
-                for (int i = 0; i < gate.Length; i++)
+                foreach (MonoBehaviour target in switchTargets)
                 {
-                    gate[i].RemoveSwitch(1);
-                }
-                for (int i = 0; i < platforms.Length; i++)
-                {
-                    platforms[i].Switches--;
+                    if (target is ISwitchManager switchable)
+                    {
+                        switchable.RemoveSwitch(1);  // or RemoveSwitch(1)
+                    }
                 }
             }
         }
         if (other.CompareTag("Player") && !triggerd)
         {
-            smallTrigger = false;
+            if (stepedOn)
+            {
+                stepedOn = false;
+                move = true;
+                smallTrigger = false;
+            }
         }
     }
 }

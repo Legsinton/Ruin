@@ -3,20 +3,28 @@ using UnityEngine.InputSystem;
 
 public class CameraFollow : MonoBehaviour
 {
-    [Header("Settings")]
+    [Header("Camera Offset")]
     [SerializeField] Vector3 cameraPlayerOffset;
     [SerializeField] Vector3 cameraFocusOffset;
+
+    [Header("Camera Sensitivity")]
     [SerializeField] float smoothTime;
     [SerializeField] public float mouseSensitivity;
     [SerializeField] public float controllerSensitivity;
+
+    [Header("Camera Rotation and Wall settings")]
     [SerializeField] Vector2 rotationClamp;
     [SerializeField] float targetCameraDistance;
     [SerializeField] float wallDistance;
 
     [Header("Reference")]
     [SerializeField] Transform cameraTransform;
+    [SerializeField] Transform playerRotation;
     [SerializeField] PlayerInput playerInput;
 
+    [HideInInspector] public bool lockCameraToPlayer;
+    [HideInInspector] public bool stopFollowingPlayer;
+    float targetXRotation;
     int layerMask;
     float sensitivity;
 
@@ -50,9 +58,17 @@ public class CameraFollow : MonoBehaviour
 
     void UpdateCameraPosition()
     {
-        currentRotation += mouseDelta * sensitivity;
+        if (lockCameraToPlayer)
+        {
+            currentRotation.x = Mathf.LerpAngle(currentRotation.x, targetXRotation, smoothTime * Time.deltaTime);
+            currentRotation.y = Mathf.Lerp(currentRotation.y, 45f, smoothTime * Time.deltaTime);
+        }
+        else
+        {
+            currentRotation += mouseDelta * sensitivity;
 
-        currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
+            currentRotation.y = Mathf.Clamp(currentRotation.y, rotationClamp.x, rotationClamp.y);
+        }
 
         // Lerped position offset
         Vector3 smoothedPlayerPos = Vector3.Slerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
@@ -63,8 +79,9 @@ public class CameraFollow : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
         Vector3 rotatedOffset = rotation * (cameraPlayerOffset.normalized * targetCameraDistance);
 
-        // Final camera position and offset
         Vector3 newCameraOffset = playerOffset + rotatedOffset;
+
+        // Final camera position and offset
         Vector3 newCameraPos = transform.position + newCameraOffset;
 
         // Check wall collision
@@ -75,8 +92,11 @@ public class CameraFollow : MonoBehaviour
             newCameraPos = new Vector3(hit1.point.x, newCameraPos.y, hit1.point.z) + direction.normalized * wallDistance;
         }
 
-        // Update camera position
-        cameraTransform.position = newCameraPos;
+        if (!stopFollowingPlayer)
+        {
+            // Update camera position
+            cameraTransform.position = newCameraPos;
+        }
 
         // Update focus point position
         Vector3 newFocusPos = transform.position - newCameraOffset + cameraFocusOffset;
@@ -92,4 +112,24 @@ public class CameraFollow : MonoBehaviour
         cameraTransform.rotation = targetRotation;
     }
 
+    public void EnableLockCamera(float rotation)
+    {
+        targetXRotation = rotation;
+        lockCameraToPlayer = true;
+    }
+
+    public void DisableLockCamera()
+    {
+        lockCameraToPlayer = false;
+    }
+
+    public void StopFollowing()
+    {
+        stopFollowingPlayer = true;
+    }
+
+    public void StartFollowing()
+    {
+        stopFollowingPlayer = false;
+    }
 }

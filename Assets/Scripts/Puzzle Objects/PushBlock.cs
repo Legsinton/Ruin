@@ -11,6 +11,7 @@ public class PushBlock : MonoBehaviour, IInteracting
     [SerializeField] Transform[] playerPositionTargets;
     [SerializeField] Rigidbody rb;
     [SerializeField] Outline outlineScript;
+    [SerializeField] CameraFollow cameraFollow;
 
     GameObject player;
     PlayerMovement playerMovement;
@@ -56,6 +57,7 @@ public class PushBlock : MonoBehaviour, IInteracting
                             currentPlayerPosTarget = playerPositionTargets[i];
                         }
                     }
+                    cameraFollow.EnableLockCamera(currentPlayerPosTarget.eulerAngles.y);
 
                     isAttached = true;
                     playerMovement.ResetPlayerVelocity();
@@ -84,6 +86,7 @@ public class PushBlock : MonoBehaviour, IInteracting
             }
             else if (isAttached)
             {
+                cameraFollow.DisableLockCamera();
                 playerMovement.PushBlock = null;
                 movedPlayerToTargetPos = false;
                 isAttached = false;

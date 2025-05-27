@@ -11,8 +11,6 @@ public class SceneManagement : MonoBehaviour
     public Image overlay;
     public TMP_Text gameOverText;
 
-
-
     public void OnDeath()
     {
         StartCoroutine(DeathScreen());
@@ -22,12 +20,11 @@ public class SceneManagement : MonoBehaviour
     {
         yield return StartCoroutine(FadeToBlack(1));
         gameOverText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
         gameOverText.gameObject.SetActive(false);
         overlay.gameObject.SetActive(false);
         SceneManager.LoadScene(sceneToLoad);
     }
-
 
     public IEnumerator FadeToBlack(float duration)
     {
