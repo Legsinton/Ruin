@@ -2737,6 +2737,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 8904396471674050031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: locked
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5864,6 +5868,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8904396471674050031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: locked
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7204,6 +7212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 20
   controllerSensitivity: 200
+  inspectableItem: {fileID: 0}
 --- !u!4 &2078593027 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3169089004556483027, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
