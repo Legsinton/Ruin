@@ -8,6 +8,7 @@ public class Inspector : MonoBehaviour
     [Header("Inspector Sensitivity")]
     [SerializeField] public float mouseSensitivity;
     [SerializeField] public float controllerSensitivity;
+    [SerializeField] public GameObject equipUI;
 
     Canvas canvas;
     PostProcessManager postProcessManager;
@@ -66,6 +67,11 @@ public class Inspector : MonoBehaviour
         if (item.equipable == true)
         {
             equipable = true;
+        }
+        else
+        {
+            // TODO: Hide UI for equip
+            equipUI.SetActive(false);
         }
 
 
