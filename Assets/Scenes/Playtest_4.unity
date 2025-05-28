@@ -2808,6 +2808,10 @@ PrefabInstance:
       propertyPath: locked
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8904396471674050031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: itemIdToUnlock
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2933,15 +2937,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4084126649285758698, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 73.05
+      value: 72.992
       objectReference: {fileID: 0}
     - target: {fileID: 4084126649285758698, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.102
+      value: 6.604
       objectReference: {fileID: 0}
     - target: {fileID: 4084126649285758698, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.386
+      value: -5.265
       objectReference: {fileID: 0}
     - target: {fileID: 4084126649285758698, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2988,6 +2992,11 @@ Transform:
 --- !u!20 &811129639 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1953881235099468401, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
+  m_PrefabInstance: {fileID: 811129637}
+  m_PrefabAsset: {fileID: 0}
+--- !u!81 &811129642 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 4774795039366736246, guid: d31ba9c7570928f4f958874bc75749c0, type: 3}
   m_PrefabInstance: {fileID: 811129637}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &848282291 stripped
@@ -6631,6 +6640,10 @@ PrefabInstance:
       propertyPath: locked
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8904396471674050031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: itemIdToUnlock
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7962,6 +7975,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57aa54458bf04545878bfb82b366a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!81 &2067480600 stripped
+AudioListener:
+  m_CorrespondingSourceObject: {fileID: 9211994925694886230, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
+  m_PrefabInstance: {fileID: 680103845}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2078593027 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3169089004556483027, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
@@ -9076,6 +9094,14 @@ PrefabInstance:
       propertyPath: cutSceneLength
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5964454032107168628, guid: d91395deada8877428a98bcd70aa1c7d, type: 3}
+      propertyPath: cameraAudioListener
+      value: 
+      objectReference: {fileID: 811129642}
+    - target: {fileID: 5964454032107168628, guid: d91395deada8877428a98bcd70aa1c7d, type: 3}
+      propertyPath: playrtAudioListener
+      value: 
+      objectReference: {fileID: 2067480600}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
