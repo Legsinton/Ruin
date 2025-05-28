@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement References")]
     [SerializeField] Transform capsule;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Animator animationController;
 
     [Header("GroundCheck Settings")]
     [SerializeField] LayerMask groundMask;
@@ -78,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isGrounded)
         {
-            gravityForce = 40;
+            gravityForce = 20;
             rb.linearVelocity += Vector3.down * gravityForce * Time.deltaTime;
         }
         else
@@ -128,18 +129,43 @@ public class PlayerMovement : MonoBehaviour
         float inputMagnitude = movement.magnitude;
         playerMoveDir = movement.normalized;
 
-
-        if (PushBlock != null && movement.magnitude > 0)
+        if (PushBlock != null)
         {
-            if (gamepad != null)
+            if (movement.magnitude > 0)
             {
-                gamepad.SetMotorSpeeds(0.005f, 0.0015f);
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0.005f, 0.0015f);
+                }
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
+                currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
             }
-            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
+            else
+            {
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+
+            animationController.SetBool("pushblock", true);
+
+            if (movementInput.y > 0)
+            {
+                animationController.SetBool("pushblockForward", true);
+                animationController.SetBool("pushblockBackward", false);
+            }
+            else if (movementInput.y < 0)
+            {
+                animationController.SetBool("pushblockForward", false);
+                animationController.SetBool("pushblockBackward", true);
+            }
+            else
+            {
+                animationController.SetBool("pushblockForward", false);
+                animationController.SetBool("pushblockBackward", false);
+            }
         }
         else if (rotatingObject != null)
         {
+            animationController.SetBool("pushblock", true);
             currentVelocity = 0;
             if (movementInput.y != 0)
             {
@@ -148,6 +174,21 @@ public class PlayerMovement : MonoBehaviour
                     gamepad.SetMotorSpeeds(0.0005f, 0.0015f);
                 }
                 SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
+                if (movementInput.y > 0)
+                {
+                    animationController.SetBool("pushblockForward", true);
+                    animationController.SetBool("pushblockBackward", false);
+                }
+                else if (movementInput.y < 0)
+                {
+                    animationController.SetBool("pushblockForward", false);
+                    animationController.SetBool("pushblockBackward", true);
+                }
+                else
+                {
+                    animationController.SetBool("pushblockForward", false);
+                    animationController.SetBool("pushblockBackward", false);
+                }
             }
             else
             {
@@ -156,12 +197,17 @@ public class PlayerMovement : MonoBehaviour
                     gamepad.SetMotorSpeeds(0f, 0f);
                 }
                 SoundFXManager.Instance.StopLoopFor(gameObject);
+                animationController.SetBool("pushblock", false);
             }
         }
         else if (movement.magnitude > 0)
         {
             float targetSpeed = maxSpeed * inputMagnitude;
             currentVelocity = Mathf.MoveTowards(currentVelocity, targetSpeed, acceleration * Time.deltaTime);
+            animationController.SetBool("walk", true);
+            animationController.SetBool("pushblock", false);
+            animationController.SetBool("pushblockForward", false);
+            animationController.SetBool("pushblockBackward", false);
         }
         else
         {
@@ -169,6 +215,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 gamepad.SetMotorSpeeds(0f, 0f);
             }
+            animationController.SetBool("walk", false);
+            animationController.SetBool("pushblock", false);
+            animationController.SetBool("pushblockForward", false);
+            animationController.SetBool("pushblockBackward", false);
+
             SoundFXManager.Instance.StopLoopFor(gameObject);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }

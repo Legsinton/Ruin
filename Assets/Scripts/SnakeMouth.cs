@@ -16,6 +16,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     [Header("References")]
     PlayerMovement PlayerMovement;
     Interact interact;
+    bool playedSound;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -24,6 +25,8 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     [Header("Camera References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] AudioListener playrtAudioListener;
+    [SerializeField] AudioListener cameraAudioListener;
 
     void Start()
     {
@@ -48,7 +51,16 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     {
         if (Quaternion.Angle(transform.rotation, openRotation) > 0.5f)
         {
+            if (!playedSound)
+            {
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock,this.transform);
+                playedSound = true;
+            }
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
+        }
+        else
+        {
+            SoundFXManager.Instance.StopLoopFor(gameObject);
         }
     }
     void ActivateCamera()
@@ -57,13 +69,18 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
         cutSceneCamera.enabled = true;
         interact.disableInteract = true;
         PlayerMovement.enabled = false;
+        playrtAudioListener.enabled = false;
+        cameraAudioListener.enabled = true;
         PlayerMovement.movement = new Vector3(0, 0, 0);
     }
     void DisableActiveCamera()
     {
+        SoundFXManager.Instance.StopLoopFor(gameObject);
+        playrtAudioListener.enabled = true;
+        cameraAudioListener.enabled = false;
+        cutSceneCamera.enabled = false;
         playerCamera.enabled = true;
         interact.disableInteract = false;
-        cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
         this.enabled = false;
     }
