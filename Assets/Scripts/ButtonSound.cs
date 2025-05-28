@@ -28,12 +28,12 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
 
     void PlayButtonSelect()
     {
-        if (Time.unscaledTime >= nextPlayTimeSelect)
+       /* if (Time.unscaledTime >= nextPlayTimeSelect)
         {
            
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             nextPlayTimeSelect = Time.unscaledTime + soundCooldownSelect;
-        }
+        }*/
     }
 
     void PlayButtonSound()

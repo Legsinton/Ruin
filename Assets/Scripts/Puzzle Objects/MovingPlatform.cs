@@ -43,6 +43,8 @@ public class MovingPlatform : MonoBehaviour, ISwitchManager
     [Header("Camera References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] AudioListener playrtAudioListener;
+    [SerializeField] AudioListener cameraAudioListener;
 
     private void Start()
     {
@@ -67,15 +69,12 @@ public class MovingPlatform : MonoBehaviour, ISwitchManager
             {
                 objectDetected = true;
                 stopHeight = hit.point.y + halfExtents.y;
-                stopHeight = Mathf.Max(stopHeight, pressDepth);
-                //Debug.Log($"Check: [BoxCast] Hit: {hit.collider.name}, Distance: {hit.distance}");
-                //Debug.Log($"Check: Platform position: {transform.position}, Hit distance: {hit.distance}, Stop distance: {stopHeight}");
+                stopHeight = Mathf.Max(stopHeight, pressDepth); 
             }
             else
             {
                 objectDetected = false;
                 stopHeight = pressDepth;
-                // Debug.Log("Agnes: stopHeight? " + stopHeight);
             }
         }
         if (move)
@@ -116,8 +115,6 @@ public class MovingPlatform : MonoBehaviour, ISwitchManager
         {
             if (switches == switchAmount)
             {
-                // Debug.Log("Move down");
-
                 if (cutSceneCamera != null && !playedCutScene)
                 {
                     ActivateCamera();
@@ -209,12 +206,16 @@ public class MovingPlatform : MonoBehaviour, ISwitchManager
     {
         playerMovement.enabled = false;
         playerMovement.movement = new Vector3(0, 0, 0);
+        playrtAudioListener.enabled = false;
+        cameraAudioListener.enabled = true;
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
     }
 
     void DisableActiveCamera()
     {
+        playrtAudioListener.enabled = true;
+        cameraAudioListener.enabled = false;    
         playerMovement.enabled = true;
         playerCamera.enabled = true;
         cutSceneCamera.enabled = false;

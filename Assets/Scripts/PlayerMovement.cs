@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!isGrounded)
         {
-            gravityForce = 40;
+            gravityForce = 20;
             rb.linearVelocity += Vector3.down * gravityForce * Time.deltaTime;
         }
         else
