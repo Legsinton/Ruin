@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement References")]
     [SerializeField] Transform capsule;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Animator animationController;
 
     [Header("GroundCheck Settings")]
     [SerializeField] LayerMask groundMask;
@@ -137,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
             }
             SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
+            animationController.SetBool("pushblock", true);
         }
         else if (rotatingObject != null)
         {
@@ -148,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
                     gamepad.SetMotorSpeeds(0.0005f, 0.0015f);
                 }
                 SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.rotatingObject.transform);
+                animationController.SetBool("pushblock", true);
             }
             else
             {
@@ -156,12 +159,15 @@ public class PlayerMovement : MonoBehaviour
                     gamepad.SetMotorSpeeds(0f, 0f);
                 }
                 SoundFXManager.Instance.StopLoopFor(gameObject);
+                animationController.SetBool("pushblock", false);
             }
         }
         else if (movement.magnitude > 0)
         {
             float targetSpeed = maxSpeed * inputMagnitude;
             currentVelocity = Mathf.MoveTowards(currentVelocity, targetSpeed, acceleration * Time.deltaTime);
+            animationController.SetBool("walk", true);
+            animationController.SetBool("pushblock", false);
         }
         else
         {
@@ -169,6 +175,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 gamepad.SetMotorSpeeds(0f, 0f);
             }
+            animationController.SetBool("walk", false);
+            animationController.SetBool("pushblock", false);
             SoundFXManager.Instance.StopLoopFor(gameObject);
             currentVelocity = Mathf.MoveTowards(currentVelocity, 0, groundDrag * Time.deltaTime);
         }
