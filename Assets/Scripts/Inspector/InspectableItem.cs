@@ -1,15 +1,11 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InspectableItem : MonoBehaviour, IInteracting
 {
     [SerializeField] Outline outlineScript;
     Inspector inspector;
-    //[SerializeField] Item item;
     public bool canInteract;
     public Item item;
-
-    public bool shouldBeDestroyed;
 
     private void Start()
     {
@@ -28,17 +24,8 @@ public class InspectableItem : MonoBehaviour, IInteracting
 
     public void PressInteract()
     {
-        if (canInteract)
-        {
-            Debug.Log("Agnes: Can interact");
-            //InputHandler.Instance.OnEnable();
-        }
         inspector.InspectItem(item);
-
-        // Logic should be handled from a public sound type
-        // SoundFXManager.Instance.PlaySoundFX(SoundType.KeyFound, transform.position);
-        // Inventory.Instance.AddItem(item.itemId);
-        // Destroy(gameObject);
+        inspector.inspectableItem = this;
     }
 
     public void ReleaseInteract()
@@ -48,7 +35,7 @@ public class InspectableItem : MonoBehaviour, IInteracting
 
     public bool shouldObjectBeDestroyed()
     {
-        if (shouldBeDestroyed)
+        if (item.equipable)
         {
             return true;
         }

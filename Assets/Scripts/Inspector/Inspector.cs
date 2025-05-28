@@ -13,7 +13,7 @@ public class Inspector : MonoBehaviour
     PostProcessManager postProcessManager;
     PlayerInput playerInput;
     GameObject itemPrefab;
-    InspectableItem inspectableItem;
+    [HideInInspector] public InspectableItem inspectableItem;
     bool isRotating = false;
     bool isGamepad = false;
     float sensitivity;
@@ -38,7 +38,6 @@ public class Inspector : MonoBehaviour
 
         postProcessManager = FindFirstObjectByType<PostProcessManager>();
         playerInput = FindFirstObjectByType<PlayerInput>();
-        inspectableItem = FindFirstObjectByType<InspectableItem>();
 
         if (playerInput == null)
         {
