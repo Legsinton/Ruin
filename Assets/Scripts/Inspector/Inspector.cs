@@ -13,10 +13,13 @@ public class Inspector : MonoBehaviour
     PostProcessManager postProcessManager;
     PlayerInput playerInput;
     GameObject itemPrefab;
+    InspectableItem inspectableItem;
     bool isRotating = false;
     bool isGamepad = false;
     float sensitivity;
     Vector2 currentRotation;
+    int itemId;
+    bool equipable;
 
 
     void Awake()
@@ -35,6 +38,7 @@ public class Inspector : MonoBehaviour
 
         postProcessManager = FindFirstObjectByType<PostProcessManager>();
         playerInput = FindFirstObjectByType<PlayerInput>();
+        inspectableItem = FindFirstObjectByType<InspectableItem>();
 
         if (playerInput == null)
         {
@@ -45,9 +49,11 @@ public class Inspector : MonoBehaviour
     private void Update()
     {
         sensitivity = isGamepad ? controllerSensitivity : mouseSensitivity;
-
-        itemPrefab.transform.Rotate(Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime, Space.World);
-        itemPrefab.transform.Rotate(Vector3.right, currentRotation.y * sensitivity * Time.deltaTime, Space.World);
+        if (itemPrefab)
+        {
+            itemPrefab.transform.Rotate(Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime, Space.World);
+            itemPrefab.transform.Rotate(Vector3.right, currentRotation.y * sensitivity * Time.deltaTime, Space.World);
+        }
     }
 
     public void InspectItem(ScriptableObject interactableObject)
@@ -56,6 +62,14 @@ public class Inspector : MonoBehaviour
         postProcessManager.ToggleDepthOfField();
 
         Item item = (Item)interactableObject;
+        itemId = item.itemId;
+
+        if (item.equipable == true)
+        {
+            equipable = true;
+        }
+
+
         if (item != null && item.prefab != null)
         {
             playerInput.SwitchCurrentActionMap("Inspector");
@@ -109,6 +123,13 @@ public class Inspector : MonoBehaviour
 
     private void OnEquip()
     {
+        if (!equipable)
+        {
+            return;
+        }
         //TODO: Add equip logic
+        Inventory.Instance.AddItem(itemId);
+        inspectableItem.DestroyOnEquip();
+        OnBack();
     }
 }

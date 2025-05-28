@@ -57,4 +57,9 @@ public class InspectableItem : MonoBehaviour, IInteracting
             return false;
         }
     }
+
+    public void DestroyOnEquip()
+    {
+        Destroy(gameObject);
+    }
 }
