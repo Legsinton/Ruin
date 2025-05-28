@@ -129,14 +129,22 @@ public class PlayerMovement : MonoBehaviour
         float inputMagnitude = movement.magnitude;
         playerMoveDir = movement.normalized;
 
-        if (PushBlock != null && movement.magnitude > 0)
+        if (PushBlock != null)
         {
-            if (gamepad != null)
+            if (movement.magnitude > 0)
             {
-                gamepad.SetMotorSpeeds(0.005f, 0.0015f);
+                if (gamepad != null)
+                {
+                    gamepad.SetMotorSpeeds(0.005f, 0.0015f);
+                }
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
+                currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
             }
-            SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
-            currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
+            else
+            {
+                SoundFXManager.Instance.StopLoopFor(gameObject);
+            }
+
             animationController.SetBool("pushblock", true);
 
             if (movementInput.y > 0)
