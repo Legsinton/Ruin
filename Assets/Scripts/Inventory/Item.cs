@@ -10,4 +10,5 @@ public class Item : ScriptableObject
     public SlotTag itemTag;
     public int itemId;
     public string itemName;
+    public bool equipable;
 }
