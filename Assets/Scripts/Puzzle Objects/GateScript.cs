@@ -21,6 +21,8 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [Header("References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] AudioListener playrtAudioListener;
+    [SerializeField] AudioListener cameraAudioListener;
     [SerializeField] Outline outlineScript;
     PlayerMovement playerMovement;
 
@@ -59,7 +61,12 @@ public class GateScript : MonoBehaviour, ISwitchManager
     {
         if (playerCamera != null) playerCamera.enabled = false;
         if (cutSceneCamera != null) cutSceneCamera.enabled = true;
-        if(playerMovement != null)
+        if (playrtAudioListener != null && cutSceneCamera != null)
+        {
+            cutSceneCamera.enabled = true;
+            playrtAudioListener.enabled = false;
+        }
+        if (playerMovement != null)
         {
             playerMovement.enabled = false;
             playerMovement.movement = new Vector3 (0, 0, 0);
@@ -70,6 +77,11 @@ public class GateScript : MonoBehaviour, ISwitchManager
     {
         if (playerCamera != null) playerCamera.enabled = true;
         if (cutSceneCamera != null) cutSceneCamera.enabled = false;
+        if(playrtAudioListener != null && cutSceneCamera != null)
+        {
+            cutSceneCamera.enabled = false;
+            playrtAudioListener.enabled = true;
+        }
         if (playerMovement != null)
         {
             playerMovement.enabled = true;
