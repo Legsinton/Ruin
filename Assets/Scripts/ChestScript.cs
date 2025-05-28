@@ -34,6 +34,8 @@ public class ChestScript : MonoBehaviour, IInteracting
     [Header("Camera References")]
     [SerializeField] Camera playerCamera;
     [SerializeField] Camera cutSceneCamera;
+    [SerializeField] AudioListener playrtAudioListener;
+    [SerializeField] AudioListener cameraAudioListener;
 
     void Start()
     {
@@ -114,6 +116,8 @@ public class ChestScript : MonoBehaviour, IInteracting
         cutSceneCamera.enabled = true;
         interact.disableInteract = true;
         PlayerMovement.enabled = false;
+        playrtAudioListener.enabled = false;
+        cameraAudioListener.enabled = true;
         PlayerMovement.movement = new Vector3(0, 0, 0);
     }
 
@@ -123,7 +127,9 @@ public class ChestScript : MonoBehaviour, IInteracting
         interact.disableInteract = false;
         cutSceneCamera.enabled = false;
         PlayerMovement.enabled = true;
-        //this.enabled = false;
+        playrtAudioListener.enabled = true;
+        cameraAudioListener.enabled = false;
+
     }
 
     public void PressInteract()
