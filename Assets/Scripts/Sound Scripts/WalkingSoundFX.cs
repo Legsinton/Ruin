@@ -22,6 +22,7 @@ public class WalkingSoundFX: MonoBehaviour
         }
         if (lastFootStep > 0 && footstep < 0 || lastFootStep < 0 && footstep > 0)
         {
+            Debug.Log("Im walking here!");
             SoundFXManager.Instance.PlaySoundFX(SoundType.Walk);
         }
 

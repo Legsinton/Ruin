@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5836405872222619045}
   - component: {fileID: 6522770843291682697}
   - component: {fileID: 9211994925694886230}
+  - component: {fileID: 8376953361304334729}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -194,7 +195,7 @@ MonoBehaviour:
   maxSpeed: 6
   acceleration: 17
   groundDrag: 4.1
-  stepRateAtFullSpeed: 0.4
+  stepRateAtFullSpeed: 0.54
   isGrounded: 0
   movement: {x: 0, y: 0, z: 0}
   PushBlock: {fileID: 0}
@@ -316,6 +317,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3831665695784811463}
   m_Enabled: 1
+--- !u!114 &8376953361304334729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3831665695784811463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4166eb2d8e7338458d1c0ce60f2d800, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 2027046640855338429}
 --- !u!1 &7590501160471171792
 GameObject:
   m_ObjectHideFlags: 0

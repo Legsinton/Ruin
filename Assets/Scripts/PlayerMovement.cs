@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         RotatePlayer();
-        PlayWalkingSound();
         CheckPlayerFalling();
     }
     void LateUpdate()
@@ -250,28 +249,6 @@ public class PlayerMovement : MonoBehaviour
             capsule.transform.rotation = Quaternion.Slerp(capsule.transform.rotation, targetRotation, 10 * Time.deltaTime);
         }
     }
-
-    void PlayWalkingSound()
-    {
-        if (playerMoveDir.magnitude > 0.1f && isGrounded)
-        {
-            stepTimer -= Time.deltaTime;
-
-            float normalizedSpeed = currentVelocity / maxSpeed;
-            float stepRate = Mathf.Lerp(0.8f, stepRateAtFullSpeed, normalizedSpeed);
-
-            if (stepTimer <= 0f)
-            {
-                SoundFXManager.Instance.PlaySoundFX(SoundType.Walk);
-                stepTimer = stepRate;
-            }
-        }
-        else
-        {
-            stepTimer = 0f;
-        }
-    }
-
     void CheckPlayerFalling()
     {
         if (!isDead && transform.position.y < deathHeight)
