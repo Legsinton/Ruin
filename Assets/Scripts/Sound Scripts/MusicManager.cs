@@ -43,7 +43,7 @@ public class MusicManager : MonoBehaviour
         isFading = true;
         Debug.Log("fade start for song " + nextTrack.name);
         float percent = 0;
-        while (percent < 1f)
+        while (percent < 0.6f)
         {
             percent += Time.deltaTime * 1/fadeDuration;
             musicSource.volume = Mathf.Lerp(soundVolume,0.2f,percent);
@@ -54,7 +54,7 @@ public class MusicManager : MonoBehaviour
         musicSource.Play();
 
         percent = 0;
-        while (percent < 1f)
+        while (percent < 0.6f)
         {
             percent += Time.deltaTime * 1 / fadeDuration;
             musicSource.volume = Mathf.Lerp(0.2f, soundVolume, percent);
