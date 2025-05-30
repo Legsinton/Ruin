@@ -71,6 +71,7 @@ public class Inspector : MonoBehaviour
         else
         {
             // TODO: Hide UI for equip
+            equipable = false;
             equipUI.SetActive(false);
         }
 
