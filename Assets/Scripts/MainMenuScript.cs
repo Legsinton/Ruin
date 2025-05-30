@@ -261,7 +261,6 @@ public class MainMenuScript : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
     }
 
     public void CreditsMenu()
