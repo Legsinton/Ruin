@@ -998,8 +998,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.0048167557, y: 0.0025607285, z: 0.03612009}
-  m_Center: {x: 0.0006692737, y: 0.0040240777, z: 0.025887305}
+  m_Size: {x: 0.0048167557, y: 0.0025607285, z: 0.034169856}
+  m_Center: {x: 0.0006692738, y: 0.0040240777, z: 0.024912192}
 --- !u!114 &9205784296617154371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,10 +1014,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clockPuzzle: 1
   rotateSpeed: 20
-  playerOffset: 0.75
+  playerOffset: 1
   correctPlayerPosSpeed: 10
   minInteractDistance: 2.5
-  minDistancToRotatingObjectAttached: 0.95
+  minDistancToRotatingObjectAttached: 1.1
   clampRotation: {x: 0, y: 355}
   playerTransform: {fileID: 0}
   playerRotation: {fileID: 0}
@@ -3034,12 +3034,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18fe552aecb8d241b5a27cf4d7c7e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctAngleMinute: 90
-  correctAngleHour: 300
+  correctAngleMinute: 60
+  correctAngleHour: 180
   angleThreshold: 3
   minuteRotatingObject: {fileID: 5026492974456959698}
   hourRotatingObject: {fileID: 9205784296617154371}
-  switchTargets: []
+  switchTargets:
+  - {fileID: 0}
 --- !u!1 &8743324763883445202
 GameObject:
   m_ObjectHideFlags: 0
@@ -3283,7 +3284,7 @@ Transform:
   m_GameObject: {fileID: 9084899799774623561}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.06599, y: 0.00953, z: 0.0013}
+  m_LocalPosition: {x: -0.0643, y: 0.00953, z: 0.0013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
