@@ -30,7 +30,7 @@ public class MusicManager : MonoBehaviour
         currentTrackName = startSong.name;
     }
 
-    public void PlayMusic(string trackName, float fadeDuration = 20f)
+    public void PlayMusic(string trackName, float fadeDuration = 0.2f)
     {
         if (!isFading)
         {
@@ -38,7 +38,7 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 20f)
+    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 0.2f)
     {
         isFading = true;
         Debug.Log("fade start for song " + nextTrack.name);

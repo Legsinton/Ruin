@@ -16669,10 +16669,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
-      propertyPath: volumeList.Array.data[10].volume
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5572631127563652053, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.536956
@@ -16717,18 +16713,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundFXManager
       objectReference: {fileID: 0}
-    - target: {fileID: 5786078048789114412, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
-      propertyPath: soundVolume
-      value: 0.128
+    - target: {fileID: 9187656699202761528, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: tracks.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 4c17f64215c01bc49b98ecbe522449c8, type: 3}
+    - target: {fileID: 9187656699202761528, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
+      propertyPath: tracks.Array.data[2].trackName
+      value: Scary
       objectReference: {fileID: 0}
     - target: {fileID: 9187656699202761528, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
-      propertyPath: tracks.Array.data[0].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 6bbccb60632be2c4187e26aba7bd2915, type: 3}
-    - target: {fileID: 9187656699202761528, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
-      propertyPath: tracks.Array.data[2].clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 9c7da2db2f3d126498629ac05da2a8b9, type: 3}
+      propertyPath: tracks.Array.data[3].trackName
+      value: Chase
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -122582,6 +122578,26 @@ PrefabInstance:
       propertyPath: playrtAudioListener
       value: 
       objectReference: {fileID: 2073873409}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineWidth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4911059735407524867, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
       propertyPath: m_Name
       value: Chest
@@ -149756,6 +149772,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 586717964483334379, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
+    - target: {fileID: 2403209487638378405, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 5756669305941176756, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_Name
       value: Moving Block (2)
