@@ -3,6 +3,7 @@ using UnityEngine;
 public class MusicChange : MonoBehaviour
 {
     [SerializeField] string music;
+    [SerializeField] float fadeDuration;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -10,7 +11,7 @@ public class MusicChange : MonoBehaviour
         {
             if (!MusicManager.Instance.IsTrackPlaying(music))
             {
-                MusicManager.Instance.PlayMusic(music);
+                MusicManager.Instance.PlayMusic(music, fadeDuration);
             }
             else
             {
