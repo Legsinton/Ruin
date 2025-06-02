@@ -9,9 +9,40 @@ public class gudinnaInteract : MonoBehaviour, IInteracting
     [SerializeField] int armId;
     [SerializeField] int legId;
 
+    bool missingText = true;
+
     public void PressInteract()
     {
-        PlayerUI.Instance.DisplayText("Something is missing...", 3);
+        for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
+        {
+            if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
+            {
+                arm.SetActive(true);
+                missingText = false;
+            }
+            if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
+            {
+                leg.SetActive(true);
+                missingText = false;
+            }
+        }
+
+        if (missingText)
+        {
+            PlayerUI.Instance.DisplayText("Something is missing...", 3);
+        }
+        else
+        {
+            missingText = true;
+        }
+    }
+
+    void CheckIfComplete()
+    {
+        if (arm.activeInHierarchy && leg.activeInHierarchy)
+        {
+            Debug.Log("GAME COMPLETE!");
+        }
     }
 
     public void ReleaseInteract() { }
