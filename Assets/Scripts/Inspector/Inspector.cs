@@ -25,7 +25,7 @@ public class Inspector : MonoBehaviour
 
     void Awake()
     {
-        GameObject inspectorCanvas = GameObject.Find("InspectorCanvas");
+        GameObject inspectorCanvas = GameObject.Find("CenteredInspectorCanvas");
 
         if (inspectorCanvas != null)
         {
@@ -67,6 +67,7 @@ public class Inspector : MonoBehaviour
         if (item.equipable == true)
         {
             equipable = true;
+            equipUI.SetActive(true);
         }
         else
         {
@@ -79,7 +80,7 @@ public class Inspector : MonoBehaviour
         if (item != null && item.prefab != null)
         {
             playerInput.SwitchCurrentActionMap("Inspector");
-            itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), Quaternion.identity);
+            itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), /*Quaternion.identity*/Quaternion.Euler(new Vector3(0, 90, 0)));
         }
         else
         {
@@ -118,13 +119,13 @@ public class Inspector : MonoBehaviour
 
     private void OnBack()
     {
-        playerInput.SwitchCurrentActionMap("Player");
         if (itemPrefab != null)
         {
             Destroy(itemPrefab);
         }
         canvas.enabled = false;
         postProcessManager.ToggleDepthOfField();
+        playerInput.SwitchCurrentActionMap("Player");
     }
 
     private void OnEquip()
