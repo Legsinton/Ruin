@@ -15,12 +15,12 @@ public class gudinnaInteract : MonoBehaviour, IInteracting
     {
         for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
         {
-            if (Inventory.Instance.inventoryItems[i].itemId == armId)
+            if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
             {
                 arm.SetActive(true);
                 missingText = false;
             }
-            if (Inventory.Instance.inventoryItems[i].itemId == legId)
+            if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
             {
                 leg.SetActive(true);
                 missingText = false;
@@ -35,8 +35,6 @@ public class gudinnaInteract : MonoBehaviour, IInteracting
         {
             missingText = true;
         }
-
-
     }
 
     void CheckIfComplete()
