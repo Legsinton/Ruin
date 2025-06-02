@@ -9,6 +9,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
     [SerializeField] bool playSound;
+    public bool cutscene;
 
     bool playedCutScene;
     bool moveGate;
@@ -66,15 +67,19 @@ public class GateScript : MonoBehaviour, ISwitchManager
             cutSceneCamera.enabled = true;
             playrtAudioListener.enabled = false;
             cameraAudioListener.enabled = true;
+            cutscene = true;
 
 
         }
         if (playerMovement != null)
         {
-            playerMovement.enabled = false;
+            playerMovement.cutscene = true;
+            playerMovement.PushBlock = null;
+            playerMovement.movementInput = new Vector2(0,0);
             playerMovement.movement = new Vector3 (0, 0, 0);
         }
     }
+
 
     void DisableActiveCamera()
     {
@@ -85,10 +90,11 @@ public class GateScript : MonoBehaviour, ISwitchManager
             cutSceneCamera.enabled = false;
             playrtAudioListener.enabled = true;
             cameraAudioListener.enabled = false;
+            cutscene = false;
         }
         if (playerMovement != null)
         {
-            playerMovement.enabled = true;
+            playerMovement.cutscene = false;
         }
         
     }
