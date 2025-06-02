@@ -93,9 +93,12 @@ public class SoundFXManager : MonoBehaviour
                 //AudioClips
                 { SoundType.ButtonSound, Resources.LoadAll<AudioClip>("Sounds/Effects/ButtonSound") },
                 { SoundType.Break,Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
+                { SoundType.Goddess, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScream") },
+                { SoundType.GoddessAngry, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScreamAngry") },
                 { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
                 { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
+                { SoundType.WalkSoft, Resources.LoadAll<AudioClip>("Sounds/Effects/WalkSoft") },
             };
     }
 
@@ -295,12 +298,15 @@ public enum SoundType
     Death,
     DoorOpen,
     Fire,
+    Goddess,
+    GoddessAngry,
     KeyFound,
     PushBlock,
     PuzzleSolved,
     PuzzleSolvedFully,
     PressurePlate,
     RandomScary,
-    Walk
+    Walk,
+    WalkSoft
 }
 

@@ -68,7 +68,7 @@ MonoBehaviour:
   - soundType: 9
     volume: 0.479
   - soundType: 10
-    volume: 1
+    volume: 0
   - soundType: 11
     volume: 0.502
   - soundType: 12
@@ -77,6 +77,12 @@ MonoBehaviour:
     volume: 0.132
   - soundType: 14
     volume: 0.444
+  - soundType: 15
+    volume: 0.169
+  - soundType: 16
+    volume: 0.47
+  - soundType: 17
+    volume: 0.65
   - soundType: 15
     volume: 0.169
   sfxMixerGroup: {fileID: 8890598207639074564, guid: 5a00149253f3892408334411cc80673a, type: 2}
@@ -126,11 +132,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracks:
   - trackName: Calm
-    clip: {fileID: 8300000, guid: 751daf2ee62052b45b9056c72b481aac, type: 3}
+    clip: {fileID: 8300000, guid: 6bbccb60632be2c4187e26aba7bd2915, type: 3}
   - trackName: Calmer
     clip: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
   - trackName: Song1
-    clip: {fileID: 8300000, guid: 5f7fb3b7bd2b05149bc3d361b5802c71, type: 3}
+    clip: {fileID: 8300000, guid: 9c7da2db2f3d126498629ac05da2a8b9, type: 3}
   - trackName: Song2
     clip: {fileID: 8300000, guid: 721eb7d7c1fb3a44f94c4f14d85b6fb5, type: 3}
 --- !u!1 &5741138818005408939
@@ -185,7 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   library: {fileID: 9187656699202761528}
   musicSource: {fileID: 1235989178362088630}
-  soundVolume: 0.6
+  soundVolume: 0.128
   startSong: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
 --- !u!114 &1618827613485960090
 MonoBehaviour:
