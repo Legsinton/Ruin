@@ -30,7 +30,7 @@ public class MusicManager : MonoBehaviour
         currentTrackName = startSong.name;
     }
 
-    public void PlayMusic(string trackName, float fadeDuration = 2f)
+    public void PlayMusic(string trackName, float fadeDuration = 20f)
     {
         if (!isFading)
         {
@@ -38,15 +38,16 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 2f)
+    IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration = 20f)
     {
         isFading = true;
         Debug.Log("fade start for song " + nextTrack.name);
         float percent = 0;
-        while (percent < 0.6f)
+        while (percent < soundVolume)
         {
+            Debug.Log("Implaying");
             percent += Time.deltaTime * 1/fadeDuration;
-            musicSource.volume = Mathf.Lerp(soundVolume,0.2f,percent);
+            musicSource.volume = Mathf.Lerp(soundVolume,0.05f,percent);
             yield return null;  
         }
 
@@ -54,10 +55,12 @@ public class MusicManager : MonoBehaviour
         musicSource.Play();
 
         percent = 0;
-        while (percent < 0.6f)
+        while (percent < soundVolume)
         {
+            Debug.Log("ImNotplaying");
+
             percent += Time.deltaTime * 1 / fadeDuration;
-            musicSource.volume = Mathf.Lerp(0.2f, soundVolume, percent);
+            musicSource.volume = Mathf.Lerp(0.05f, soundVolume, percent);
             yield return null;
         }
         Debug.Log("fade complete for song " + nextTrack.name);
