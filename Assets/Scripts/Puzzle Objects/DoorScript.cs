@@ -116,6 +116,10 @@ public class DoorEasyScript : MonoBehaviour, IInteracting
                     locked = false;
                 }
             }
+            if (locked)
+            {
+                PlayerUI.Instance.DisplayText("It appears to be locked", 3);
+            }
         }
 
         if (!locked && !isDoorOpen && !openingDoor)
