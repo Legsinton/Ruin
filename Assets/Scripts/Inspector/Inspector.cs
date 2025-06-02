@@ -51,8 +51,13 @@ public class Inspector : MonoBehaviour
         sensitivity = isGamepad ? controllerSensitivity : mouseSensitivity;
         if (itemPrefab)
         {
-            itemPrefab.transform.Rotate(Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime, Space.World);
-            itemPrefab.transform.Rotate(Vector3.right, currentRotation.y * sensitivity * Time.deltaTime, Space.World);
+            Renderer renderer = itemPrefab.GetComponentInChildren<Renderer>();
+            Vector3 center = renderer.bounds.center;
+
+            itemPrefab.transform.RotateAround(center, Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime);
+            itemPrefab.transform.RotateAround(center, Vector3.right, currentRotation.y * sensitivity * Time.deltaTime);
+
+            Debug.Log(currentRotation + " | Applied Rotation: " + (-currentRotation.x * sensitivity * Time.deltaTime));
         }
     }
 
@@ -80,7 +85,26 @@ public class Inspector : MonoBehaviour
         if (item != null && item.prefab != null)
         {
             playerInput.SwitchCurrentActionMap("Inspector");
-            itemPrefab = Instantiate(item.prefab, new Vector3(1000, 1000, 1003), /*Quaternion.identity*/Quaternion.Euler(new Vector3(0, 90, 0)));
+            itemPrefab = Instantiate(item.prefab, Vector3.zero, Quaternion.Euler(0, 90, 0));
+            Renderer[] renderers = itemPrefab.GetComponentsInChildren<Renderer>();
+
+            if (renderers.Length == 0)
+            {
+                Debug.LogWarning("No Renderer found in prefab: " + item.prefab.name);
+            }
+            else
+            {
+                Bounds bounds = renderers[0].bounds;
+                foreach (Renderer r in renderers)
+                {
+                    bounds.Encapsulate(r.bounds);
+                }
+
+                Vector3 centerOffset = bounds.center - itemPrefab.transform.position;
+                Vector3 desiredCenterPosition = new Vector3(1000, 1000, 1003);
+                itemPrefab.transform.position = desiredCenterPosition - centerOffset;
+            }
+
         }
         else
         {
@@ -134,7 +158,7 @@ public class Inspector : MonoBehaviour
         {
             return;
         }
-        //TODO: Add equip logic
+
         Inventory.Instance.AddItem(itemId);
         inspectableItem.DestroyOnEquip();
         OnBack();
