@@ -15,12 +15,19 @@ public class WalkingSoundFX: MonoBehaviour
 
     private void Update()
     {
+        var speed = animator.GetFloat("Velocity");
         var footstep = animator.GetFloat("Footstep");
         if (Mathf.Abs(footstep) < 0.0001f)
         {
             footstep = 0f;
         }
-        if (lastFootStep > 0 && footstep < 0 || lastFootStep < 0 && footstep > 0)
+        if (lastFootStep > 0 && footstep < 0 && speed < 0.5f  || lastFootStep < 0 && footstep > 0 && speed < 0.5f)
+        {
+            Debug.Log("Im walking softly here!");
+
+            SoundFXManager.Instance.PlaySoundFX(SoundType.WalkSoft);
+        }
+        else if (lastFootStep > 0 && footstep < 0 || lastFootStep < 0 && footstep > 0)
         {
             Debug.Log("Im walking here!");
             SoundFXManager.Instance.PlaySoundFX(SoundType.Walk);

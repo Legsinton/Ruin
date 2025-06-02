@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        animationController.SetFloat("Velocity", currentVelocity/maxSpeed);
         RotatePlayer();
         CheckPlayerFalling();
     }
