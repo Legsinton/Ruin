@@ -14,7 +14,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     bool played;
 
     [Header("References")]
-    PlayerMovement PlayerMovement;
+    PlayerMovement playerMovement;
     Interact interact;
     bool playedSound;
 
@@ -31,7 +31,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     void Start()
     {
         openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(openAngle, 0,0 ));
-        PlayerMovement = FindAnyObjectByType<PlayerMovement>();
+        playerMovement = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();
     }
     void Update()
@@ -68,10 +68,15 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
         interact.disableInteract = true;
-        PlayerMovement.enabled = false;
         playrtAudioListener.enabled = false;
         cameraAudioListener.enabled = true;
-        PlayerMovement.movement = new Vector3(0, 0, 0);
+        if (playerMovement != null)
+        {
+            playerMovement.cutscene = true;
+            playerMovement.PushBlock = null;
+            playerMovement.movementInput = new Vector2(0, 0);
+            playerMovement.movement = new Vector3(0, 0, 0);
+        }
     }
     void DisableActiveCamera()
     {
@@ -81,8 +86,11 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
         cutSceneCamera.enabled = false;
         playerCamera.enabled = true;
         interact.disableInteract = false;
-        PlayerMovement.enabled = true;
         this.enabled = false;
+        if (playerMovement != null)
+        {
+            playerMovement.cutscene = false;
+        }
     }
     public void AddSwitch(int amount)
     {
