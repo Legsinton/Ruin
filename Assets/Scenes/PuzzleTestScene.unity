@@ -20073,6 +20073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   music: Calmer
+  fadeDuration: 1
 --- !u!65 &279195459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -206367,6 +206368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   music: Calm
+  fadeDuration: 2
 --- !u!65 &1940837732
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -213393,6 +213395,10 @@ PrefabInstance:
     - target: {fileID: 7174165044273764623, guid: 76081c7e51cb67e42984cdb3d3cc425b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397048052634389497, guid: 76081c7e51cb67e42984cdb3d3cc425b, type: 3}
+      propertyPath: fadeDuration
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

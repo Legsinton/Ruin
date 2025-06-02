@@ -65,6 +65,9 @@ public class GateScript : MonoBehaviour, ISwitchManager
         {
             cutSceneCamera.enabled = true;
             playrtAudioListener.enabled = false;
+            cameraAudioListener.enabled = true;
+
+
         }
         if (playerMovement != null)
         {
@@ -81,6 +84,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
         {
             cutSceneCamera.enabled = false;
             playrtAudioListener.enabled = true;
+            cameraAudioListener.enabled = false;
         }
         if (playerMovement != null)
         {
