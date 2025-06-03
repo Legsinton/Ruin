@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 
 public class Inspector : MonoBehaviour
@@ -9,6 +10,7 @@ public class Inspector : MonoBehaviour
     [SerializeField] public float mouseSensitivity;
     [SerializeField] public float controllerSensitivity;
     [SerializeField] public GameObject equipUI;
+    [SerializeField] public TMP_Text itemInfoText;
 
     Canvas canvas;
     PostProcessManager postProcessManager;
@@ -66,8 +68,13 @@ public class Inspector : MonoBehaviour
         canvas.enabled = true;
         postProcessManager.ToggleDepthOfField();
 
+
         Item item = (Item)interactableObject;
         itemId = item.itemId;
+
+        itemInfoText.text = item.itemInfo;
+        Debug.Log("Agnes: Info text = " + itemInfoText.text);
+        Debug.Log("Agnes: Info text = " + item.itemInfo);
 
         if (item.equipable == true)
         {
