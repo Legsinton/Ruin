@@ -36,7 +36,7 @@ public class GoddessInteract : MonoBehaviour, IInteracting
             missingText = true;
         }
 
-        if (Inventory.Instance.inventoryItems.Count == 2)
+        if (arm.activeInHierarchy && leg.activeInHierarchy)
         {
             MusicManager.Instance.StopMusic(4);
             SceneManagement.Instance.OnWin();
