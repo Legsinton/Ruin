@@ -7,7 +7,6 @@ public class MusicManager : MonoBehaviour
     [SerializeField] MusicLibrary library;
     public AudioSource musicSource;
     [SerializeField] float soundVolume;
-    [SerializeField] AudioClip startSong;
     string currentTrackName;
     bool isFading = false;
     readonly string Chase;
@@ -26,12 +25,24 @@ public class MusicManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-
+/*
     private void Start()
     {
         musicSource.clip = startSong;
         musicSource.Play();
         currentTrackName = startSong.name;
+    }
+*/
+    public void StopMusic(float fadeDuration)
+    {
+        StartCoroutine(AnimateMusicStopCrossFade(fadeDuration));
+    }
+
+    public void StartMusic(string track,float volume)
+    {
+        musicSource.clip = library.GetClipFromName(track);
+        musicSource.volume = volume;
+        musicSource.Play();
     }
 
     public void PlayMusic(string trackName, float fadeDuration)
@@ -77,6 +88,23 @@ public class MusicManager : MonoBehaviour
         Debug.Log("fade complete for song " + nextTrack.name);
         musicSource.volume = soundVolume; // ensure it's exactly at the target volume
         currentTrackName = nextTrack.name;
+        isFading = false;
+    }
+
+    IEnumerator AnimateMusicStopCrossFade(float fadeDuration)
+    {
+        isFading = true;
+        float time = 0f;
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            musicSource.volume = Mathf.Lerp(soundVolume, 0, time / fadeDuration);
+            yield return null;
+        }
+
+        musicSource.Stop();
+
+        
         isFading = false;
     }
 

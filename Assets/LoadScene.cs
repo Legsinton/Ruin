@@ -6,14 +6,10 @@ using UnityEngine.SceneManagement;
 public class LoadScene : MonoBehaviour
 {
     public TextMeshProUGUI introText;
-    public TextMeshProUGUI introDot;
-
-    public AudioSource soundClip;
 
     private void Awake()
     {
         introText.enabled = false;
-        introDot.enabled = false;
     }
     private void Start()
     {
@@ -24,11 +20,9 @@ public class LoadScene : MonoBehaviour
     IEnumerator LoadText()
     {
         yield return new WaitForSeconds(10.5f);
-        //introDot.enabled = true;
         introText.enabled = true;
         
-       
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(7f);
         introText.enabled = false;
     }
 

@@ -158,12 +158,13 @@ public class MainMenuScript : MonoBehaviour
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
+        MusicManager.Instance.StopMusic(1.5f);
         Invoke(nameof(LoadScene), 2);
     }
 
-    public void LoadScene()
+    void LoadScene()
     {
-        SceneManager.LoadScene("IntroScene");
+        SceneManager.LoadScene("LoadScene");
     }
 
     public void PauseMenu()
