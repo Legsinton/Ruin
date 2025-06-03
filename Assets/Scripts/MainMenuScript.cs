@@ -142,7 +142,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Playtest_3");
+        SceneManager.LoadScene("Playtest_4");
         if (justPaused)
         {
             return;
