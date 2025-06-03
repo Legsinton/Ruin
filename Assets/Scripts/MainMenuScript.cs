@@ -163,8 +163,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void LoadScene()
     {
-        SceneManager.LoadScene("Playtest_4");
-
+        SceneManager.LoadScene("IntroScene");
     }
 
     public void PauseMenu()
