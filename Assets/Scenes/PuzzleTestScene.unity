@@ -16670,8 +16670,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1727570422431343391, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
-      propertyPath: volumeList.Array.data[10].volume
-      value: 0
+      propertyPath: volumeList.Array.data[17].volume
+      value: 0.585
       objectReference: {fileID: 0}
     - target: {fileID: 5572631127563652053, guid: b3c3653103edd2a4bb0a22cfd14cc8a9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19394,6 +19394,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1209498608}
     m_Modifications:
+    - target: {fileID: 978575795207061084, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 3231518945668882031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.4128573
@@ -19450,6 +19454,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5580516807541030520, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 6437696385884111190, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_Name
       value: Door (1)
@@ -20069,6 +20077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   music: Calmer
+  fadeDuration: 1
 --- !u!65 &279195459
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76678,6 +76687,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1209498608}
     m_Modifications:
+    - target: {fileID: 978575795207061084, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 3231518945668882031, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 92.82
@@ -76718,6 +76731,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5580516807541030520, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 6437696385884111190, guid: a109e963ad92d304abf73e8641fd27fc, type: 3}
       propertyPath: m_Name
       value: Door
@@ -102346,6 +102363,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 586717964483334379, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
+    - target: {fileID: 2403209487638378405, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 5756669305941176756, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_Name
       value: Moving Block (3)
@@ -122546,6 +122571,26 @@ PrefabInstance:
       propertyPath: playrtAudioListener
       value: 
       objectReference: {fileID: 2073873409}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineWidth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625973442647806532, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
+      propertyPath: outlineColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4911059735407524867, guid: 760f1866e5c2ee74e880b3de55b2ff75, type: 3}
       propertyPath: m_Name
       value: Chest
@@ -149720,6 +149765,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 586717964483334379, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
+    - target: {fileID: 2403209487638378405, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 2072415368}
     - target: {fileID: 5756669305941176756, guid: 4bed42efb4361794ea58edcfff56e122, type: 3}
       propertyPath: m_Name
       value: Moving Block (2)
@@ -206319,6 +206372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   music: Calm
+  fadeDuration: 2
 --- !u!65 &1940837732
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -210299,7 +210353,7 @@ PrefabInstance:
       objectReference: {fileID: 1397457928}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 110.35
+      value: 91.97
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.y
@@ -210307,7 +210361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.08
+      value: -30.08
       objectReference: {fileID: 0}
     - target: {fileID: 6310075026258042403, guid: 1a34799a7d6d46b4fa22ed8ee8c131de, type: 3}
       propertyPath: m_LocalRotation.w
@@ -213345,6 +213399,10 @@ PrefabInstance:
     - target: {fileID: 7174165044273764623, guid: 76081c7e51cb67e42984cdb3d3cc425b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397048052634389497, guid: 76081c7e51cb67e42984cdb3d3cc425b, type: 3}
+      propertyPath: fadeDuration
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

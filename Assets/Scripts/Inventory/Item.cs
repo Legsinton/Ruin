@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public enum SlotTag { Arm, Leg, Eyes, Key }
 
@@ -11,4 +12,5 @@ public class Item : ScriptableObject
     public int itemId;
     public string itemName;
     public bool equipable;
+    public TMP_Text tMP_Text;
 }

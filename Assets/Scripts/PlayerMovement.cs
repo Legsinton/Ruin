@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 playerMoveDir;
     float stepTimer;
     float gravityForce;
+    public bool cutscene;
 
     [HideInInspector] public PushBlock PushBlock;
     [HideInInspector] public RotatingObject rotatingObject;
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        animationController.SetFloat("Velocity", currentVelocity/maxSpeed);
         RotatePlayer();
         CheckPlayerFalling();
     }
@@ -88,7 +90,10 @@ public class PlayerMovement : MonoBehaviour
     }
     void OnMove(InputValue movementValue)
     {
-        movementInput = movementValue.Get<Vector2>();
+        if (!cutscene)
+        {
+            movementInput = movementValue.Get<Vector2>();
+        }
     }
     void GroundCheck()
     {
