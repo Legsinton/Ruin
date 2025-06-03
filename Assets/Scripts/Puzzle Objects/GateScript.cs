@@ -3,7 +3,7 @@ using UnityEngine;
 public class GateScript : MonoBehaviour, ISwitchManager
 {
     [Header("Settings")]
-    public int switches;
+    int switches;
     [SerializeField] int switchesNeeded;
     [SerializeField] float pressDepth;
     [SerializeField] float moveSpeed;
@@ -12,7 +12,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     public bool cutscene;
 
     bool playedCutScene;
-    bool moveGate;
+    [SerializeField] bool moveGate;
     Vector3 originalPosition;
     Vector3 targetPos;
 
