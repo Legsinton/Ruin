@@ -10,6 +10,8 @@ public class MusicManager : MonoBehaviour
     [SerializeField] AudioClip startSong;
     string currentTrackName;
     bool isFading = false;
+    AudioClip previousClip;
+
     void Awake()
     {
         if (Instance != null)
@@ -34,7 +36,14 @@ public class MusicManager : MonoBehaviour
     {
         if (!isFading)
         {
-            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
+            AudioClip newClip = library.GetClipFromName(trackName);
+
+            if (musicSource.clip != newClip)
+            {
+                previousClip = musicSource.clip;
+                StartCoroutine(AnimateMusicCrossFade(newClip, fadeDuration));
+            }
+            //StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
         }
     }
 
@@ -48,8 +57,8 @@ public class MusicManager : MonoBehaviour
             Debug.Log("Implaying");
             //percent += Time.deltaTime * 1/fadeDuration;
             time += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(soundVolume,0.05f,time/fadeDuration);
-            yield return null;  
+            musicSource.volume = Mathf.Lerp(soundVolume, 0.05f, time / fadeDuration);
+            yield return null;
         }
 
         musicSource.clip = nextTrack;
@@ -61,7 +70,7 @@ public class MusicManager : MonoBehaviour
             Debug.Log("ImNotplaying");
 
             time += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time/fadeDuration);
+            musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time / fadeDuration);
             yield return null;
         }
         Debug.Log("fade complete for song " + nextTrack.name);
