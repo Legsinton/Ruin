@@ -50,9 +50,9 @@ MonoBehaviour:
   - soundType: 0
     volume: 0.59
   - soundType: 1
-    volume: 0.645
+    volume: 0.798
   - soundType: 2
-    volume: 1
+    volume: 0.17
   - soundType: 3
     volume: 0.887
   - soundType: 4
@@ -68,23 +68,13 @@ MonoBehaviour:
   - soundType: 9
     volume: 0.479
   - soundType: 10
-    volume: 0
+    volume: 1
   - soundType: 11
     volume: 0.502
   - soundType: 12
     volume: 0.54
   - soundType: 13
-    volume: 0.132
-  - soundType: 14
-    volume: 0.444
-  - soundType: 15
-    volume: 0.169
-  - soundType: 16
-    volume: 0.47
-  - soundType: 17
-    volume: 0.65
-  - soundType: 15
-    volume: 0.169
+    volume: 0.31
   sfxMixerGroup: {fileID: 8890598207639074564, guid: 5a00149253f3892408334411cc80673a, type: 2}
 --- !u!1 &3259026730935904916
 GameObject:
@@ -132,13 +122,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracks:
   - trackName: Calm
-    clip: {fileID: 8300000, guid: 6bbccb60632be2c4187e26aba7bd2915, type: 3}
+    clip: {fileID: 8300000, guid: 532df8e12066d5947a7ec4f983c7a121, type: 3}
   - trackName: Calmer
     clip: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
-  - trackName: Scary
-    clip: {fileID: 8300000, guid: 9c7da2db2f3d126498629ac05da2a8b9, type: 3}
   - trackName: Chase
     clip: {fileID: 8300000, guid: 4c17f64215c01bc49b98ecbe522449c8, type: 3}
+  - trackName: Main
+    clip: {fileID: 8300000, guid: ad97d78f75b5e1840b2f0a3fef08833d, type: 3}
+  - trackName: Scary
+    clip: {fileID: 8300000, guid: 6bbccb60632be2c4187e26aba7bd2915, type: 3}
 --- !u!1 &5741138818005408939
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,8 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   library: {fileID: 9187656699202761528}
   musicSource: {fileID: 1235989178362088630}
-  soundVolume: 0.128
-  startSong: {fileID: 8300000, guid: f37555ca9d15c8349a4bc58b57457730, type: 3}
+  soundVolume: 0.118
 --- !u!114 &1618827613485960090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,8 +241,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 8863665404254155133, guid: 5a00149253f3892408334411cc80673a, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 0.128
+  m_PlayOnAwake: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0

@@ -7,10 +7,12 @@ public class MusicManager : MonoBehaviour
     [SerializeField] MusicLibrary library;
     public AudioSource musicSource;
     [SerializeField] float soundVolume;
-    [SerializeField] AudioClip startSong;
     string currentTrackName;
     bool isFading = false;
     AudioClip previousClip;
+    readonly string Chase;
+    readonly string Scary;
+
 
     void Awake()
     {
@@ -25,16 +27,31 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void StopMusic(float fadeDuration)
     {
-        musicSource.clip = startSong;
+        StartCoroutine(AnimateMusicStopCrossFade(fadeDuration));
+    }
+
+    public void StartMusic(string track, float volume)
+    {
+        musicSource.clip = library.GetClipFromName(track);
+        musicSource.volume = volume;
         musicSource.Play();
-        currentTrackName = startSong.name;
     }
 
     public void PlayMusic(string trackName, float fadeDuration)
     {
-        if (!isFading)
+        if (isFading && currentTrackName == Scary)
+        {
+            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
+
+        }
+        else if (isFading && currentTrackName == Chase)
+        {
+            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
+
+        }
+        else if (!isFading)
         {
             AudioClip newClip = library.GetClipFromName(trackName);
 
@@ -54,8 +71,6 @@ public class MusicManager : MonoBehaviour
         float time = 0f;
         while (time < fadeDuration)
         {
-            Debug.Log("Implaying");
-            //percent += Time.deltaTime * 1/fadeDuration;
             time += Time.deltaTime;
             musicSource.volume = Mathf.Lerp(soundVolume, 0.05f, time / fadeDuration);
             yield return null;
@@ -67,8 +82,6 @@ public class MusicManager : MonoBehaviour
         time = 0f;
         while (time < fadeDuration)
         {
-            Debug.Log("ImNotplaying");
-
             time += Time.deltaTime;
             musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time / fadeDuration);
             yield return null;
@@ -76,6 +89,23 @@ public class MusicManager : MonoBehaviour
         Debug.Log("fade complete for song " + nextTrack.name);
         musicSource.volume = soundVolume; // ensure it's exactly at the target volume
         currentTrackName = nextTrack.name;
+        isFading = false;
+    }
+
+    IEnumerator AnimateMusicStopCrossFade(float fadeDuration)
+    {
+        isFading = true;
+        float time = 0f;
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            musicSource.volume = Mathf.Lerp(soundVolume, 0, time / fadeDuration);
+            yield return null;
+        }
+
+        musicSource.Stop();
+
+
         isFading = false;
     }
 
