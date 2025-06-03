@@ -79,6 +79,7 @@ public class SoundFXManager : MonoBehaviour
             {
                 //Single AudioClips
                 { SoundType.ButtonSelect, Resources.Load<AudioClip>("Sounds/Effects/ButtonSelect") },
+                { SoundType.Boom, Resources.Load<AudioClip>("Sounds/Effects/Boom") },
                 { SoundType.Chain, Resources.Load<AudioClip>("Sounds/Effects/Chain") },
                 { SoundType.ChestCreak, Resources.Load<AudioClip>("Sounds/Effects/ChestCreak") },
                 { SoundType.ChestOpen, Resources.Load<AudioClip>("Sounds/Effects/ChestOpen") },
@@ -292,6 +293,7 @@ public enum SoundType
     Break,
     ButtonSound,
     ButtonSelect,
+    Boom,
     Chain,
     ChestCreak,
     ChestOpen,

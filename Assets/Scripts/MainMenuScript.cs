@@ -142,7 +142,6 @@ public class MainMenuScript : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Playtest_4");
         if (justPaused)
         {
             return;
@@ -150,6 +149,7 @@ public class MainMenuScript : MonoBehaviour
 
         creditsText.enabled = false;
 
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.Boom);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         playerInput.SwitchCurrentActionMap("Player");
@@ -157,7 +157,14 @@ public class MainMenuScript : MonoBehaviour
         Time.timeScale = 1f;
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
-        controllMenu.SetActive(false); 
+        controllMenu.SetActive(false);
+        Invoke(nameof(LoadScene), 2);
+    }
+
+    public void LoadScene()
+    {
+        SceneManager.LoadScene("Playtest_4");
+
     }
 
     public void PauseMenu()
