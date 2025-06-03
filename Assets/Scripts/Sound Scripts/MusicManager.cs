@@ -9,6 +9,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] float soundVolume;
     string currentTrackName;
     bool isFading = false;
+    AudioClip previousClip;
     readonly string Chase;
     readonly string Scary;
 
@@ -31,7 +32,7 @@ public class MusicManager : MonoBehaviour
         StartCoroutine(AnimateMusicStopCrossFade(fadeDuration));
     }
 
-    public void StartMusic(string track,float volume)
+    public void StartMusic(string track, float volume)
     {
         musicSource.clip = library.GetClipFromName(track);
         musicSource.volume = volume;
@@ -39,7 +40,7 @@ public class MusicManager : MonoBehaviour
     }
 
     public void PlayMusic(string trackName, float fadeDuration)
-    {    
+    {
         if (isFading && currentTrackName == Scary)
         {
             StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
@@ -52,7 +53,14 @@ public class MusicManager : MonoBehaviour
         }
         else if (!isFading)
         {
-            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
+            AudioClip newClip = library.GetClipFromName(trackName);
+
+            if (musicSource.clip != newClip)
+            {
+                previousClip = musicSource.clip;
+                StartCoroutine(AnimateMusicCrossFade(newClip, fadeDuration));
+            }
+            //StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
         }
     }
 
@@ -63,8 +71,8 @@ public class MusicManager : MonoBehaviour
         while (time < fadeDuration)
         {
             time += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(soundVolume,0.05f,time/fadeDuration);
-            yield return null;  
+            musicSource.volume = Mathf.Lerp(soundVolume, 0.05f, time / fadeDuration);
+            yield return null;
         }
 
         musicSource.clip = nextTrack;
@@ -74,7 +82,7 @@ public class MusicManager : MonoBehaviour
         while (time < fadeDuration)
         {
             time += Time.deltaTime;
-            musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time/fadeDuration);
+            musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time / fadeDuration);
             yield return null;
         }
         musicSource.volume = soundVolume; // ensure it's exactly at the target volume
@@ -95,7 +103,7 @@ public class MusicManager : MonoBehaviour
 
         musicSource.Stop();
 
-        
+
         isFading = false;
     }
 
