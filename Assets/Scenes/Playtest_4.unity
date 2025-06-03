@@ -4687,6 +4687,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &359961807 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8118088150577829577, guid: 1e7d1b8f7ce4e8d46b71c1d6ae85a035, type: 3}
+  m_PrefabInstance: {fileID: 2137467258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &370076624 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8035096803675612306, guid: 5d369c45295327a4b9706704a85fca95, type: 3}
@@ -16235,17 +16246,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 33072591485055293, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
+      propertyPath: WinText
+      value: 
+      objectReference: {fileID: 359961807}
+    - target: {fileID: 33072591485055293, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
       propertyPath: overlay
       value: 
       objectReference: {fileID: 2137467260}
     - target: {fileID: 33072591485055293, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
-      propertyPath: sceneToLoad
-      value: Playtest_4
-      objectReference: {fileID: 0}
-    - target: {fileID: 33072591485055293, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
       propertyPath: gameOverText
       value: 
       objectReference: {fileID: 2137467259}
+    - target: {fileID: 33072591485055293, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
+      propertyPath: overlayWhite
+      value: 
+      objectReference: {fileID: 1744624029}
     - target: {fileID: 72139996874970311, guid: 80260deaa19315f47a0a0961b158ae1b, type: 3}
       propertyPath: m_Name
       value: SceneManagement
@@ -26099,6 +26114,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e42ca39aa68df46b28d166aeda648a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1744624029 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 424323985405695162, guid: 1e7d1b8f7ce4e8d46b71c1d6ae85a035, type: 3}
+  m_PrefabInstance: {fileID: 2137467258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1770921036
 Mesh:
   m_ObjectHideFlags: 0
@@ -30220,10 +30246,6 @@ PrefabInstance:
     - target: {fileID: 2871925332782395456, guid: 1e7d1b8f7ce4e8d46b71c1d6ae85a035, type: 3}
       propertyPath: m_Name
       value: GameOverCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 2871925332782395456, guid: 1e7d1b8f7ce4e8d46b71c1d6ae85a035, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5976445921443367078, guid: 1e7d1b8f7ce4e8d46b71c1d6ae85a035, type: 3}
       propertyPath: m_Pivot.x

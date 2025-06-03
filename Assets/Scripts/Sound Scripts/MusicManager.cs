@@ -59,7 +59,6 @@ public class MusicManager : MonoBehaviour
     IEnumerator AnimateMusicCrossFade(AudioClip nextTrack, float fadeDuration)
     {
         isFading = true;
-        Debug.Log("fade start for song " + nextTrack.name);
         float time = 0f;
         while (time < fadeDuration)
         {
@@ -78,7 +77,6 @@ public class MusicManager : MonoBehaviour
             musicSource.volume = Mathf.Lerp(0.05f, soundVolume, time/fadeDuration);
             yield return null;
         }
-        Debug.Log("fade complete for song " + nextTrack.name);
         musicSource.volume = soundVolume; // ensure it's exactly at the target volume
         currentTrackName = nextTrack.name;
         isFading = false;

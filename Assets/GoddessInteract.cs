@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class gudinnaInteract : MonoBehaviour, IInteracting
+public class GoddessInteract : MonoBehaviour, IInteracting
 {
     [Header("References")]
     [SerializeField] Outline outline;
@@ -10,6 +10,15 @@ public class gudinnaInteract : MonoBehaviour, IInteracting
     [SerializeField] int legId;
 
     bool missingText = true;
+
+    private void Update()
+    {
+        if (Inventory.Instance.inventoryItems.Count == 2)
+        {
+            MusicManager.Instance.StopMusic(4);
+            
+        }
+    }
 
     public void PressInteract()
     {
