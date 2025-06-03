@@ -9,6 +9,7 @@ public class EnemyMusic : MonoBehaviour
     private BlackboardVariable chaseSequence;
     public string previousSongName;
     AudioClip previousSong;
+    bool played;
 
     private void Start()
     {
@@ -40,11 +41,20 @@ public class EnemyMusic : MonoBehaviour
 
         if (playChaseMusic)
         {
+            if (!played)
+            {
+                played = true;
+                Debug.Log("Agnes: Should play Angry!");
+                SoundFXManager.Instance.PlaySoundFX(SoundType.GoddessAngry, this.transform.position);
+            }
+
             MusicManager.Instance.PlayMusic("Chase", 1);
         }
 
         if (!playChaseMusic && !string.IsNullOrEmpty(previousSongName))
         {
+            played = false;
+
             MusicManager.Instance.PlayMusic(previousSongName, 1);
         }
         else
