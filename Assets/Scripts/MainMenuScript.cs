@@ -27,6 +27,12 @@ public class MainMenuScript : MonoBehaviour
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        EventSystem.current.SetSelectedGameObject(null);
+        StartCoroutine(SetSelect(startButton));
+        playerInput.SwitchCurrentActionMap("UI");
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
     }
     private void OnEnable()
     {
@@ -186,6 +192,8 @@ public class MainMenuScript : MonoBehaviour
         }
         else if (!isGamepad)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
             justPaused = false;
         }
     }
@@ -214,6 +222,8 @@ public class MainMenuScript : MonoBehaviour
         }
         else if (!isGamepad)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
             Cursor.visible = true;
             justPaused = false;
         }
@@ -236,6 +246,8 @@ public class MainMenuScript : MonoBehaviour
         }
         else if (!isGamepad)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
             Cursor.visible = true;
             justPaused = false;
         }
@@ -255,12 +267,15 @@ public class MainMenuScript : MonoBehaviour
         controllMenu.SetActive(false);
         Time.timeScale = 0f;
         creditsText.enabled = false;
+        isGamepad = playerInput.currentControlScheme == "Gamepad";
         if (isGamepad)
         {
             StartCoroutine(SetSelect(backButton));
         }
         else if (!isGamepad)
         {
+            EventSystem.current.SetSelectedGameObject(null);
+
             justPaused = false;
         }
     }
