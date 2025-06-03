@@ -6,13 +6,21 @@ using UnityEngine.UI;
 
 public class SceneManagement : MonoBehaviour
 {
+    public static SceneManagement Instance;
     public string sceneToLoad;
     [Header("Game over UI")]
     public Image overlay;
+    [Header("Win State UI")]
     public Image overlayWhite;
-    public TMP_Text gameOverText;
     public TMP_Text winText;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     public void OnDeath()
     {
@@ -27,20 +35,27 @@ public class SceneManagement : MonoBehaviour
     private IEnumerator DeathScreen()
     {
         yield return StartCoroutine(FadeToBlack(1));
-        gameOverText.gameObject.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-        gameOverText.gameObject.SetActive(false);
         overlay.gameObject.SetActive(false);
         SceneManager.LoadScene(sceneToLoad);
     }
 
     private IEnumerator WinScene()
     {
-        yield return StartCoroutine(FadeToBlack(2));
+        PlayerMovement playerMovement = FindAnyObjectByType<PlayerMovement>();
+        SoundFXManager.Instance.PlaySoundFX(SoundType.Boom);
+        if (playerMovement != null)
+        {
+            playerMovement.cutscene = true;
+            playerMovement.PushBlock = null;
+            playerMovement.movementInput = new Vector2(0, 0);
+            playerMovement.movement = new Vector3(0, 0, 0);
+        }
+        yield return StartCoroutine(FadeToWhite(2));
         winText.gameObject.SetActive(true);
         yield return new WaitForSeconds(7f);
         winText.gameObject.SetActive(false);
-        overlay.gameObject.SetActive(false);
+        overlayWhite.gameObject.SetActive(false);
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -71,7 +86,7 @@ public class SceneManagement : MonoBehaviour
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            overlay.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
+            overlayWhite.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
             yield return null;
         }
 

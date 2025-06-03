@@ -11,15 +11,6 @@ public class GoddessInteract : MonoBehaviour, IInteracting
 
     bool missingText = true;
 
-    private void Update()
-    {
-        if (Inventory.Instance.inventoryItems.Count == 2)
-        {
-            MusicManager.Instance.StopMusic(4);
-            
-        }
-    }
-
     public void PressInteract()
     {
         for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
@@ -43,6 +34,13 @@ public class GoddessInteract : MonoBehaviour, IInteracting
         else
         {
             missingText = true;
+        }
+
+        if (Inventory.Instance.inventoryItems.Count == 2)
+        {
+            MusicManager.Instance.StopMusic(4);
+            SceneManagement.Instance.OnWin();
+
         }
     }
 
