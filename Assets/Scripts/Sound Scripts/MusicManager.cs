@@ -25,14 +25,7 @@ public class MusicManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-/*
-    private void Start()
-    {
-        musicSource.clip = startSong;
-        musicSource.Play();
-        currentTrackName = startSong.name;
-    }
-*/
+
     public void StopMusic(float fadeDuration)
     {
         StartCoroutine(AnimateMusicStopCrossFade(fadeDuration));
