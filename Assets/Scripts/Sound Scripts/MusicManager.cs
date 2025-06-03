@@ -41,17 +41,7 @@ public class MusicManager : MonoBehaviour
 
     public void PlayMusic(string trackName, float fadeDuration)
     {
-        if (isFading && currentTrackName == Scary)
-        {
-            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
-
-        }
-        else if (isFading && currentTrackName == Chase)
-        {
-            StartCoroutine(AnimateMusicCrossFade(library.GetClipFromName(trackName), fadeDuration));
-
-        }
-        else if (!isFading)
+        if (!isFading)
         {
             AudioClip newClip = library.GetClipFromName(trackName);
 

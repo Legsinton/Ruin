@@ -63,7 +63,6 @@ public class RangeDetector : MonoBehaviour
         if (previouslyDetected && newDetectedTarget == null && DetectedTarget != null)
         {
             LastKnownPosition = DetectedTarget.transform.position;
-            Debug.Log("Agnes, last known position: " + LastKnownPosition);
         }
 
         DetectedTarget = newDetectedTarget;
