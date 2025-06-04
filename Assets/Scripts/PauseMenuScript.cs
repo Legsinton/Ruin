@@ -10,7 +10,6 @@ using UnityEngine.UI;
 public class PauseMenuScript : MonoBehaviour
 {
     public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
-    public GameObject Hud_Ref1, Hud_Ref2, fishKey,skullKey,foot,arm;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
     public CameraFollow cameraFollow;
@@ -39,12 +38,12 @@ public class PauseMenuScript : MonoBehaviour
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
-        Hud_Ref1.SetActive(false);
+        /*Hud_Ref1.SetActive(false);
         Hud_Ref2.SetActive(false);
         fishKey.SetActive(false);
         skullKey.SetActive(false);
         foot.SetActive(false);
-        arm.SetActive(false);
+        arm.SetActive(false);*/
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { pauseMenu, defaultPauseButton },
@@ -221,12 +220,12 @@ public class PauseMenuScript : MonoBehaviour
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
             OpenMenu(pauseMenu);
-            Hud_Ref1.SetActive(true);
+            /*Hud_Ref1.SetActive(true);
             Hud_Ref2.SetActive(true);
             fishKey.SetActive(true);
             skullKey.SetActive(true);
             foot.SetActive(true);
-            arm.SetActive(true);
+            arm.SetActive(true);*/
             isPausing = true;
             Time.timeScale = 0f;
             justPaused = true;
@@ -255,12 +254,7 @@ public class PauseMenuScript : MonoBehaviour
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            Hud_Ref1.SetActive(false);
-            Hud_Ref2.SetActive(false);
-            fishKey.SetActive(false);
-            skullKey.SetActive(false);
-            foot.SetActive(false);
-            arm.SetActive(false);
+            
             //currentMenu = null;
             menuHistory.Clear();
         }
@@ -309,12 +303,12 @@ public class PauseMenuScript : MonoBehaviour
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            Hud_Ref1.SetActive(false);
+            /*Hud_Ref1.SetActive(false);
             Hud_Ref2.SetActive(false);
             fishKey.SetActive(false);
             skullKey.SetActive(false);
             foot.SetActive(false);
-            arm.SetActive(false);
+            arm.SetActive(false);*/
             isPausing = false;
 
             //currentMenu = null;
