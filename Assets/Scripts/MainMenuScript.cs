@@ -29,8 +29,8 @@ public class MainMenuScript : MonoBehaviour
         controllMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
-        EventSystem.current.SetSelectedGameObject(null);
-        StartCoroutine(SetSelect(startButton));
+        /*EventSystem.current.SetSelectedGameObject(null);
+        StartCoroutine(SetSelect(startButton));*/
         playerInput.SwitchCurrentActionMap("UI");
         isGamepad = playerInput.currentControlScheme == "Gamepad";
     }
