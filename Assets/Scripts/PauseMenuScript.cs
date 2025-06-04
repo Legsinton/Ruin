@@ -218,13 +218,13 @@ public class PauseMenuScript : MonoBehaviour
             Cursor.visible = false;
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
-            pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             isPausing = false;
+            pauseMenu.SetActive(false);
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            currentMenu = null;
+            //currentMenu = null;
             menuHistory.Clear();
         }
     }
