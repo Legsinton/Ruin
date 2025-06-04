@@ -230,8 +230,6 @@ public class MainMenuScript : MonoBehaviour
             return;
         }
 
-        creditsText.enabled = false;
-
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.Boom);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
@@ -274,7 +272,6 @@ public class MainMenuScript : MonoBehaviour
         OpenMenu(soundMenu);
 
         Time.timeScale = 0f;
-        creditsText.enabled = false;
 
         justPaused = true; // <- block resume for 1 frame
 
