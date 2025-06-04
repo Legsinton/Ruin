@@ -9,6 +9,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
     [SerializeField] bool playSound;
+    [SerializeField] bool played;
     public bool cutscene;
 
     bool playedCutScene;
@@ -104,6 +105,11 @@ public class GateScript : MonoBehaviour, ISwitchManager
         {
             if (!playedCutScene && cutSceneCamera != null)
             {
+                if (playSound && !played)
+                {
+                    played = true;
+                    SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+                }
                 ActivateCamera();
                 Invoke(nameof(DisableActiveCamera), cutSceneLength);
                 playedCutScene = true;
@@ -121,10 +127,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
 
     public void AddSwitch(int amount)
     {
-        if (playSound)
-        {
-            SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
-        }
+        
         switches += amount;
         OnSwitchCountChanged();
     }

@@ -131,7 +131,7 @@ public class MainMenuScript : MonoBehaviour
         
     }
 
-    private void OnSubmit(InputValue value)
+  /*  private void OnSubmit(InputValue value)
     {
         if (value.isPressed && !pauseButtonWasPressed)
         {
@@ -148,7 +148,7 @@ public class MainMenuScript : MonoBehaviour
             Debug.Log("Not Pressed");
             pauseButtonWasPressed = false;
         }
-    }
+    }*/
 
     void OpenMenu(GameObject menu)
     {
