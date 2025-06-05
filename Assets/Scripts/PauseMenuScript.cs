@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public class PauseMenuScript : MonoBehaviour
 {
+    
     public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
@@ -385,7 +386,12 @@ public class PauseMenuScript : MonoBehaviour
     public void QuitGame()
     {
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+        MainMenuScript.cameFromPauseMenu = true;
+        SceneManager.LoadScene("MainMenu");
+    }
 
+    void LoadMainMenu()
+    {
         SceneManager.LoadScene("MainMenu");
     }
 }

@@ -10,12 +10,10 @@ using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
-    public GameObject mainMenu, optionsMenu, soundMenu, controllMenu;
+    public static bool cameFromPauseMenu = false;
+    public GameObject mainMenu, creditsMenu;
     public PlayerInput playerInput;
-    public CameraFollow cameraFollow;
     bool pauseButtonWasPressed = false;
-    public Slider sliderControll;
-    public Slider sliderMouse;
     [SerializeField] TextMeshProUGUI creditsText;
     bool isGamepad;
     private bool justPaused = false;
@@ -23,19 +21,20 @@ public class MainMenuScript : MonoBehaviour
     private InputAction clickAction;
     private InputAction cancelAction;
     private GameObject currentMenu;
+    private bool blockInput = false;
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
     [SerializeField]
-    private GameObject defaultStartButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
+    private GameObject defaultStartButton, defaultCreditsButton;
 
     private Dictionary<GameObject, GameObject> menuDefaultButtons;
 
     private void Awake()
     {
-        optionsMenu.SetActive(false);
-        soundMenu.SetActive(false);
-        controllMenu.SetActive(false);
+        StartCoroutine(Start());
+        creditsMenu.SetActive(false);
+       
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
         playerInput.SwitchCurrentActionMap("UI");
@@ -44,9 +43,7 @@ public class MainMenuScript : MonoBehaviour
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { mainMenu, defaultStartButton },
-            { optionsMenu, defaultOptionsButton },
-            { soundMenu, defaultSoundButton },
-            { controllMenu, defaultControlButton }
+            { creditsMenu, defaultCreditsButton },
         };
     }
     private void OnEnable()
@@ -69,6 +66,9 @@ public class MainMenuScript : MonoBehaviour
 
     private void OnClickPerformed(InputAction.CallbackContext context)
     {
+        if (blockInput)
+            return;
+
         var selected = EventSystem.current.currentSelectedGameObject;
 
        
@@ -76,9 +76,9 @@ public class MainMenuScript : MonoBehaviour
         {
             StartGame();
         }
-        else if (selected != null && selected.name == "OptionsButton")
+        else if (selected != null && selected.name == "CreditsButton")
         {
-            Options();
+            Credits();
         }
         else if (selected != null && selected.name == "QuitButton")
         {
@@ -88,25 +88,9 @@ public class MainMenuScript : MonoBehaviour
         {
             BackButton();
         }
-        else if (selected != null && selected.name == "BackButtonOptions")
+        else if (selected != null && selected.name == "CreditsBackButton")
         {
-            BackButtonOptions();
-        }
-        else if (selected != null && selected.name == "CreditsButton")
-        {
-            CreditsMenu();
-        }
-        else if (selected != null && selected.name == "SoundSettings")
-        {
-            SoundMenu();
-        }
-        else if (selected != null && selected.name == "ControllSettings")
-        {
-            ControllMenu();
-        }
-        else if (selected != null && selected.name == "BackButtonOptionsSound")
-        {
-            BackButtonOptions();
+            CreditsBackButton();
         }
         else
         {
@@ -192,15 +176,16 @@ public class MainMenuScript : MonoBehaviour
         }
     }
 
-    public void ChangeCameraSensetivetyControl()
+    private IEnumerator Start()
     {
-        cameraFollow.controllerSensitivity = sliderControll.value;
+        if (cameFromPauseMenu)
+        {
+            blockInput = true;
+            yield return new WaitForSecondsRealtime(0.5f); // Wait until input is released
+            cameFromPauseMenu = false;
+            blockInput = false;
+        }
     }
-    public void ChangeCameraSensetivetyMouse()
-    {
-        cameraFollow.mouseSensitivity = sliderMouse.value;
-    }
-   
     IEnumerator SetSelect(GameObject gameObject)
     {
         Cursor.lockState = CursorLockMode.None;
@@ -236,9 +221,7 @@ public class MainMenuScript : MonoBehaviour
         playerInput.SwitchCurrentActionMap("Player");
         Time.timeScale = 1f;
         mainMenu.SetActive(false);
-        optionsMenu.SetActive(false);
-        soundMenu.SetActive(false);
-        controllMenu.SetActive(false);
+        creditsMenu.SetActive(false);
         MusicManager.Instance.StopMusic(1.5f);
         Invoke(nameof(LoadScene), 2);
     }
@@ -265,35 +248,14 @@ public class MainMenuScript : MonoBehaviour
         PauseMenu();
     }
 
-    public void SoundMenu()
+    public void CreditsBackButton()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        Cursor.lockState = CursorLockMode.Confined;
-        OpenMenu(soundMenu);
-
-        Time.timeScale = 0f;
-
-        justPaused = true; // <- block resume for 1 frame
-
-    }
-    public void ControllMenu()
-    {
-        EventSystem.current.SetSelectedGameObject(null);
-        Cursor.lockState = CursorLockMode.Confined;
-        OpenMenu(controllMenu);
-
-        Time.timeScale = 0f;
-        creditsText.enabled = false;
-        justPaused = true; // <- block resume for 1 frame
-    }
-    public void BackButtonOptions()
-    {
-        Options();
+        Credits();
     }
 
-    public void Options()
+    public void Credits()
     {
-        OpenMenu(optionsMenu);
+        OpenMenu(creditsMenu);
 
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
@@ -303,10 +265,5 @@ public class MainMenuScript : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
-    }
-
-    public void CreditsMenu()
-    {
-        creditsText.enabled = !creditsText.enabled;
     }
 }
