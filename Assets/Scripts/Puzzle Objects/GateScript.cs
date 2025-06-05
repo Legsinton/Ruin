@@ -3,7 +3,7 @@ using UnityEngine;
 public class GateScript : MonoBehaviour, ISwitchManager
 {
     [Header("Settings")]
-    int switches;
+    [SerializeField] int switches;
     [SerializeField] int switchesNeeded;
     [SerializeField] float pressDepth;
     [SerializeField] float moveSpeed;
