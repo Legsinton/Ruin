@@ -5,6 +5,7 @@ public class CutSceneTrigger : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] bool playSound;
+    [SerializeField] bool changeMusic;
     [SerializeField] Transform target;
     [SerializeField] string music;
     [SerializeField] float fadeDuration;
@@ -33,13 +34,16 @@ public class CutSceneTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (!MusicManager.Instance.IsTrackPlaying(music))
+            if (changeMusic)
             {
-                MusicManager.Instance.PlayMusic(music, fadeDuration);
-            }
-            else
-            {
-                Debug.Log("Song already playing");
+                if (!MusicManager.Instance.IsTrackPlaying(music))
+                {
+                    MusicManager.Instance.PlayMusic(music, fadeDuration);
+                }
+                else
+                {
+                    Debug.Log("Song already playing");
+                }
             }
 
             Debug.Log("Im triggered");
@@ -48,7 +52,7 @@ public class CutSceneTrigger : MonoBehaviour
                 if (playSound && !played)
                 {
                     played = true;
-                    SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolvedFully);
+                    SoundFXManager.Instance.PlaySoundFX(SoundType.PuzzleSolved);
                 }
                 ActivateCamera();
                 StartCoroutine(PlayCutscene());

@@ -63,6 +63,12 @@ public class ChestScript : MonoBehaviour, IInteracting
                 Invoke(nameof(DisableActiveCamera), cutSceneLength);
                 playedCutScene = true;
             }
+            else if (cutSceneCamera == null && !playedCutScene)
+            {
+                DisablePlayer();
+                Invoke(nameof(ActivatePlayer), 1);
+                playedCutScene = true;
+            }
             if (!spawned)
             {
                 spawned = true;
@@ -130,6 +136,19 @@ public class ChestScript : MonoBehaviour, IInteracting
         playrtAudioListener.enabled = true;
         cameraAudioListener.enabled = false;
 
+    }
+
+    void DisablePlayer()
+    {
+        interact.disableInteract = true;
+        PlayerMovement.enabled = false;
+        PlayerMovement.movement = new Vector3(0, 0, 0);
+    }
+
+    void ActivatePlayer()
+    {
+        interact.disableInteract = false;
+        PlayerMovement.enabled = true;
     }
 
     public void PressInteract()
