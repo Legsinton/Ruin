@@ -8,6 +8,7 @@ public class GoddessInteract : MonoBehaviour, IInteracting
     [SerializeField] GameObject leg;
     [SerializeField] int armId;
     [SerializeField] int legId;
+    bool hasBeenPressed;
 
     bool missingText = true;
 
@@ -36,8 +37,9 @@ public class GoddessInteract : MonoBehaviour, IInteracting
             missingText = true;
         }
 
-        if (arm.activeInHierarchy && leg.activeInHierarchy)
+        if (arm.activeInHierarchy && leg.activeInHierarchy && !hasBeenPressed)
         {
+            hasBeenPressed = true;
             MusicManager.Instance.StopMusic(4);
             SceneManagement.Instance.OnWin();
 
