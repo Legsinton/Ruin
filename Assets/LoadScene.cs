@@ -20,7 +20,7 @@ public class LoadScene : MonoBehaviour
         introText.enabled = false;
         scipText.enabled = false;
         skipAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
-        skipAction.AddBinding("<Gamepad>/buttonSouth"); // A on Xbox, X on PS
+        skipAction.AddBinding("<Gamepad>/buttonSouth"); 
         skipAction.performed += OnSkipPressed;
         skipAction.Enable();
     }
@@ -55,9 +55,43 @@ public class LoadScene : MonoBehaviour
     {
         yield return new WaitForSeconds(10.5f);
         introText.enabled = true;
+        StartCoroutine(FadeMenu(introText, 1.5f, true));
         
-        yield return new WaitForSeconds(7f);
-        introText.enabled = false;
+        yield return new WaitForSeconds(6f);
+        StartCoroutine(FadeMenu(introText, 1.5f, false));
+    }
+
+    IEnumerator FadeMenu(TextMeshProUGUI menu, float duration, bool fadeIn)
+    {
+        float time = 0f;
+        float startAlpha = fadeIn ? 0f : 1f;
+        float endAlpha = fadeIn ? 1f : 0f;
+
+        // Get all UI components you want to fade
+        var texts = menu.GetComponentsInChildren<TextMeshProUGUI>(true);
+
+        while (time < duration)
+        {
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, time / duration);
+
+            foreach (var txt in texts)
+            {
+                Color c = txt.color;
+                c.a = alpha;
+                txt.color = c;
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure final alpha
+        foreach (var txt in texts)
+        {
+            Color c = txt.color;
+            c.a = endAlpha;
+            txt.color = c;
+        }
     }
 
     void LoadNewScene()

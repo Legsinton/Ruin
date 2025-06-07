@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
@@ -9,26 +11,38 @@ using UnityEngine.UI;
 
 public class PauseMenuScript : MonoBehaviour
 {
-    
-    public GameObject pauseMenu, optionsMenu,soundMenu,controllMenu;
+    [Header("Menu References")]
+    public Slider sliderControll;
+    public GameObject pauseMenu, optionsMenu, soundMenu, controllMenu;
+    public Slider sliderMouse;
+
+    [Header("Icon References")]
+
+    [SerializeField]
+    private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
+    public GameObject Hud_Ref,goddesSymbol/*, fishKey, skullKey, foot, hand*/;
+
+    [Header("Settings")]
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
     public CameraFollow cameraFollow;
-    public Slider sliderControll;
-    public Slider sliderMouse;
+    public InputActionAsset actions;
+    private InputAction clickAction;
+    private InputAction cancelAction;
+    private GameObject currentMenu;
     bool pauseButtonWasPressed = false;
     bool isPausing;
     bool isGamepad;
     bool justPaused = false;
-    public InputActionAsset actions; 
-    private InputAction clickAction;
-    private InputAction cancelAction;
-    private GameObject currentMenu;
+    readonly float fishKeyId = 1;
+    readonly float skullKeyId = 2;
+    readonly float armId = 3;
+    readonly float legId = 4;
+    //[SerializeField] GameObject arm,leg,fishKeyObject,skullKeyObject;
+
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
-    [SerializeField]
-    private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
 
     private Dictionary<GameObject, GameObject> menuDefaultButtons;
 
@@ -39,12 +53,9 @@ public class PauseMenuScript : MonoBehaviour
         optionsMenu.SetActive(false);
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
-        /*Hud_Ref1.SetActive(false);
-        Hud_Ref2.SetActive(false);
-        fishKey.SetActive(false);
-        skullKey.SetActive(false);
-        foot.SetActive(false);
-        arm.SetActive(false);*/
+        goddesSymbol.SetActive(false);
+        Hud_Ref.SetActive(false);
+        //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { pauseMenu, defaultPauseButton },
@@ -55,7 +66,7 @@ public class PauseMenuScript : MonoBehaviour
     }
     private void OnEnable()
     {
-        var actionMap = actions.FindActionMap("UI"); 
+        var actionMap = actions.FindActionMap("UI");
         clickAction = actionMap.FindAction("Click");
         cancelAction = actionMap.FindAction("Cancel");
 
@@ -167,7 +178,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             StartCoroutine(SetSelect(menuDefaultButtons[menu]));
         }
-        else 
+        else
         {
             EventSystem.current.SetSelectedGameObject(null);
 
@@ -175,8 +186,6 @@ public class PauseMenuScript : MonoBehaviour
             Cursor.visible = true;
             justPaused = false;
             isPausing = true;
-
-
         }
     }
 
@@ -210,23 +219,21 @@ public class PauseMenuScript : MonoBehaviour
     }
     public void PauseUnPause()
     {
-        
+
         bool isPaused = pauseMenu.activeInHierarchy;
         if (!isPaused)
         {
-            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);           
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             isGamepad = playerInput.currentControlScheme == "Gamepad";
             EventSystem.current.SetSelectedGameObject(null);
-        
+
             playerInput.SwitchCurrentActionMap("UI");
             playerMovement.enabled = false;
+            Hud_Ref.SetActive(true);
+            goddesSymbol.SetActive(true);
+            //SymbolConfirm();
+            //fishKey.SetActive(true); skullKey.SetActive(true); foot.SetActive(true); hand.SetActive(true);
             OpenMenu(pauseMenu);
-            /*Hud_Ref1.SetActive(true);
-            Hud_Ref2.SetActive(true);
-            fishKey.SetActive(true);
-            skullKey.SetActive(true);
-            foot.SetActive(true);
-            arm.SetActive(true);*/
             isPausing = true;
             Time.timeScale = 0f;
             justPaused = true;
@@ -246,7 +253,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             //Cursor.lockState = CursorLockMode.None;
-            //Cursor.visible = false;
+            Cursor.visible = false;
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
             Time.timeScale = 1f;
@@ -255,8 +262,10 @@ public class PauseMenuScript : MonoBehaviour
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            
-            //currentMenu = null;
+            Hud_Ref.SetActive(false);
+            goddesSymbol.SetActive(false);
+           // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
+            currentMenu = null;
             menuHistory.Clear();
         }
     }
@@ -278,11 +287,34 @@ public class PauseMenuScript : MonoBehaviour
         yield return null; // Let one frame pass
 
         justPaused = false;
-        
+
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(gameObject);  
+        EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
+   /* public void SymbolConfirm()
+    {
+        for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
+        {
+            if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
+            {
+                hand.SetActive(true);
+            }
+            if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
+            {
+                foot.SetActive(true);
+            }
+            if (Inventory.Instance.inventoryItems[i].itemId == skullKeyId && !skullKeyObject.activeInHierarchy)
+            {
+                skullKey.SetActive(true);
+            }
+            if (Inventory.Instance.inventoryItems[i].itemId == fishKeyId && !fishKeyObject.activeInHierarchy)
+            {
+                fishKey.SetActive(true);
+            }
+        }
+    }
+*/
     public void ResumeGame()
     {
         if (justPaused)
@@ -293,28 +325,22 @@ public class PauseMenuScript : MonoBehaviour
         if (isPausing)
         {
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
-            //Cursor.lockState = CursorLockMode.Confined;
-            //Cursor.visible = false; 
-
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
             Debug.Log("Unpause");
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
+            Hud_Ref.SetActive(false);
+            goddesSymbol.SetActive(false);
+            //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
-            /*Hud_Ref1.SetActive(false);
-            Hud_Ref2.SetActive(false);
-            fishKey.SetActive(false);
-            skullKey.SetActive(false);
-            foot.SetActive(false);
-            arm.SetActive(false);*/
             isPausing = false;
-
-            //currentMenu = null;
+            currentMenu = null;
             menuHistory.Clear();
-
         }
     }
 
@@ -330,8 +356,8 @@ public class PauseMenuScript : MonoBehaviour
         isPausing = true;
         Time.timeScale = 0f;
         justPaused = true; // <- block resume for 1 frame
-        
-        if(!isGamepad)
+
+        if (!isGamepad)
         {
             EventSystem.current.SetSelectedGameObject(null);
 
@@ -380,18 +406,13 @@ public class PauseMenuScript : MonoBehaviour
 
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
-        Time.timeScale = 0f; 
+        Time.timeScale = 0f;
     }
 
     public void QuitGame()
     {
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
         MainMenuScript.cameFromPauseMenu = true;
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    void LoadMainMenu()
-    {
         SceneManager.LoadScene("MainMenu");
     }
 }

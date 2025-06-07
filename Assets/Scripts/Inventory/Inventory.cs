@@ -4,6 +4,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance { get; private set; }
+    public ItemView itemView;
 
     [SerializeField] private ItemDatabase itemDatabase;
     public List<Item> inventoryItems = new List<Item>();
@@ -28,6 +29,7 @@ public class Inventory : MonoBehaviour
         {
             inventoryItems.Add(itemToAdd);
             Debug.Log($"Added: {itemToAdd.itemName}");
+            itemView.SymbolConfirm();
         }
     }
 

@@ -4,17 +4,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
     public static bool cameFromPauseMenu = false;
     public GameObject mainMenu, creditsMenu;
     public PlayerInput playerInput;
-    bool pauseButtonWasPressed = false;
     [SerializeField] TextMeshProUGUI creditsText;
+
     bool isGamepad;
     private bool justPaused = false;
     public InputActionAsset actions; // Drag in your InputActions asset in inspector
@@ -22,6 +20,7 @@ public class MainMenuScript : MonoBehaviour
     private InputAction cancelAction;
     private GameObject currentMenu;
     private bool blockInput = false;
+    bool pressed;
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
@@ -88,10 +87,6 @@ public class MainMenuScript : MonoBehaviour
         {
             BackButton();
         }
-        else if (selected != null && selected.name == "CreditsBackButton")
-        {
-            CreditsBackButton();
-        }
         else
         {
 
@@ -150,10 +145,11 @@ public class MainMenuScript : MonoBehaviour
         {
             StartCoroutine(SetSelect(menuDefaultButtons[menu]));
         }
-        else if (!isGamepad)
+        else
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
+            justPaused = false;
         }
     }
 
@@ -208,22 +204,78 @@ public class MainMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
+    IEnumerator FadeMenu(GameObject menu, float duration, bool fadeIn)
+    {
+        float time = 0f;
+        float startAlpha = fadeIn ? 0f : 1f;
+        float endAlpha = fadeIn ? 1f : 0f;
+
+        // Get all UI components you want to fade
+        var texts = menu.GetComponentsInChildren<TextMeshProUGUI>(true);
+        var images = menu.GetComponentsInChildren<UnityEngine.UI.Image>(true);
+
+        while (time < duration)
+        {
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, time / duration);
+
+            foreach (var txt in texts)
+            {
+                Color c = txt.color;
+                c.a = alpha;
+                txt.color = c;
+            }
+
+            foreach (var img in images)
+            {
+                Color c = img.color;
+                c.a = alpha;
+                img.color = c;
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure final alpha
+        foreach (var txt in texts)
+        {
+            Color c = txt.color;
+            c.a = endAlpha;
+            txt.color = c;
+        }
+
+        foreach (var img in images)
+        {
+            Color c = img.color;
+            c.a = endAlpha;
+            img.color = c;
+        }
+
+        // Optional: disable menu when fully faded out
+        if (!fadeIn)
+            OpenMenu(menu);
+    }
+
     public void StartGame()
     {
         if (justPaused)
         {
             return;
         }
-
-        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.Boom);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
-        playerInput.SwitchCurrentActionMap("Player");
-        Time.timeScale = 1f;
-        mainMenu.SetActive(false);
-        creditsMenu.SetActive(false);
-        MusicManager.Instance.StopMusic(1.5f);
-        Invoke(nameof(LoadScene), 2);
+        else if (!pressed)
+        {
+            pressed = true;
+            SoundFXManager.Instance.PlayButtonSoundFX(SoundType.Boom);
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
+            playerInput.SwitchCurrentActionMap("Player");
+            Time.timeScale = 1f;
+            //mainMenu.SetActive(false);
+            creditsMenu.SetActive(false);
+            StartCoroutine(FadeMenu(mainMenu, 1.5f, false));  
+            MusicManager.Instance.StopMusic(1.5f);
+            Invoke(nameof(LoadScene), 2);
+        }
     }
 
     void LoadScene()
@@ -240,17 +292,11 @@ public class MainMenuScript : MonoBehaviour
         Time.timeScale = 0f;
         creditsText.enabled = false;
         OpenMenu(mainMenu);
-        justPaused = true; // <- block resume for 1 frame
     }
 
     public void BackButton()
     {
         PauseMenu();
-    }
-
-    public void CreditsBackButton()
-    {
-        Credits();
     }
 
     public void Credits()
@@ -260,6 +306,8 @@ public class MainMenuScript : MonoBehaviour
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
         Time.timeScale = 0f;
+
+
     }
 
     public void QuitGame()
