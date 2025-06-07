@@ -34,7 +34,7 @@ public class LoadScene : MonoBehaviour
     {
         if (!pressedOnce)
         {
-            scipText.enabled = true;
+            StartCoroutine(FadeMenu(scipText, 1.5f, true));
             pressedOnce = true;
             Invoke(nameof(StopPressed), 2f);
         }

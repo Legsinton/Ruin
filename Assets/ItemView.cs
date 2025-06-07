@@ -18,7 +18,6 @@ public class ItemView : MonoBehaviour
     }
     public void SymbolConfirm()
     {
-        Debug.Log("Im running here");
         for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
         {
             Debug.Log("Im running here again");

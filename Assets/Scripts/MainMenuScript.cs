@@ -50,10 +50,10 @@ public class MainMenuScript : MonoBehaviour
         var actionMap = actions.FindActionMap("UI"); // Or whichever map contains your Click
         clickAction = actionMap.FindAction("Click");
         cancelAction = actionMap.FindAction("Cancel");
+        playerInput.onControlsChanged += OnControlsChanged;
         clickAction.Enable();
         clickAction.performed += OnClickPerformed;
         cancelAction.performed += OnCancelPerformed; // Define this handler
-
     }
 
     private void OnDisable()
@@ -169,6 +169,42 @@ public class MainMenuScript : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(null);
                 justPaused = false;
             }
+        }
+    }
+
+    void OnControlsChanged(PlayerInput input)
+    {
+        string scheme = input.currentControlScheme;
+        isGamepad = scheme == "Gamepad";
+
+        // Find your pointer action — adjust the action map and action name as per your setup
+        var uiActionMap = actions.FindActionMap("UI");
+        var pointerAction = uiActionMap?.FindAction("Point");
+
+        if (pointerAction != null)
+        {
+            if (isGamepad)
+                pointerAction.Disable();  // Disable pointer input when using gamepad
+            else
+                pointerAction.Enable();   // Enable pointer input when using mouse/keyboard
+        }
+
+        // Now set the EventSystem selected object accordingly
+        EventSystem.current.SetSelectedGameObject(null);
+
+        if (isGamepad)
+        {
+            if (currentMenu != null && menuDefaultButtons.ContainsKey(currentMenu))
+            {
+                EventSystem.current.SetSelectedGameObject(menuDefaultButtons[currentMenu]);
+            }
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked; // optional: lock cursor center for gamepad
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined; // free cursor
         }
     }
 

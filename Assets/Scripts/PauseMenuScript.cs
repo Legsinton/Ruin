@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class PauseMenuScript : MonoBehaviour
     public Slider sliderControll;
     public GameObject pauseMenu, optionsMenu, soundMenu, controllMenu;
     public Slider sliderMouse;
-
+   
     [Header("Icon References")]
 
     [SerializeField]
@@ -55,6 +56,7 @@ public class PauseMenuScript : MonoBehaviour
         controllMenu.SetActive(false);
         goddesSymbol.SetActive(false);
         Hud_Ref.SetActive(false);
+
         //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
@@ -69,7 +71,7 @@ public class PauseMenuScript : MonoBehaviour
         var actionMap = actions.FindActionMap("UI");
         clickAction = actionMap.FindAction("Click");
         cancelAction = actionMap.FindAction("Cancel");
-
+        playerInput.onControlsChanged += OnControlsChanged;
         clickAction.Enable();
         clickAction.performed += OnClickPerformed;
         cancelAction.performed += OnCancelPerformed; // Define this handler
@@ -144,6 +146,43 @@ public class PauseMenuScript : MonoBehaviour
         }
     }
 
+    void OnControlsChanged(PlayerInput input)
+    {
+        string scheme = input.currentControlScheme;
+        isGamepad = scheme == "Gamepad";
+
+        // Find your pointer action — adjust the action map and action name as per your setup
+        var uiActionMap = actions.FindActionMap("UI");
+        var pointerAction = uiActionMap?.FindAction("Point");
+
+        if (pointerAction != null)
+        {
+            if (isGamepad)
+                pointerAction.Disable();  // Disable pointer input when using gamepad
+            else
+                pointerAction.Enable();   // Enable pointer input when using mouse/keyboard
+        }
+
+        // Now set the EventSystem selected object accordingly
+        EventSystem.current.SetSelectedGameObject(null);
+
+        if (isGamepad)
+        {
+            if (currentMenu != null && menuDefaultButtons.ContainsKey(currentMenu))
+            {
+                EventSystem.current.SetSelectedGameObject(menuDefaultButtons[currentMenu]);
+            }
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked; // optional: lock cursor center for gamepad
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined; // free cursor
+        }
+    }
+
+
     private void OnSubmit(InputValue value)
     {
         if (value.isPressed && !pauseButtonWasPressed)
@@ -182,8 +221,8 @@ public class PauseMenuScript : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
 
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
+            /*Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;*/
             justPaused = false;
             isPausing = true;
         }
@@ -244,6 +283,8 @@ public class PauseMenuScript : MonoBehaviour
             else
             {
                 EventSystem.current.SetSelectedGameObject(null);
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
                 justPaused = false;
                 isPausing = true;
 
@@ -252,7 +293,7 @@ public class PauseMenuScript : MonoBehaviour
         else if (isPaused)
         {
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
-            //Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
             playerMovement.enabled = true;
             playerInput.SwitchCurrentActionMap("Player");
@@ -266,14 +307,13 @@ public class PauseMenuScript : MonoBehaviour
             goddesSymbol.SetActive(false);
            // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             currentMenu = null;
+           
             menuHistory.Clear();
         }
     }
 
     IEnumerator SetSelect(GameObject gameObject)
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = false;
         yield return new WaitUntil(() =>
         {
             bool startReleased = Gamepad.current == null || !Gamepad.current.startButton.isPressed;

@@ -146,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                gamepad.SetMotorSpeeds(0f, 0f);
                 SoundFXManager.Instance.StopLoopFor(gameObject);
             }
 
