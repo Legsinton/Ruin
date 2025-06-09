@@ -17,6 +17,8 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     PlayerMovement playerMovement;
     Interact interact;
     bool playedSound;
+    GameObject cinematicCanvas;
+
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -28,11 +30,17 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     [SerializeField] AudioListener playrtAudioListener;
     [SerializeField] AudioListener cameraAudioListener;
 
+    private void Awake()
+    {
+        cinematicCanvas = GameObject.Find("CinemaCanvas");
+    }
+
     void Start()
     {
-        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(openAngle, 0,0 ));
+        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(openAngle, 0, 0));
         playerMovement = FindAnyObjectByType<PlayerMovement>();
         interact = FindAnyObjectByType<Interact>();
+        cinematicCanvas.SetActive(false);
     }
     void Update()
     {
@@ -53,7 +61,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
         {
             if (!playedSound)
             {
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock,this.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, this.transform);
                 playedSound = true;
             }
             transform.rotation = Quaternion.Lerp(transform.rotation, openRotation, Time.deltaTime * openSpeed);
@@ -65,6 +73,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     }
     void ActivateCamera()
     {
+        cinematicCanvas.SetActive(true);
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
         interact.disableInteract = true;
@@ -80,6 +89,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     }
     void DisableActiveCamera()
     {
+        cinematicCanvas.SetActive(false);
         SoundFXManager.Instance.StopLoopFor(gameObject);
         playrtAudioListener.enabled = true;
         cameraAudioListener.enabled = false;
