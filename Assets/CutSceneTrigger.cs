@@ -24,10 +24,19 @@ public class CutSceneTrigger : MonoBehaviour
     [SerializeField] AudioListener playrtAudioListener;
     [SerializeField] AudioListener cameraAudioListener;
     PlayerMovement playerMovement;
+    GameObject playerCanvas;
+    GameObject cinematicCanvas;
 
     private void Awake()
     {
         playerMovement = FindAnyObjectByType<PlayerMovement>();
+        playerCanvas = GameObject.Find("CanvasPlayer");
+        cinematicCanvas = GameObject.Find("CinemaCanvas");
+    }
+
+    private void Start()
+    {
+        cinematicCanvas.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -64,6 +73,9 @@ public class CutSceneTrigger : MonoBehaviour
 
     void ActivateCamera()
     {
+        playerCanvas.SetActive(false);
+        cinematicCanvas.SetActive(true);
+
         if (playerCamera != null) playerCamera.enabled = false;
         if (cutSceneCamera != null) cutSceneCamera.enabled = true;
         if (playrtAudioListener != null && cutSceneCamera != null)
@@ -87,6 +99,9 @@ public class CutSceneTrigger : MonoBehaviour
 
     void DisableActiveCamera()
     {
+        playerCanvas.SetActive(true);
+        cinematicCanvas.SetActive(false);
+
         if (playerCamera != null) playerCamera.enabled = true;
         if (cutSceneCamera != null) cutSceneCamera.enabled = false;
         if (playrtAudioListener != null && cutSceneCamera != null)

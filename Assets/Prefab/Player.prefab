@@ -187,7 +187,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3831665695784811463}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a432be1f13e5354e8431d4b89d005ce, type: 3}
   m_Name: 
@@ -213,6 +213,7 @@ MonoBehaviour:
     m_Bits: 8
   distToGround: 1.2
   deathHeight: -15
+  playerStartPosition: {x: 0, y: 0, z: 0}
   cameraTransform: {fileID: 0}
 --- !u!114 &2961865858088359948
 MonoBehaviour:
@@ -241,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300ae839d6cb63948b9e9e57859c46b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemView: {fileID: 0}
   itemDatabase: {fileID: 11400000, guid: d27a1fc639b201949ac9b724f9d863fd, type: 2}
   inventoryItems: []
 --- !u!114 &8199516164004468363
@@ -268,6 +270,7 @@ MonoBehaviour:
   playerInput: {fileID: 5285071339164778062}
   lockCameraToPlayer: 0
   stopFollowingPlayer: 0
+  cameraStartPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &5836405872222619045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,26 +283,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08b36d7b036940244b4b30e6b4d797e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sliderControll: {fileID: 0}
   pauseMenu: {fileID: 0}
   optionsMenu: {fileID: 0}
   soundMenu: {fileID: 0}
   controllMenu: {fileID: 0}
-  Hud_Ref1: {fileID: 0}
-  Hud_Ref2: {fileID: 0}
-  fishKey: {fileID: 0}
-  skullKey: {fileID: 0}
-  foot: {fileID: 0}
-  arm: {fileID: 0}
-  playerInput: {fileID: 5285071339164778062}
-  playerMovement: {fileID: 1130461663377977015}
-  cameraFollow: {fileID: 8199516164004468363}
-  sliderControll: {fileID: 0}
   sliderMouse: {fileID: 0}
-  actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   defaultPauseButton: {fileID: 0}
   defaultOptionsButton: {fileID: 0}
   defaultSoundButton: {fileID: 0}
   defaultControlButton: {fileID: 0}
+  Hud_Ref: {fileID: 0}
+  goddesSymbol: {fileID: 0}
+  playerInput: {fileID: 5285071339164778062}
+  playerMovement: {fileID: 1130461663377977015}
+  cameraFollow: {fileID: 8199516164004468363}
+  actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
 --- !u!114 &6522770843291682697
 MonoBehaviour:
   m_ObjectHideFlags: 0
