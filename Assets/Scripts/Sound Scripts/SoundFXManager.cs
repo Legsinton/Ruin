@@ -217,7 +217,7 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    public void StartLoopFor(GameObject owner, SoundType type,Transform parent = null)
+    public void StartLoopFor(GameObject owner, SoundType type,Transform parent = null, float? spatialBlend = 1f)
     {
         if (activeLoopsByObject.ContainsKey(owner)) return; // If there's already a loop for this object, don't start another
 
@@ -257,7 +257,14 @@ public class SoundFXManager : MonoBehaviour
         source.outputAudioMixerGroup = sfxMixerGroup;
         source.clip = clip;
         source.loop = true;
-        source.spatialBlend = 1f;
+        if (spatialBlend.HasValue)
+        {
+            source.spatialBlend = spatialBlend.Value;
+        }
+        else
+        {
+            source.spatialBlend = 1f;
+        }
         source.minDistance = 1f;
         source.maxDistance = 50f;
         source.volume = volume;

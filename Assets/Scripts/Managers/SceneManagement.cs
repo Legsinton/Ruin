@@ -18,6 +18,19 @@ public class SceneManagement : MonoBehaviour
     GameObject player;
     CameraFollow cameraFollow;
     GameObject playerCamera;
+    [SerializeField] Camera playerCameraCutscene;
+
+    [Header("Settings For Cameras")]
+    public Transform[] waypoints; // Set these in the Inspector
+    public float moveDuration = 2f; // Time between waypoints
+    [SerializeField] float cutSceneLength;
+    [SerializeField] Transform target;
+
+    [Header("References")]
+    public bool cutscene;
+    [SerializeField] Camera cutSceneCamera;
+    [SerializeField] AudioListener playrtAudioListener;
+    [SerializeField] AudioListener cameraAudioListener;
 
     private void Awake()
     {
@@ -77,11 +90,13 @@ public class SceneManagement : MonoBehaviour
             playerMovement.movementInput = new Vector2(0, 0);
             playerMovement.movement = new Vector3(0, 0, 0);
         }
+        ActivateCamera();
+        StartCoroutine(PlayCutscene());
         yield return StartCoroutine(FadeToWhite(2));
         winText.gameObject.SetActive(true);
         yield return new WaitForSeconds(7f);
-        winText.gameObject.SetActive(false);
-        overlayWhite.gameObject.SetActive(false);
+        /*winText.gameObject.SetActive(false);
+        overlayWhite.gameObject.SetActive(false);*/
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -116,5 +131,49 @@ public class SceneManagement : MonoBehaviour
             yield return null;
         }
         overlayWhite.color = new Color(color.r, color.g, color.b, 1f);
+    }
+    void ActivateCamera()
+    {
+        if (playerCameraCutscene != null) playerCameraCutscene.enabled = false;
+        if (cutSceneCamera != null) cutSceneCamera.enabled = true;
+        if (playrtAudioListener != null && cutSceneCamera != null)
+        {
+            cutSceneCamera.enabled = true;
+            playrtAudioListener.enabled = false;
+            cameraAudioListener.enabled = true;
+            cutscene = true;
+        }
+    }
+    private IEnumerator PlayCutscene()
+    {
+        for (int i = 0; i < waypoints.Length - 1; i++)
+        {
+            cutSceneCamera.transform.LookAt(target);
+            Vector3 startPos = waypoints[i].position;
+            Quaternion startRot = waypoints[i].rotation;
+            Vector3 endPos = waypoints[i + 1].position;
+            Quaternion endRot = waypoints[i + 1].rotation;
+
+            Debug.Log("Started Moving");
+
+            float elapsed = 0f;
+            while (elapsed < moveDuration)
+            {
+                Debug.Log("Is Moving");
+
+                float t = elapsed / moveDuration;
+                cutSceneCamera.transform.position = Vector3.Lerp(startPos, endPos, t);
+                cutSceneCamera.transform.rotation = Quaternion.Slerp(startRot, endRot, t);
+                cutSceneCamera.transform.LookAt(target);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            cutSceneCamera.transform.position = endPos;
+            cutSceneCamera.transform.LookAt(target);
+        }
+
+        yield return new WaitForSeconds(cutSceneLength); // example timing, or use actual animation/movement
+        Debug.Log("Im done");
     }
 }

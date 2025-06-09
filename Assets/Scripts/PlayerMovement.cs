@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     gamepad.SetMotorSpeeds(0.005f, 0.0015f);
                 }
-                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform);
+                SoundFXManager.Instance.StartLoopFor(gameObject, SoundType.PushBlock, PushBlock.transform,0);
                 currentVelocity = Mathf.MoveTowards(currentVelocity, 2, acceleration * Time.deltaTime);
             }
             else
