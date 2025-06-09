@@ -35,8 +35,6 @@ public class PauseMenuScript : MonoBehaviour
     readonly float skullKeyId = 2;
     readonly float armId = 3;
     readonly float legId = 4;
-    //[SerializeField] GameObject arm,leg,fishKeyObject,skullKeyObject;
-
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
@@ -52,8 +50,6 @@ public class PauseMenuScript : MonoBehaviour
         controllMenu.SetActive(false);
         goddesSymbol.SetActive(false);
         Hud_Ref.SetActive(false);
-
-        //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { pauseMenu, defaultPauseButton },
@@ -217,8 +213,8 @@ public class PauseMenuScript : MonoBehaviour
         {
             EventSystem.current.SetSelectedGameObject(null);
 
-            /*Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;*/
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
             justPaused = false;
             isPausing = true;
         }
