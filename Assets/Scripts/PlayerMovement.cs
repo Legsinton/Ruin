@@ -38,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
 
     SceneManagement sceneManagement;
     bool isDead;
+    [HideInInspector] public Vector3 playerStartPosition;
 
     [Header("Camera")]
     [SerializeField] Transform cameraTransform;
@@ -54,15 +55,16 @@ public class PlayerMovement : MonoBehaviour
         cameraFollow = GetComponent<CameraFollow>();
         sceneManagement = FindFirstObjectByType<SceneManagement>();
         rb.freezeRotation = true;
+        playerStartPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
     void Update()
     {
-        animationController.SetFloat("Velocity", currentVelocity/maxSpeed);
+        animationController.SetFloat("Velocity", currentVelocity / maxSpeed);
         RotatePlayer();
         CheckPlayerFalling();
     }
-    void LateUpdate()
+    public void LateUpdate()
     {
         cachedCameraForward = cameraTransform.forward;
         cachedCameraForward.y = 0;
@@ -268,9 +270,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void CheckPlayerFalling()
     {
-        if (!isDead && transform.position.y < deathHeight)
+        if (/*!isDead &&*/ transform.position.y < deathHeight)
         {
-            isDead = true;
+            //isDead = true;
             cameraFollow.StopFollowing();
             cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
             sceneManagement.OnDeath();
@@ -280,6 +282,6 @@ public class PlayerMovement : MonoBehaviour
     // Action map change
     void OnEnable()
     {
-       // playerInput.SwitchCurrentActionMap("UI");
+        // playerInput.SwitchCurrentActionMap("UI");
     }
 }

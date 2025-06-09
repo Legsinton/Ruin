@@ -24,6 +24,7 @@ public class CameraFollow : MonoBehaviour
 
     [HideInInspector] public bool lockCameraToPlayer;
     [HideInInspector] public bool stopFollowingPlayer;
+    [HideInInspector] public Vector3 cameraStartPosition;
     float targetXRotation;
     int layerMask;
     float sensitivity;
@@ -37,6 +38,7 @@ public class CameraFollow : MonoBehaviour
     {
         previousPlayerPos = transform.position;
         layerMask = LayerMask.GetMask("Wall", "whatIsGround");
+        cameraStartPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
     private void OnLook(InputValue value)
