@@ -23,7 +23,6 @@ public partial class FreezePlayerAction : Action
         if (target != null)
         {
             Debug.Log("Target isn't null");
-            // targetRb = target.GetComponent<Rigidbody>();
             targetRb = target.GetComponentInParent<Rigidbody>();
 
             if (targetRb != null)
@@ -42,13 +41,13 @@ public partial class FreezePlayerAction : Action
         return Status.Running;
     }
 
-    // protected override void OnEnd()
-    // {
-    //     if (targetRb != null)
-    //     {
-    //         targetRb.isKinematic = false; // Unfreeze
-    //     }
-    // }
+    protected override void OnEnd()
+    {
+        if (targetRb != null)
+        {
+            targetRb.isKinematic = false; // Unfreeze
+        }
+    }
 
     protected override Status OnUpdate()
     {

@@ -73,8 +73,6 @@ public class Inspector : MonoBehaviour
         itemId = item.itemId;
 
         itemInfoText.text = item.itemInfo;
-        Debug.Log("Agnes: Info text = " + itemInfoText.text);
-        Debug.Log("Agnes: Info text = " + item.itemInfo);
 
         if (item.equipable == true)
         {
@@ -122,7 +120,7 @@ public class Inspector : MonoBehaviour
     // ACTION MAPS / INPUT HANDLING
     public void StopInspection()
     {
-        Debug.Log("Agnes: Stopped inspection");
+
     }
 
     public void OnRotateStart()

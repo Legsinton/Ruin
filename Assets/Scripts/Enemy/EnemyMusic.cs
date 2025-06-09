@@ -44,7 +44,6 @@ public class EnemyMusic : MonoBehaviour
             if (!played)
             {
                 played = true;
-                Debug.Log("Agnes: Should play Angry!");
                 SoundFXManager.Instance.PlaySoundFX(SoundType.GoddessAngry, this.transform.position);
             }
 

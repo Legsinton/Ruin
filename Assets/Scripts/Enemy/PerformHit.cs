@@ -30,10 +30,11 @@ public class PerformHit : MonoBehaviour
 
         bool targetDetected = (bool)isHit.ObjectValue;
 
-        if (targetDetected)
+        if (targetDetected && !sceneManagement.playerHasDied)
         {
-            Debug.Log("Target killed!");
+            BehaviorGraphAgent behaviorAgent = agent.GetComponent<BehaviorGraphAgent>();
             sceneManagement.OnDeath();
+            behaviorAgent.BlackboardReference.SetVariableValue("IsHit", false);
         }
     }
 }
