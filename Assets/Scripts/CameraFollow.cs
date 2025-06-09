@@ -37,7 +37,7 @@ public class CameraFollow : MonoBehaviour
     void Start()
     {
         previousPlayerPos = transform.position;
-        layerMask = LayerMask.GetMask("Wall", "whatIsGround");
+        layerMask = LayerMask.GetMask("Wall", "whatIsGround", "Interactable");
         cameraStartPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
 
