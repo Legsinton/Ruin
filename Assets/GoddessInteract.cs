@@ -18,11 +18,13 @@ public class GoddessInteract : MonoBehaviour, IInteracting
         {
             if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
             {
+                SoundFXManager.Instance.PlaySoundFX(SoundType.Insert, this.transform.position,2,10);
                 arm.SetActive(true);
                 missingText = false;
             }
             if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
             {
+                SoundFXManager.Instance.PlaySoundFX(SoundType.Insert, this.transform.position, 2, 10);
                 leg.SetActive(true);
                 missingText = false;
             }

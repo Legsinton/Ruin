@@ -94,11 +94,12 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.PressurePlate,Resources.Load<AudioClip>("Sounds/Effects/PressurePlate") },
                 
                 
-                //AudioClips
+                //Multible AudioClips
                 { SoundType.ButtonSound, Resources.LoadAll<AudioClip>("Sounds/Effects/ButtonSound") },
                 { SoundType.Break,Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
                 { SoundType.Goddess, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScream") },
                 { SoundType.GoddessAngry, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScreamAngry") },
+                { SoundType.Insert,Resources.LoadAll<AudioClip>("Sounds/Effects/Insert") },
                 { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
                 { SoundType.WalkSoft, Resources.LoadAll<AudioClip>("Sounds/Effects/WalkSoft") },
@@ -311,6 +312,7 @@ public enum SoundType
     Fire,
     Goddess,
     GoddessAngry,
+    Insert,
     KeyFound,
     ManScream,
     PushBlock,
