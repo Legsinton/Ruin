@@ -9,6 +9,10 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI displayText;
 
     private Coroutine currentTextCoroutine;
+    readonly float fishKeyId = 1;
+    readonly float skullKeyId = 2;
+    readonly float armId = 3;
+    readonly float legId = 4;
 
     private void Awake()
     {

@@ -16,6 +16,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [SerializeField] bool moveGate;
     Vector3 originalPosition;
     Vector3 targetPos;
+    GameObject cinematicCanvas;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -28,12 +29,17 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [SerializeField] Outline outlineScript;
     PlayerMovement playerMovement;
 
+    private void Awake()
+    {
+        cinematicCanvas = GameObject.Find("CinemaCanvas");
+    }
 
     private void Start()
     {
         originalPosition = transform.position;
         targetPos = originalPosition;
         playerMovement = FindAnyObjectByType<PlayerMovement>();
+        cinematicCanvas.SetActive(false);
     }
 
     private void Update()
@@ -61,6 +67,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
 
     void ActivateCamera()
     {
+        cinematicCanvas.SetActive(true);
         if (playerCamera != null) playerCamera.enabled = false;
         if (cutSceneCamera != null) cutSceneCamera.enabled = true;
         if (playrtAudioListener != null && cutSceneCamera != null)
@@ -76,17 +83,18 @@ public class GateScript : MonoBehaviour, ISwitchManager
         {
             playerMovement.cutscene = true;
             playerMovement.PushBlock = null;
-            playerMovement.movementInput = new Vector2(0,0);
-            playerMovement.movement = new Vector3 (0, 0, 0);
+            playerMovement.movementInput = new Vector2(0, 0);
+            playerMovement.movement = new Vector3(0, 0, 0);
         }
     }
 
 
     void DisableActiveCamera()
     {
+        cinematicCanvas.SetActive(false);
         if (playerCamera != null) playerCamera.enabled = true;
         if (cutSceneCamera != null) cutSceneCamera.enabled = false;
-        if(playrtAudioListener != null && cutSceneCamera != null)
+        if (playrtAudioListener != null && cutSceneCamera != null)
         {
             cutSceneCamera.enabled = false;
             playrtAudioListener.enabled = true;
@@ -97,7 +105,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
         {
             playerMovement.cutscene = false;
         }
-        
+
     }
     void OnSwitchCountChanged()
     {
@@ -127,7 +135,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
 
     public void AddSwitch(int amount)
     {
-        
+
         switches += amount;
         OnSwitchCountChanged();
     }

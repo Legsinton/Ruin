@@ -12,12 +12,13 @@ public class PauseMenuScript : MonoBehaviour
     public Slider sliderControll;
     public GameObject pauseMenu, optionsMenu, soundMenu, controllMenu;
     public Slider sliderMouse;
-   
+
     [Header("Icon References")]
 
     [SerializeField]
     private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
-    public GameObject Hud_Ref,goddesSymbol/*, fishKey, skullKey, foot, hand*/;
+    public GameObject Hud_Ref, goddesSymbol/*, fishKey, skullKey, foot, hand*/;
+    GameObject playerCanvas;
 
     [Header("Settings")]
     public PlayerInput playerInput;
@@ -50,6 +51,9 @@ public class PauseMenuScript : MonoBehaviour
         controllMenu.SetActive(false);
         goddesSymbol.SetActive(false);
         Hud_Ref.SetActive(false);
+        playerCanvas = GameObject.Find("CanvasPlayer");
+
+        //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { pauseMenu, defaultPauseButton },
@@ -143,7 +147,7 @@ public class PauseMenuScript : MonoBehaviour
         string scheme = input.currentControlScheme;
         isGamepad = scheme == "Gamepad";
 
-        // Find your pointer action — adjust the action map and action name as per your setup
+        // Find your pointer action ï¿½ adjust the action map and action name as per your setup
         var uiActionMap = actions.FindActionMap("UI");
         var pointerAction = uiActionMap?.FindAction("Point");
 
@@ -281,6 +285,7 @@ public class PauseMenuScript : MonoBehaviour
                 isPausing = true;
 
             }
+            playerCanvas.SetActive(false);
         }
         else if (isPaused)
         {
@@ -297,9 +302,11 @@ public class PauseMenuScript : MonoBehaviour
             controllMenu.SetActive(false);
             Hud_Ref.SetActive(false);
             goddesSymbol.SetActive(false);
-           // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
+            // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             currentMenu = null;
-           
+
+            playerCanvas.SetActive(true);
+
             menuHistory.Clear();
         }
     }
@@ -324,29 +331,29 @@ public class PauseMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(gameObject);
     }
 
-   /* public void SymbolConfirm()
-    {
-        for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
-        {
-            if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
-            {
-                hand.SetActive(true);
-            }
-            if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
-            {
-                foot.SetActive(true);
-            }
-            if (Inventory.Instance.inventoryItems[i].itemId == skullKeyId && !skullKeyObject.activeInHierarchy)
-            {
-                skullKey.SetActive(true);
-            }
-            if (Inventory.Instance.inventoryItems[i].itemId == fishKeyId && !fishKeyObject.activeInHierarchy)
-            {
-                fishKey.SetActive(true);
-            }
-        }
-    }
-*/
+    /* public void SymbolConfirm()
+     {
+         for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
+         {
+             if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
+             {
+                 hand.SetActive(true);
+             }
+             if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
+             {
+                 foot.SetActive(true);
+             }
+             if (Inventory.Instance.inventoryItems[i].itemId == skullKeyId && !skullKeyObject.activeInHierarchy)
+             {
+                 skullKey.SetActive(true);
+             }
+             if (Inventory.Instance.inventoryItems[i].itemId == fishKeyId && !fishKeyObject.activeInHierarchy)
+             {
+                 fishKey.SetActive(true);
+             }
+         }
+     }
+ */
     public void ResumeGame()
     {
         if (justPaused)
@@ -373,6 +380,8 @@ public class PauseMenuScript : MonoBehaviour
             isPausing = false;
             currentMenu = null;
             menuHistory.Clear();
+
+            playerCanvas.SetActive(true);
         }
     }
 
