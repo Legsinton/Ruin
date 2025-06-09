@@ -13,6 +13,9 @@ public class SceneManagement : MonoBehaviour
     [Header("Win State UI")]
     public Image overlayWhite;
     public TMP_Text winText;
+    [HideInInspector] private bool deathScreenStarted = false;
+    [HideInInspector] public bool playerHasDied = false;
+
 
     PlayerMovement playerMovement;
     GameObject player;
@@ -32,9 +35,16 @@ public class SceneManagement : MonoBehaviour
         playerCamera = GameObject.Find("PlayerCamera");
     }
 
+
     public void OnDeath()
     {
+        if (playerHasDied || deathScreenStarted) return;
+
+        playerHasDied = true;
+        deathScreenStarted = true;
         StartCoroutine(DeathScreen());
+        playerHasDied = false;
+        deathScreenStarted = false;
     }
 
     public void OnWin()
@@ -49,21 +59,14 @@ public class SceneManagement : MonoBehaviour
         playerMovement.enabled = false;
         player.transform.position = playerMovement.playerStartPosition;
 
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.MovePosition(playerMovement.playerStartPosition);
-        }
-
         playerCamera.transform.position = cameraFollow.cameraStartPosition;
         cameraFollow.StartFollowing();
         cameraFollow.DisableLockCamera();
 
         yield return null;
 
+        yield return StartCoroutine(FadeOut(2));
         playerMovement.enabled = true;
-        overlay.gameObject.SetActive(false);
     }
 
     private IEnumerator WinScene()
@@ -100,6 +103,15 @@ public class SceneManagement : MonoBehaviour
         }
 
         overlay.color = new Color(color.r, color.g, color.b, 1f);
+    }
+
+    IEnumerator FadeOut(float duration)
+    {
+        for (float timer = 0; timer < duration; timer += Time.deltaTime)
+        {
+            overlay.color = Color.Lerp(Color.black, Color.clear, timer / duration);
+            yield return 0;
+        }
     }
 
     public IEnumerator FadeToWhite(float duration)

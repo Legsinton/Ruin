@@ -31,7 +31,6 @@ public partial class RangeDetectorAction : Action
         if (previousTarget != null && currentTarget == null)
         {
             LastKnownPosition.Value = previousTarget.transform.position;
-            Debug.Log("Agnes: Enemy lost player, last known position set to: " + LastKnownPosition.Value);
         }
 
         previousTarget = currentTarget;

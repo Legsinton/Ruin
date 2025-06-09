@@ -245,6 +245,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 vel = playerMoveDir * currentVelocity;
         vel.y = rb.linearVelocity.y; // preserve current fall speed
         rb.linearVelocity = vel;
+
     }
 
     void RotatePlayer()
@@ -270,9 +271,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void CheckPlayerFalling()
     {
-        if (/*!isDead &&*/ transform.position.y < deathHeight)
+        if (transform.position.y < deathHeight)
         {
-            //isDead = true;
             cameraFollow.StopFollowing();
             cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
             sceneManagement.OnDeath();
