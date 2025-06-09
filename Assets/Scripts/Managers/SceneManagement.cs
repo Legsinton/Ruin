@@ -14,12 +14,22 @@ public class SceneManagement : MonoBehaviour
     public Image overlayWhite;
     public TMP_Text winText;
 
+    PlayerMovement playerMovement;
+    GameObject player;
+    CameraFollow cameraFollow;
+    GameObject playerCamera;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
+        cameraFollow = FindFirstObjectByType<CameraFollow>();
+        GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
+        player = playerGO.transform.root.gameObject;
+        playerCamera = GameObject.Find("PlayerCamera");
     }
 
     public void OnDeath()
@@ -29,15 +39,31 @@ public class SceneManagement : MonoBehaviour
 
     public void OnWin()
     {
-       StartCoroutine(WinScene());
+        StartCoroutine(WinScene());
     }
 
     private IEnumerator DeathScreen()
     {
         yield return StartCoroutine(FadeToBlack(1));
         yield return new WaitForSeconds(0.5f);
+        playerMovement.enabled = false;
+        player.transform.position = playerMovement.playerStartPosition;
+
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.MovePosition(playerMovement.playerStartPosition);
+        }
+
+        playerCamera.transform.position = cameraFollow.cameraStartPosition;
+        cameraFollow.StartFollowing();
+        cameraFollow.DisableLockCamera();
+
+        yield return null;
+
+        playerMovement.enabled = true;
         overlay.gameObject.SetActive(false);
-        SceneManager.LoadScene(sceneToLoad);
     }
 
     private IEnumerator WinScene()
@@ -89,7 +115,6 @@ public class SceneManagement : MonoBehaviour
             overlayWhite.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
             yield return null;
         }
-
         overlayWhite.color = new Color(color.r, color.g, color.b, 1f);
     }
 }
