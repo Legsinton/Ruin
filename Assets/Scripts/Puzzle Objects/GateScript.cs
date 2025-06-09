@@ -9,8 +9,8 @@ public class GateScript : MonoBehaviour, ISwitchManager
     [SerializeField] float moveSpeed;
     [SerializeField] float arriveThreshold;
     [SerializeField] bool playSound;
-    [SerializeField] bool played;
     public bool cutscene;
+    bool played;
 
     bool playedCutScene;
     [SerializeField] bool moveGate;

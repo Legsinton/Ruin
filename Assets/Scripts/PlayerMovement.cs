@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public bool cutscene;
     bool played;
 
-    [HideInInspector] public PushBlock PushBlock;
+    public PushBlock PushBlock;
     [HideInInspector] public RotatingObject rotatingObject;
 
     [HideInInspector] public Vector2 movementInput;
@@ -216,6 +216,11 @@ public class PlayerMovement : MonoBehaviour
         {
             float targetSpeed = maxSpeed * inputMagnitude;
             currentVelocity = Mathf.MoveTowards(currentVelocity, targetSpeed, acceleration * Time.deltaTime);
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+            }
+            SoundFXManager.Instance.StopLoopFor(gameObject);
             animationController.SetBool("walk", true);
 
             animationController.SetBool("pushblock", false);
