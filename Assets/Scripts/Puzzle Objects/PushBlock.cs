@@ -68,9 +68,13 @@ public class PushBlock : MonoBehaviour, IInteracting
                 }
                 if (!movedPlayerToTargetPos)
                 {
-                    if (Vector3.Distance(new Vector3(player.transform.position.x, 0, player.transform.position.z), new Vector3(currentPlayerPosTarget.position.x, 0, currentPlayerPosTarget.position.z)) > 0.05)
+                    Vector3 flatPlayerPos = new Vector3(player.transform.position.x, 0, player.transform.position.z);
+                    Vector3 flatTargetPos = new Vector3(currentPlayerPosTarget.position.x, 0, currentPlayerPosTarget.position.z);
+
+                    if (Vector3.Distance(flatPlayerPos, flatTargetPos) > 0.05f)
                     {
-                        Vector3 newPos = Vector3.Lerp(player.transform.position, currentPlayerPosTarget.position, 10 * Time.deltaTime);
+                        float moveSpeed = 7.5f;
+                        Vector3 newPos = Vector3.MoveTowards(player.transform.position, currentPlayerPosTarget.position, moveSpeed * Time.deltaTime);
                         player.transform.position = new Vector3(newPos.x, player.transform.position.y, newPos.z);
                     }
                     else
@@ -79,7 +83,6 @@ public class PushBlock : MonoBehaviour, IInteracting
                         movedPlayerToTargetPos = true;
 
                         float snappedY = Mathf.Round(playerRotation.eulerAngles.y / 90f) * 90f;
-
                         playerRotation.transform.rotation = Quaternion.Euler(playerRotation.rotation.x, snappedY, playerRotation.rotation.z);
                     }
                 }
