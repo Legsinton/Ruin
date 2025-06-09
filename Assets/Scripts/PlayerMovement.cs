@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     float stepTimer;
     float gravityForce;
     public bool cutscene;
+    bool played;
 
     [HideInInspector] public PushBlock PushBlock;
     [HideInInspector] public RotatingObject rotatingObject;
@@ -276,10 +277,23 @@ public class PlayerMovement : MonoBehaviour
         if (/*!isDead &&*/ transform.position.y < deathHeight)
         {
             //isDead = true;
+            if (!played)
+            {
+                Debug.Log("I screamed");
+                SoundFXManager.Instance.PlaySoundFX(SoundType.ManScream, this.transform.position,2,500);
+                played = true;
+            }
             cameraFollow.StopFollowing();
             cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
             sceneManagement.OnDeath();
+            Invoke(nameof(StopPlay), 2);
         }
+    }
+
+    void StopPlay()
+    {
+        played = false;
+
     }
 
     // Action map change
