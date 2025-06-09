@@ -14,6 +14,7 @@ public class TriggerBlock : MonoBehaviour
     [SerializeField] RotatingObject extraRotatingObject;
     float rotatingObjectAngle;
     float extraRotatingObjectAngle;
+    bool played;
 
     [Header("References")]
     [SerializeField] RotatingObject rotatingObject;
@@ -103,7 +104,12 @@ public class TriggerBlock : MonoBehaviour
                 foreach (MonoBehaviour target in switchTargets)
                 {
                     if (target is ISwitchManager switchable)
-                    {
+                    {                       
+                        if (!clockPuzzle)
+                        {
+                            
+                            SoundFXManager.Instance.PlaySoundFX(SoundType.Insert, this.transform.position);
+                        }
                         switchable.AddSwitch(1);  // or RemoveSwitch(1)
                     }
                 }

@@ -15,6 +15,8 @@ public class SceneManagement : MonoBehaviour
     public TMP_Text winText;
     [HideInInspector] private bool deathScreenStarted = false;
     [HideInInspector] public bool playerHasDied = false;
+    [SerializeField] string music;
+    [SerializeField] float fadeDuration;
 
 
     PlayerMovement playerMovement;
@@ -75,6 +77,7 @@ public class SceneManagement : MonoBehaviour
         playerCamera.transform.position = cameraFollow.cameraStartPosition;
         cameraFollow.StartFollowing();
         cameraFollow.DisableLockCamera();
+        MusicManager.Instance.PlayMusic(music, fadeDuration);
 
         yield return null;
 
