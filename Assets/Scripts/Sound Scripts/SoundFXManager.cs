@@ -86,17 +86,20 @@ public class SoundFXManager : MonoBehaviour
                 { SoundType.Death, Resources.Load<AudioClip>("Sounds/Effects/Death") },
                 { SoundType.Fire, Resources.Load<AudioClip>("Sounds/Effects/Fire") },
                 { SoundType.KeyFound, Resources.Load<AudioClip>("Sounds/Effects/KeyFound") },
+                { SoundType.ManScream, Resources.Load<AudioClip>("Sounds/Effects/ManScream") },
+                { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
                 { SoundType.PuzzleSolved, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolved") },
                 { SoundType.PuzzleSolvedFully, Resources.Load<AudioClip>("Sounds/Effects/PuzzleSolvedFully") },
                 { SoundType.DoorOpen, Resources.Load<AudioClip>("Sounds/Effects/DoorOpen") },
-                { SoundType.PushBlock, Resources.Load<AudioClip>("Sounds/Effects/PushBlock") },
+                { SoundType.PressurePlate,Resources.Load<AudioClip>("Sounds/Effects/PressurePlate") },
                 
-                //AudioClips
+                
+                //Multible AudioClips
                 { SoundType.ButtonSound, Resources.LoadAll<AudioClip>("Sounds/Effects/ButtonSound") },
                 { SoundType.Break,Resources.LoadAll<AudioClip>("Sounds/Effects/Break") },
                 { SoundType.Goddess, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScream") },
                 { SoundType.GoddessAngry, Resources.LoadAll<AudioClip>("Sounds/Effects/GoddesScreamAngry") },
-                { SoundType.PressurePlate,Resources.LoadAll<AudioClip>("Sounds/Effects/PressurePlate") },
+                { SoundType.Insert,Resources.LoadAll<AudioClip>("Sounds/Effects/Insert") },
                 { SoundType.RandomScary,Resources.LoadAll<AudioClip>("Sounds/Effects/RandomScary") },
                 { SoundType.Walk, Resources.LoadAll<AudioClip>("Sounds/Effects/Walk") },
                 { SoundType.WalkSoft, Resources.LoadAll<AudioClip>("Sounds/Effects/WalkSoft") },
@@ -309,7 +312,9 @@ public enum SoundType
     Fire,
     Goddess,
     GoddessAngry,
+    Insert,
     KeyFound,
+    ManScream,
     PushBlock,
     PuzzleSolved,
     PuzzleSolvedFully,
