@@ -34,7 +34,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     private void Awake()
     {
         cinematicCanvas = GameObject.Find("CinemaCanvas");
-        playerCanvas = GameObject.Find("PlayerCanvas");
+        playerCanvas = GameObject.Find("CanvasPlayer");
     }
 
     void Start()
