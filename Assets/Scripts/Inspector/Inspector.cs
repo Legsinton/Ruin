@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
@@ -14,7 +13,7 @@ public class Inspector : MonoBehaviour
     [SerializeField] public GameObject playerCanvas;
 
     Canvas canvas;
-    Camera camera;
+    Camera inspectorCamera;
     PostProcessManager postProcessManager;
     PlayerInput playerInput;
     GameObject itemPrefab;
@@ -44,8 +43,8 @@ public class Inspector : MonoBehaviour
 
         if (inspectorCamera != null)
         {
-            camera = inspectorCamera.GetComponent<Camera>();
-            camera.enabled = false;
+            this.inspectorCamera = inspectorCamera.GetComponent<Camera>();
+            this.inspectorCamera.enabled = false;
         }
         else
         {
@@ -77,7 +76,7 @@ public class Inspector : MonoBehaviour
     public void InspectItem(ScriptableObject interactableObject)
     {
         canvas.enabled = true;
-        camera.enabled = true;
+        inspectorCamera.enabled = true;
         postProcessManager.ToggleDepthOfField();
         playerCanvas.SetActive(false);
 
@@ -166,7 +165,7 @@ public class Inspector : MonoBehaviour
             Destroy(itemPrefab);
         }
         canvas.enabled = false;
-        camera.enabled = false;
+        inspectorCamera.enabled = false;
         postProcessManager.ToggleDepthOfField();
         playerInput.SwitchCurrentActionMap("Player");
         playerCanvas.SetActive(true);
@@ -179,6 +178,7 @@ public class Inspector : MonoBehaviour
             return;
         }
 
+        SoundFXManager.Instance.PlaySoundFX(SoundType.KeyFound, this.transform.position, 1, 50, 0);
         Inventory.Instance.AddItem(itemId);
         inspectableItem.DestroyOnEquip();
         OnBack();
