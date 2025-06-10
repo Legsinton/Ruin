@@ -183,21 +183,27 @@ public class PauseMenuScript : MonoBehaviour
 
     private void OnSubmit(InputValue value)
     {
-        if (value.isPressed && !pauseButtonWasPressed)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
+        //if (value.isPressed && !pauseButtonWasPressed)
+       // {
 
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("Pressed");
-            pauseButtonWasPressed = true;
+            Debug.Log("Im pressed");
+            //pauseButtonWasPressed = true;
             PauseUnPause();
-        }
-        else
+            //StartCoroutine(StopButton());            
+        //}
+        /*else
         {
             Debug.Log("Not Pressed");
             pauseButtonWasPressed = false;
-        }
+        }*/
+    }
+
+    IEnumerator StopButton()
+    {
+        yield return new WaitForSeconds(0.2F);
+        Debug.Log("I stopped pressed");
+
+        pauseButtonWasPressed = false;
     }
 
     void OpenMenu(GameObject menu)

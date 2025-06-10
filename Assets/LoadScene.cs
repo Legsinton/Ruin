@@ -44,7 +44,7 @@ public class LoadScene : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            SceneManager.LoadScene("Playtest_4");
+            LoadNewScene(); 
         }
     }
 
@@ -99,7 +99,7 @@ public class LoadScene : MonoBehaviour
 
     void LoadNewScene()
     {
-        SceneManager.LoadScene("Playtest_4");
+        SceneManager.LoadScene("Final_Build");
     }
 
     void StopPressed()
