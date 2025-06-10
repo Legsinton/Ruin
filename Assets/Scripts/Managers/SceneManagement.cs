@@ -33,6 +33,7 @@ public class SceneManagement : MonoBehaviour
     [SerializeField] Camera cutSceneCamera;
     [SerializeField] AudioListener playrtAudioListener;
     [SerializeField] AudioListener cameraAudioListener;
+    GameObject playerCanvas;
 
     private void Awake()
     {
@@ -42,6 +43,7 @@ public class SceneManagement : MonoBehaviour
         }
         playerMovement = FindFirstObjectByType<PlayerMovement>();
         cameraFollow = FindFirstObjectByType<CameraFollow>();
+        playerCanvas = GameObject.Find("CanvasPlayer");
     }
 
     public void OnDeath()
@@ -79,13 +81,14 @@ public class SceneManagement : MonoBehaviour
 
         yield return StartCoroutine(FadeOut(2));
         playerMovement.enabled = true;
-       
+
         Debug.Log("Im finished dying");
 
     }
 
     private IEnumerator WinScene()
     {
+        playerCanvas.SetActive(false);
         PlayerMovement playerMovement = FindAnyObjectByType<PlayerMovement>();
         SoundFXManager.Instance.PlaySoundFX(SoundType.Boom);
         if (playerMovement != null)
@@ -97,7 +100,7 @@ public class SceneManagement : MonoBehaviour
         }
         ActivateCamera();
         StartCoroutine(PlayCutscene());
-        yield return StartCoroutine(FadeToWhite(2));
+        yield return StartCoroutine(FadeWhite(4));
         winText.gameObject.SetActive(true);
         yield return new WaitForSeconds(7f);
         /*winText.gameObject.SetActive(false);
@@ -135,21 +138,33 @@ public class SceneManagement : MonoBehaviour
 
     }
 
-    public IEnumerator FadeToWhite(float duration)
+    IEnumerator FadeWhite(float duration)
     {
-        Color color = overlayWhite.color;
-        float elapsedTime = 0f;
-
         overlayWhite.gameObject.SetActive(true);
 
-        while (elapsedTime < duration)
+        for (float timer = 0; timer < duration; timer += Time.deltaTime)
         {
-            elapsedTime += Time.deltaTime;
-            overlayWhite.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
-            yield return null;
+            overlayWhite.color = Color.Lerp(Color.clear, Color.white, timer / duration);
+            yield return 0;
         }
-        overlayWhite.color = new Color(color.r, color.g, color.b, 1f);
     }
+
+    // public IEnumerator FadeToWhite(float duration)
+    // {
+    //     Color color = overlayWhite.color;
+    //     float elapsedTime = 0f;
+
+    //     overlayWhite.gameObject.SetActive(true);
+
+    //     while (elapsedTime < duration)
+    //     {
+    //         elapsedTime += Time.deltaTime;
+    //         overlayWhite.color = new Color(color.r, color.g, color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
+    //         yield return null;
+    //     }
+    //     overlayWhite.color = new Color(color.r, color.g, color.b, 1f);
+    // }
+
     void ActivateCamera()
     {
         if (playerCameraCutscene != null) playerCameraCutscene.enabled = false;
