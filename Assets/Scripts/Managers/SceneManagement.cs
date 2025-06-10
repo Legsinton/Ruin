@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -121,6 +120,7 @@ public class SceneManagement : MonoBehaviour
         }
 
         overlay.color = new Color(color.r, color.g, color.b, 1f);
+
     }
 
     IEnumerator FadeOut(float duration)
@@ -130,6 +130,9 @@ public class SceneManagement : MonoBehaviour
             overlay.color = Color.Lerp(Color.black, Color.clear, timer / duration);
             yield return 0;
         }
+
+        overlay.gameObject.SetActive(false);
+
     }
 
     public IEnumerator FadeToWhite(float duration)
