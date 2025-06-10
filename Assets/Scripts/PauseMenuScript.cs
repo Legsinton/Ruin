@@ -17,7 +17,7 @@ public class PauseMenuScript : MonoBehaviour
 
     [SerializeField]
     private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
-    public GameObject Hud_Ref, goddesSymbol, panel/*, fishKey, skullKey, foot, hand*/;
+    public GameObject Hud_Ref, goddesSymbol;
     GameObject playerCanvas;
 
     [Header("Settings")]
@@ -32,10 +32,6 @@ public class PauseMenuScript : MonoBehaviour
     bool isPausing;
     bool isGamepad;
     bool justPaused = false;
-    readonly float fishKeyId = 1;
-    readonly float skullKeyId = 2;
-    readonly float armId = 3;
-    readonly float legId = 4;
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
@@ -266,8 +262,6 @@ public class PauseMenuScript : MonoBehaviour
         {
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             isGamepad = playerInput.currentControlScheme == "Gamepad";
-            //EventSystem.current.SetSelectedGameObject(null);
-
             playerInput.SwitchCurrentActionMap("UI");
             playerInput.SwitchCurrentControlScheme("Keyboard&Mouse");
             playerMovement.enabled = false;
