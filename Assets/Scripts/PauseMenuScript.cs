@@ -17,7 +17,7 @@ public class PauseMenuScript : MonoBehaviour
 
     [SerializeField]
     private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
-    public GameObject Hud_Ref, goddesSymbol/*, fishKey, skullKey, foot, hand*/;
+    public GameObject Hud_Ref, goddesSymbol, panel/*, fishKey, skullKey, foot, hand*/;
     GameObject playerCanvas;
 
     [Header("Settings")]
@@ -50,6 +50,7 @@ public class PauseMenuScript : MonoBehaviour
         soundMenu.SetActive(false);
         controllMenu.SetActive(false);
         goddesSymbol.SetActive(false);
+        panel.SetActive(false);
         Hud_Ref.SetActive(false);
         playerCanvas = GameObject.Find("CanvasPlayer");
 
@@ -271,6 +272,7 @@ public class PauseMenuScript : MonoBehaviour
             playerInput.SwitchCurrentControlScheme("Keyboard&Mouse");
             playerMovement.enabled = false;
             Hud_Ref.SetActive(true);
+            panel.SetActive(true);
             goddesSymbol.SetActive(true);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -310,6 +312,7 @@ public class PauseMenuScript : MonoBehaviour
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
             Hud_Ref.SetActive(false);
+            panel.SetActive(false);
             goddesSymbol.SetActive(false);
             // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             currentMenu = null;
@@ -381,6 +384,7 @@ public class PauseMenuScript : MonoBehaviour
             pauseMenu.SetActive(false);
             Time.timeScale = 1f;
             Hud_Ref.SetActive(false);
+            panel.SetActive(false);
             goddesSymbol.SetActive(false);
             //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             optionsMenu.SetActive(false);
