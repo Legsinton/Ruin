@@ -321,6 +321,8 @@ public class MainMenuScript : MonoBehaviour
 
     public void PauseMenu()
     {
+        SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+
         EventSystem.current.SetSelectedGameObject(null);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;

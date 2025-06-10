@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -17,7 +18,6 @@ public class SceneManagement : MonoBehaviour
     [HideInInspector] public bool playerHasDied = false;
     [SerializeField] string music;
     [SerializeField] float fadeDuration;
-
 
     PlayerMovement playerMovement;
     GameObject player;
@@ -50,16 +50,15 @@ public class SceneManagement : MonoBehaviour
         playerCamera = GameObject.Find("PlayerCamera");
     }
 
-
     public void OnDeath()
     {
         if (playerHasDied || deathScreenStarted) return;
 
-        playerHasDied = true;
+        Debug.Log("Im dying");
+        //playerHasDied = true;
         deathScreenStarted = true;
         StartCoroutine(DeathScreen());
-        playerHasDied = false;
-        deathScreenStarted = false;
+        
     }
 
     public void OnWin()
@@ -83,6 +82,10 @@ public class SceneManagement : MonoBehaviour
 
         yield return StartCoroutine(FadeOut(2));
         playerMovement.enabled = true;
+        playerHasDied = false;
+        deathScreenStarted = false;
+        Debug.Log("Im finished dying");
+
     }
 
     private IEnumerator WinScene()

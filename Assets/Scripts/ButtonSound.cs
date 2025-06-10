@@ -14,12 +14,12 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
     }
     public void OnPointerClick(PointerEventData eventData)
     {
-        PlayButtonSelect();
+        //PlayButtonSelect();
     }
 
     public void OnSubmit(BaseEventData eventData) 
     {
-        PlayButtonSelect();
+      //  PlayButtonSelect();
     }
     public void OnSelect(BaseEventData eventData)
     {
@@ -28,12 +28,12 @@ public class UIButtonSFX : MonoBehaviour, IPointerEnterHandler, ISelectHandler, 
 
     void PlayButtonSelect()
     {
-       /* if (Time.unscaledTime >= nextPlayTimeSelect)
+        if (Time.unscaledTime >= nextPlayTimeSelect)
         {
            
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             nextPlayTimeSelect = Time.unscaledTime + soundCooldownSelect;
-        }*/
+        }
     }
 
     void PlayButtonSound()

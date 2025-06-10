@@ -19,6 +19,8 @@ public class LoadScene : MonoBehaviour
     {
         introText.enabled = false;
         scipText.enabled = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         skipAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
         skipAction.AddBinding("<Gamepad>/buttonSouth"); 
         skipAction.performed += OnSkipPressed;
@@ -34,6 +36,7 @@ public class LoadScene : MonoBehaviour
     {
         if (!pressedOnce)
         {
+            scipText.enabled = true;
             StartCoroutine(FadeMenu(scipText, 1.5f, true));
             pressedOnce = true;
             Invoke(nameof(StopPressed), 2f);

@@ -53,7 +53,6 @@ public class PauseMenuScript : MonoBehaviour
         Hud_Ref.SetActive(false);
         playerCanvas = GameObject.Find("CanvasPlayer");
 
-        //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { pauseMenu, defaultPauseButton },
@@ -146,20 +145,25 @@ public class PauseMenuScript : MonoBehaviour
     {
         string scheme = input.currentControlScheme;
         isGamepad = scheme == "Gamepad";
+        Debug.Log($"Control scheme changed to: {scheme}");
 
-        // Find your pointer action � adjust the action map and action name as per your setup
         var uiActionMap = actions.FindActionMap("UI");
-        var pointerAction = uiActionMap?.FindAction("Point");
+        var pointAction = uiActionMap?.FindAction("Point");
 
-        if (pointerAction != null)
+        if (pointAction != null)
         {
             if (isGamepad)
-                pointerAction.Disable();  // Disable pointer input when using gamepad
+            {
+                pointAction.Disable();
+            }
             else
-                pointerAction.Enable();   // Enable pointer input when using mouse/keyboard
+            {
+                pointAction.Enable();
+                Debug.Log("Mouse Point action re-enabled");
+            }
         }
 
-        // Now set the EventSystem selected object accordingly
+        // Reset selection
         EventSystem.current.SetSelectedGameObject(null);
 
         if (isGamepad)
@@ -169,14 +173,15 @@ public class PauseMenuScript : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(menuDefaultButtons[currentMenu]);
             }
             Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked; // optional: lock cursor center for gamepad
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
             Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined; // free cursor
+            Cursor.lockState = CursorLockMode.Confined;
         }
     }
+
 
 
     private void OnSubmit(InputValue value)
@@ -260,14 +265,18 @@ public class PauseMenuScript : MonoBehaviour
         {
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             isGamepad = playerInput.currentControlScheme == "Gamepad";
-            EventSystem.current.SetSelectedGameObject(null);
+            //EventSystem.current.SetSelectedGameObject(null);
 
             playerInput.SwitchCurrentActionMap("UI");
+            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse");
             playerMovement.enabled = false;
             Hud_Ref.SetActive(true);
             goddesSymbol.SetActive(true);
-            //SymbolConfirm();
-            //fishKey.SetActive(true); skullKey.SetActive(true); foot.SetActive(true); hand.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            EventSystem.current.SetSelectedGameObject(null);
+            // or select your default UI button
+            EventSystem.current.SetSelectedGameObject(defaultPauseButton);
             OpenMenu(pauseMenu);
             isPausing = true;
             Time.timeScale = 0f;
@@ -278,7 +287,7 @@ public class PauseMenuScript : MonoBehaviour
             }
             else
             {
-                EventSystem.current.SetSelectedGameObject(null);
+                //EventSystem.current.SetSelectedGameObject(null);
                 Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
                 justPaused = false;
@@ -455,5 +464,26 @@ public class PauseMenuScript : MonoBehaviour
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
         MainMenuScript.cameFromPauseMenu = true;
         SceneManager.LoadScene("MainMenu");
+    }
+    public class PointerDebug : MonoBehaviour
+    {
+        void Update()
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                PointerEventData pointerData = new PointerEventData(EventSystem.current)
+                {
+                    position = Mouse.current.position.ReadValue()
+                };
+
+                List<RaycastResult> results = new List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointerData, results);
+
+                foreach (var result in results)
+                {
+                    Debug.Log("Hit: " + result.gameObject.name);
+                }
+            }
+        }
     }
 }
