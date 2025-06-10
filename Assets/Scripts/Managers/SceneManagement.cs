@@ -76,7 +76,7 @@ public class SceneManagement : MonoBehaviour
         playerMovement.enabled = false;
         playerMovement.TeleportPlayer(playerMovement.playerStartPosition);
         yield return null;
-        //playerCamera.transform.position = cameraFollow.cameraStartPosition;
+        cameraFollow.SnapToPosition();
         cameraFollow.StartFollowing();
         cameraFollow.DisableLockCamera();
         MusicManager.Instance.PlayMusic(music, fadeDuration);
