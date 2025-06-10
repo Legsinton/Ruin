@@ -137,19 +137,6 @@ public class CameraFollow : MonoBehaviour
 
     public void SnapToPosition()
     {
-        // Lerped position offset
-        Vector3 smoothedPlayerPos = Vector3.Slerp(previousPlayerPos, transform.position, smoothTime * Time.deltaTime);
-        Vector3 playerOffset = smoothedPlayerPos - transform.position;
-        previousPlayerPos = smoothedPlayerPos;
-
-        // Instant rotation offset
-        Quaternion rotation = Quaternion.Euler(-currentRotation.y, currentRotation.x, 0);
-        Vector3 rotatedOffset = rotation * (cameraPlayerOffset.normalized * targetCameraDistance);
-
-        Vector3 newCameraOffset = playerOffset + rotatedOffset;
-
-        // Final camera position and offset
-        Vector3 newCameraPos = transform.position + newCameraOffset;
-        transform.position = newCameraPos;
+        previousPlayerPos = transform.position;
     }
 }

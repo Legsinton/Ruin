@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -20,9 +19,7 @@ public class SceneManagement : MonoBehaviour
     [SerializeField] float fadeDuration;
 
     PlayerMovement playerMovement;
-    GameObject player;
     CameraFollow cameraFollow;
-    GameObject playerCamera;
     [SerializeField] Camera playerCameraCutscene;
 
     [Header("Settings For Cameras")]
@@ -45,9 +42,6 @@ public class SceneManagement : MonoBehaviour
         }
         playerMovement = FindFirstObjectByType<PlayerMovement>();
         cameraFollow = FindFirstObjectByType<CameraFollow>();
-        GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
-        player = playerGO.transform.root.gameObject;
-        playerCamera = GameObject.Find("PlayerCamera");
     }
 
     public void OnDeath()
@@ -76,7 +70,7 @@ public class SceneManagement : MonoBehaviour
         playerMovement.enabled = false;
         playerMovement.TeleportPlayer(playerMovement.playerStartPosition);
         yield return null;
-        //playerCamera.transform.position = cameraFollow.cameraStartPosition;
+        cameraFollow.SnapToPosition();
         cameraFollow.StartFollowing();
         cameraFollow.DisableLockCamera();
         MusicManager.Instance.PlayMusic(music, fadeDuration);
@@ -126,6 +120,7 @@ public class SceneManagement : MonoBehaviour
         }
 
         overlay.color = new Color(color.r, color.g, color.b, 1f);
+
     }
 
     IEnumerator FadeOut(float duration)
@@ -135,6 +130,9 @@ public class SceneManagement : MonoBehaviour
             overlay.color = Color.Lerp(Color.black, Color.clear, timer / duration);
             yield return 0;
         }
+
+        overlay.gameObject.SetActive(false);
+
     }
 
     public IEnumerator FadeToWhite(float duration)
