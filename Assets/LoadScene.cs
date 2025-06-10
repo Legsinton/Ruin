@@ -9,6 +9,7 @@ public class LoadScene : MonoBehaviour
 {
     public TextMeshProUGUI introText;
     public TextMeshProUGUI scipText;
+    public TextMeshProUGUI scipTextKeyboard;
     private InputAction skipAction;
 
     bool justPressed;
@@ -19,6 +20,7 @@ public class LoadScene : MonoBehaviour
     {
         introText.enabled = false;
         scipText.enabled = false;
+        scipTextKeyboard.enabled = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         skipAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
@@ -34,17 +36,39 @@ public class LoadScene : MonoBehaviour
 
     private void OnSkipPressed(InputAction.CallbackContext context)
     {
+        // Detect what control was used
+        string controlPath = context.control.path;
+
         if (!pressedOnce)
         {
-            scipText.enabled = true;
-            StartCoroutine(FadeMenu(scipText, 1.5f, true));
+            if (controlPath.Contains("buttonSouth")) // Gamepad
+            {
+                scipText.enabled = true;
+                StartCoroutine(FadeMenu(scipText, 1.5f, true));
+
+                if (scipTextKeyboard.enabled)
+                {
+                    StartCoroutine(FadeMenu(scipTextKeyboard, 1.5f, false));
+                }
+            }
+            else if (controlPath.Contains("space")) // Keyboard
+            {
+                scipTextKeyboard.enabled = true;
+                StartCoroutine(FadeMenu(scipTextKeyboard, 1.5f, true));
+
+                if (scipText.enabled)
+                {
+                    StartCoroutine(FadeMenu(scipText, 1.5f, false));
+                }
+            }
+
             pressedOnce = true;
             Invoke(nameof(StopPressed), 2f);
         }
         else
         {
             StopAllCoroutines();
-            LoadNewScene(); 
+            LoadNewScene();
         }
     }
 
