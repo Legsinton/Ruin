@@ -13,6 +13,7 @@ public class Inspector : MonoBehaviour
     [SerializeField] public TMP_Text itemInfoText;
 
     Canvas canvas;
+    Camera camera;
     PostProcessManager postProcessManager;
     PlayerInput playerInput;
     GameObject itemPrefab;
@@ -28,11 +29,22 @@ public class Inspector : MonoBehaviour
     void Awake()
     {
         GameObject inspectorCanvas = GameObject.Find("CenteredInspectorCanvas");
+        GameObject inspectorCamera = GameObject.Find("InspectorCamera");
 
         if (inspectorCanvas != null)
         {
             canvas = inspectorCanvas.GetComponent<Canvas>();
             canvas.enabled = false;
+        }
+        else
+        {
+            Debug.Log("Could not locate Canvas component on " + inspectorCanvas.name);
+        }
+
+        if (inspectorCamera != null)
+        {
+            camera = inspectorCamera.GetComponent<Camera>();
+            camera.enabled = false;
         }
         else
         {
@@ -66,6 +78,7 @@ public class Inspector : MonoBehaviour
     public void InspectItem(ScriptableObject interactableObject)
     {
         canvas.enabled = true;
+        camera.enabled = true;
         postProcessManager.ToggleDepthOfField();
 
 
@@ -153,6 +166,7 @@ public class Inspector : MonoBehaviour
             Destroy(itemPrefab);
         }
         canvas.enabled = false;
+        camera.enabled = false;
         postProcessManager.ToggleDepthOfField();
         playerInput.SwitchCurrentActionMap("Player");
     }
