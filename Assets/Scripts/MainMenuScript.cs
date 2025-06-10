@@ -45,6 +45,19 @@ public class MainMenuScript : MonoBehaviour
             { creditsMenu, defaultCreditsButton },
         };
     }
+
+    private IEnumerator Start()
+    {
+        if (cameFromPauseMenu)
+        {
+            blockInput = true;
+            yield return new WaitForSecondsRealtime(0.5f); // Wait until input is released
+            cameFromPauseMenu = false;
+            blockInput = false;
+        }
+
+        StartCoroutine(SetSelect(defaultStartButton));
+    }
     private void OnEnable()
     {
         var actionMap = actions.FindActionMap("UI"); // Or whichever map contains your Click
@@ -109,25 +122,6 @@ public class MainMenuScript : MonoBehaviour
         }
         
     }
-
-  /*  private void OnSubmit(InputValue value)
-    {
-        if (value.isPressed && !pauseButtonWasPressed)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("Pressed");
-            pauseButtonWasPressed = true;
-            BackButton();
-        }
-        else
-        {
-            Debug.Log("Not Pressed");
-            pauseButtonWasPressed = false;
-        }
-    }*/
 
     void OpenMenu(GameObject menu)
     {
@@ -208,16 +202,7 @@ public class MainMenuScript : MonoBehaviour
         }
     }
 
-    private IEnumerator Start()
-    {
-        if (cameFromPauseMenu)
-        {
-            blockInput = true;
-            yield return new WaitForSecondsRealtime(0.5f); // Wait until input is released
-            cameFromPauseMenu = false;
-            blockInput = false;
-        }
-    }
+  
     IEnumerator SetSelect(GameObject gameObject)
     {
         Cursor.lockState = CursorLockMode.None;

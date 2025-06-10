@@ -191,15 +191,11 @@ public class PauseMenuScript : MonoBehaviour
             pauseButtonWasPressed = true;
             PauseUnPause();
         }
-        else
-        {
-            Debug.Log("Not Pressed");
-            pauseButtonWasPressed = false;
-        }
     }
 
     void StopButton()
     {
+        Debug.Log("Stopped pressed");
         pauseButtonWasPressed = false;
 
     }
@@ -210,6 +206,7 @@ public class PauseMenuScript : MonoBehaviour
         {
             Debug.Log("Un Pressed");
             Invoke(nameof(StopButton), 1);
+
             PauseUnPause();
         }
     }
@@ -281,11 +278,6 @@ public class PauseMenuScript : MonoBehaviour
             Hud_Ref.SetActive(true);
             panel.SetActive(true);
             goddesSymbol.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            EventSystem.current.SetSelectedGameObject(null);
-            // or select your default UI button
-            EventSystem.current.SetSelectedGameObject(defaultPauseButton);
             OpenMenu(pauseMenu);
             isPausing = true;
             Time.timeScale = 0f;
@@ -296,7 +288,7 @@ public class PauseMenuScript : MonoBehaviour
             }
             else
             {
-                //EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(null);
                 Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
                 justPaused = false;
@@ -348,30 +340,6 @@ public class PauseMenuScript : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(gameObject);
     }
-
-    /* public void SymbolConfirm()
-     {
-         for (int i = 0; Inventory.Instance.inventoryItems.Count > i; i++)
-         {
-             if (Inventory.Instance.inventoryItems[i].itemId == armId && !arm.activeInHierarchy)
-             {
-                 hand.SetActive(true);
-             }
-             if (Inventory.Instance.inventoryItems[i].itemId == legId && !leg.activeInHierarchy)
-             {
-                 foot.SetActive(true);
-             }
-             if (Inventory.Instance.inventoryItems[i].itemId == skullKeyId && !skullKeyObject.activeInHierarchy)
-             {
-                 skullKey.SetActive(true);
-             }
-             if (Inventory.Instance.inventoryItems[i].itemId == fishKeyId && !fishKeyObject.activeInHierarchy)
-             {
-                 fishKey.SetActive(true);
-             }
-         }
-     }
- */
     public void ResumeGame()
     {
         if (justPaused)
@@ -392,21 +360,20 @@ public class PauseMenuScript : MonoBehaviour
             Hud_Ref.SetActive(false);
             panel.SetActive(false);
             goddesSymbol.SetActive(false);
-            //fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             optionsMenu.SetActive(false);
             soundMenu.SetActive(false);
             controllMenu.SetActive(false);
             isPausing = false;
             currentMenu = null;
             menuHistory.Clear();
-
+            pauseButtonWasPressed = false;
             playerCanvas.SetActive(true);
         }
     }
 
     public void PauseMenu()
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(null);
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
         playerInput.SwitchCurrentActionMap("UI");
@@ -416,16 +383,6 @@ public class PauseMenuScript : MonoBehaviour
         isPausing = true;
         Time.timeScale = 0f;
         justPaused = true; // <- block resume for 1 frame
-
-        if (!isGamepad)
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = true;
-            justPaused = false;
-            isPausing = true;
-        }
     }
 
     public void BackButton()
@@ -435,7 +392,6 @@ public class PauseMenuScript : MonoBehaviour
 
     public void SoundMenu()
     {
-        EventSystem.current.SetSelectedGameObject(null);
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
         OpenMenu(soundMenu);
 
@@ -445,7 +401,6 @@ public class PauseMenuScript : MonoBehaviour
     }
     public void ControllMenu()
     {
-        EventSystem.current.SetSelectedGameObject(null);
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
         OpenMenu(controllMenu);
@@ -474,26 +429,5 @@ public class PauseMenuScript : MonoBehaviour
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
         MainMenuScript.cameFromPauseMenu = true;
         SceneManager.LoadScene("MainMenu");
-    }
-    public class PointerDebug : MonoBehaviour
-    {
-        void Update()
-        {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                PointerEventData pointerData = new PointerEventData(EventSystem.current)
-                {
-                    position = Mouse.current.position.ReadValue()
-                };
-
-                List<RaycastResult> results = new List<RaycastResult>();
-                EventSystem.current.RaycastAll(pointerData, results);
-
-                foreach (var result in results)
-                {
-                    Debug.Log("Hit: " + result.gameObject.name);
-                }
-            }
-        }
     }
 }
