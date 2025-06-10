@@ -55,7 +55,7 @@ public class SceneManagement : MonoBehaviour
         if (playerHasDied || deathScreenStarted) return;
 
         Debug.Log("Im dying");
-        //playerHasDied = true;
+        playerHasDied = true;
         deathScreenStarted = true;
         StartCoroutine(DeathScreen());
         
