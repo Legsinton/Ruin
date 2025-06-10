@@ -17,6 +17,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     Vector3 originalPosition;
     Vector3 targetPos;
     GameObject cinematicCanvas;
+    GameObject playerCanvas;
 
     [Header("Settings For Cameras")]
     [SerializeField] float cutSceneLength;
@@ -32,6 +33,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     private void Awake()
     {
         cinematicCanvas = GameObject.Find("CinemaCanvas");
+        playerCanvas = GameObject.Find("CanvasPlayer");
     }
 
     private void Start()
@@ -68,6 +70,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     void ActivateCamera()
     {
         cinematicCanvas.SetActive(true);
+        playerCanvas.SetActive(false);
         if (playerCamera != null) playerCamera.enabled = false;
         if (cutSceneCamera != null) cutSceneCamera.enabled = true;
         if (playrtAudioListener != null && cutSceneCamera != null)
@@ -92,6 +95,7 @@ public class GateScript : MonoBehaviour, ISwitchManager
     void DisableActiveCamera()
     {
         cinematicCanvas.SetActive(false);
+        playerCanvas.SetActive(true);
         if (playerCamera != null) playerCamera.enabled = true;
         if (cutSceneCamera != null) cutSceneCamera.enabled = false;
         if (playrtAudioListener != null && cutSceneCamera != null)

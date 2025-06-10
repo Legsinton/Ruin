@@ -18,6 +18,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     Interact interact;
     bool playedSound;
     GameObject cinematicCanvas;
+    GameObject playerCanvas;
 
 
     [Header("Settings For Cameras")]
@@ -33,6 +34,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     private void Awake()
     {
         cinematicCanvas = GameObject.Find("CinemaCanvas");
+        playerCanvas = GameObject.Find("PlayerCanvas");
     }
 
     void Start()
@@ -74,6 +76,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     void ActivateCamera()
     {
         cinematicCanvas.SetActive(true);
+        playerCanvas.SetActive(false);
         playerCamera.enabled = false;
         cutSceneCamera.enabled = true;
         interact.disableInteract = true;
@@ -90,6 +93,7 @@ public class SnakeMouth : MonoBehaviour, ISwitchManager
     void DisableActiveCamera()
     {
         cinematicCanvas.SetActive(false);
+        playerCanvas.SetActive(true);
         SoundFXManager.Instance.StopLoopFor(gameObject);
         playrtAudioListener.enabled = true;
         cameraAudioListener.enabled = false;
