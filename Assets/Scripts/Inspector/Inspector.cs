@@ -11,6 +11,7 @@ public class Inspector : MonoBehaviour
     [SerializeField] public float controllerSensitivity;
     [SerializeField] public GameObject equipUI;
     [SerializeField] public TMP_Text itemInfoText;
+    [SerializeField] public GameObject playerCanvas;
 
     Canvas canvas;
     Camera camera;
@@ -48,7 +49,7 @@ public class Inspector : MonoBehaviour
         }
         else
         {
-            Debug.Log("Could not locate Canvas component on " + inspectorCanvas.name);
+            Debug.Log("Could not locate Canvas component on " + inspectorCamera.name);
         }
 
         postProcessManager = FindFirstObjectByType<PostProcessManager>();
@@ -70,8 +71,6 @@ public class Inspector : MonoBehaviour
 
             itemPrefab.transform.RotateAround(center, Vector3.up, -currentRotation.x * sensitivity * Time.deltaTime);
             itemPrefab.transform.RotateAround(center, Vector3.right, currentRotation.y * sensitivity * Time.deltaTime);
-
-            Debug.Log(currentRotation + " | Applied Rotation: " + (-currentRotation.x * sensitivity * Time.deltaTime));
         }
     }
 
@@ -80,7 +79,7 @@ public class Inspector : MonoBehaviour
         canvas.enabled = true;
         camera.enabled = true;
         postProcessManager.ToggleDepthOfField();
-
+        playerCanvas.SetActive(false);
 
         Item item = (Item)interactableObject;
         itemId = item.itemId;
@@ -131,6 +130,7 @@ public class Inspector : MonoBehaviour
     }
 
     // ACTION MAPS / INPUT HANDLING
+
     public void StopInspection()
     {
 
@@ -169,6 +169,7 @@ public class Inspector : MonoBehaviour
         camera.enabled = false;
         postProcessManager.ToggleDepthOfField();
         playerInput.SwitchCurrentActionMap("Player");
+        playerCanvas.SetActive(true);
     }
 
     private void OnEquip()
