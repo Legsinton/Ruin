@@ -20,9 +20,7 @@ public class SceneManagement : MonoBehaviour
     [SerializeField] float fadeDuration;
 
     PlayerMovement playerMovement;
-    GameObject player;
     CameraFollow cameraFollow;
-    GameObject playerCamera;
     [SerializeField] Camera playerCameraCutscene;
 
     [Header("Settings For Cameras")]
@@ -45,9 +43,6 @@ public class SceneManagement : MonoBehaviour
         }
         playerMovement = FindFirstObjectByType<PlayerMovement>();
         cameraFollow = FindFirstObjectByType<CameraFollow>();
-        GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
-        player = playerGO.transform.root.gameObject;
-        playerCamera = GameObject.Find("PlayerCamera");
     }
 
     public void OnDeath()

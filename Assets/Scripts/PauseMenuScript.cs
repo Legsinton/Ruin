@@ -319,7 +319,6 @@ public class PauseMenuScript : MonoBehaviour
             Hud_Ref.SetActive(false);
             panel.SetActive(false);
             goddesSymbol.SetActive(false);
-            // fishKey.SetActive(false); skullKey.SetActive(false); foot.SetActive(false); hand.SetActive(false);
             currentMenu = null;
 
             playerCanvas.SetActive(true);
