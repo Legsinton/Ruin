@@ -57,8 +57,11 @@ public class SceneManagement : MonoBehaviour
         Debug.Log("Im dying");
         playerHasDied = true;
         deathScreenStarted = true;
+
         StartCoroutine(DeathScreen());
-        
+        playerHasDied = false;
+        deathScreenStarted = false;
+
     }
 
     public void OnWin()
@@ -71,9 +74,9 @@ public class SceneManagement : MonoBehaviour
         yield return StartCoroutine(FadeToBlack(1));
         yield return new WaitForSeconds(0.5f);
         playerMovement.enabled = false;
-        player.transform.position = playerMovement.playerStartPosition;
-
-        playerCamera.transform.position = cameraFollow.cameraStartPosition;
+        playerMovement.TeleportPlayer(playerMovement.playerStartPosition);
+        yield return null;
+        //playerCamera.transform.position = cameraFollow.cameraStartPosition;
         cameraFollow.StartFollowing();
         cameraFollow.DisableLockCamera();
         MusicManager.Instance.PlayMusic(music, fadeDuration);
@@ -82,8 +85,7 @@ public class SceneManagement : MonoBehaviour
 
         yield return StartCoroutine(FadeOut(2));
         playerMovement.enabled = true;
-        playerHasDied = false;
-        deathScreenStarted = false;
+       
         Debug.Log("Im finished dying");
 
     }

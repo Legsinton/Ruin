@@ -108,6 +108,13 @@ public class PlayerMovement : MonoBehaviour
         currentVelocity = 0;
     }
 
+    public void TeleportPlayer(Vector3 hello)
+    {
+        rb.Sleep();
+        rb.MovePosition(hello);
+        rb.WakeUp();
+    }
+
     void MovePlayer()
     {
         if (PushBlock != null)
@@ -280,9 +287,9 @@ public class PlayerMovement : MonoBehaviour
     }
     void CheckPlayerFalling()
     {
-        if (transform.position.y < deathHeight)
+        if (transform.position.y < deathHeight && !isDead)
         {
-            //isDead = true;
+            isDead = true;
             if (!played)
             {
                 Debug.Log("I screamed");
@@ -292,14 +299,14 @@ public class PlayerMovement : MonoBehaviour
             cameraFollow.StopFollowing();
             cameraFollow.EnableLockCamera(capsule.eulerAngles.y);
             sceneManagement.OnDeath();
-            Invoke(nameof(StopPlay), 2);
+            Invoke(nameof(StopPlay), 4);
         }
     }
 
     void StopPlay()
     {
         played = false;
-
+        isDead = false;
     }
 
     // Action map change
