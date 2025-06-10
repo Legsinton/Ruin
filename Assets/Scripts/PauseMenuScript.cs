@@ -57,6 +57,8 @@ public class PauseMenuScript : MonoBehaviour
             { soundMenu, defaultSoundButton },
             { controllMenu, defaultControlButton }
         };
+
+
     }
     private void OnEnable()
     {
