@@ -17,7 +17,7 @@ public class PauseMenuScript : MonoBehaviour
 
     [SerializeField]
     private GameObject defaultPauseButton, defaultOptionsButton, defaultSoundButton, defaultControlButton;
-    public GameObject Hud_Ref, goddesSymbol;
+    public GameObject Hud_Ref, goddesSymbol, panel;
     GameObject playerCanvas;
 
     [Header("Settings")]
