@@ -183,27 +183,33 @@ public class PauseMenuScript : MonoBehaviour
 
     private void OnSubmit(InputValue value)
     {
-        //if (value.isPressed && !pauseButtonWasPressed)
-       // {
-
-            Debug.Log("Im pressed");
-            //pauseButtonWasPressed = true;
+        if (value.isPressed && !pauseButtonWasPressed)
+        {
+            Debug.Log("Pressed");
+            pauseButtonWasPressed = true;
             PauseUnPause();
-            //StartCoroutine(StopButton());            
-        //}
-        /*else
+        }
+        else
         {
             Debug.Log("Not Pressed");
             pauseButtonWasPressed = false;
-        }*/
+        }
     }
 
-    IEnumerator StopButton()
+    void StopButton()
     {
-        yield return new WaitForSeconds(0.2F);
-        Debug.Log("I stopped pressed");
-
         pauseButtonWasPressed = false;
+
+    }
+
+    private void OnUnClick(InputValue value)
+    {
+        if (value.isPressed && pauseButtonWasPressed)
+        {
+            Debug.Log("Un Pressed");
+            Invoke(nameof(StopButton), 1);
+            PauseUnPause();
+        }
     }
 
     void OpenMenu(GameObject menu)
@@ -269,7 +275,6 @@ public class PauseMenuScript : MonoBehaviour
             SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
             isGamepad = playerInput.currentControlScheme == "Gamepad";
             playerInput.SwitchCurrentActionMap("UI");
-            playerInput.SwitchCurrentControlScheme("Keyboard&Mouse");
             playerMovement.enabled = false;
             Hud_Ref.SetActive(true);
             panel.SetActive(true);
