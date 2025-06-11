@@ -56,7 +56,7 @@ public class MainMenuScript : MonoBehaviour
             blockInput = false;
         }
 
-        StartCoroutine(SetSelect(defaultStartButton));
+        //StartCoroutine(SetSelect(defaultStartButton));
     }
     private void OnEnable()
     {
@@ -197,6 +197,7 @@ public class MainMenuScript : MonoBehaviour
         }
         else
         {
+            EventSystem.current.SetSelectedGameObject(null);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined; // free cursor
         }
@@ -309,8 +310,8 @@ public class MainMenuScript : MonoBehaviour
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
         EventSystem.current.SetSelectedGameObject(null);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.visible = true;
         playerInput.SwitchCurrentActionMap("UI");
         Time.timeScale = 0f;
         creditsText.enabled = false;
