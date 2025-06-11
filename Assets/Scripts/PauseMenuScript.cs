@@ -29,9 +29,9 @@ public class PauseMenuScript : MonoBehaviour
     private InputAction cancelAction;
     private GameObject currentMenu;
     bool pauseButtonWasPressed = false;
-    bool isPausing;
+    [SerializeField] bool isPausing;
     bool isGamepad;
-    bool justPaused = false;
+    [SerializeField] bool justPaused = false;
 
     Stack<GameObject> menuHistory = new Stack<GameObject>();
 
@@ -176,6 +176,7 @@ public class PauseMenuScript : MonoBehaviour
         }
         else
         {
+            justPaused = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
         }
@@ -336,7 +337,8 @@ public class PauseMenuScript : MonoBehaviour
         yield return null; // Let one frame pass
 
         justPaused = false;
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(gameObject);
     }
@@ -382,7 +384,7 @@ public class PauseMenuScript : MonoBehaviour
 
         isPausing = true;
         Time.timeScale = 0f;
-        justPaused = true; // <- block resume for 1 frame
+        justPaused = false; // <- block resume for 1 frame
     }
 
     public void BackButton()
@@ -422,6 +424,7 @@ public class PauseMenuScript : MonoBehaviour
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
 
         Time.timeScale = 0f;
+
     }
 
     public void QuitGame()
