@@ -34,7 +34,7 @@ public class MainMenuScript : MonoBehaviour
         StartCoroutine(Start());
         creditsMenu.SetActive(false);
        
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         playerInput.SwitchCurrentActionMap("UI");
         isGamepad = playerInput.currentControlScheme == "Gamepad";
@@ -56,7 +56,7 @@ public class MainMenuScript : MonoBehaviour
             blockInput = false;
         }
 
-        //StartCoroutine(SetSelect(defaultStartButton));
+        StartCoroutine(SetSelect(defaultStartButton));
     }
     private void OnEnable()
     {
@@ -160,6 +160,7 @@ public class MainMenuScript : MonoBehaviour
             }
             else
             {
+                EventSystem.current.firstSelectedGameObject = null;
                 EventSystem.current.SetSelectedGameObject(null);
                 justPaused = false;
             }
@@ -195,9 +196,12 @@ public class MainMenuScript : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked; // optional: lock cursor center for gamepad
         }
-        else
+        else if(!isGamepad)
         {
-            EventSystem.current.SetSelectedGameObject(null);
+            Debug.Log(EventSystem.current.firstSelectedGameObject);
+            Debug.Log("Changed Mouse");
+            EventSystem.current.firstSelectedGameObject = null;
+            //EventSystem.current.SetSelectedGameObject(null);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined; // free cursor
         }
