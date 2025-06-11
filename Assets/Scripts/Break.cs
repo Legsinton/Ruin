@@ -65,6 +65,14 @@ public class Break : MonoBehaviour,IInteracting
         Destroy(gameObject);
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isBroken = true;
+        }
+    }
+
     IEnumerator FadeOut(float duration)
     {
         if (rbMesh != null)
