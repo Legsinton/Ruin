@@ -13,9 +13,9 @@ using Unity.Properties;
 public partial class SearchForPlayerAction : Action
 {
     [SerializeReference] public BlackboardVariable<GameObject> Self;
-    [SerializeField] private float rotationSpeed = 120f;
+    [SerializeField] private float rotationSpeed = 200f;
     [SerializeField] private float angleThreshold = 2f;
-    [SerializeField] private float pauseDuration = 0.5f;
+    [SerializeField] private float pauseDuration = 0.2f;
 
     private Vector3[] directions;
     private int currentDirectionIndex;
@@ -28,7 +28,7 @@ public partial class SearchForPlayerAction : Action
         currentDirectionIndex = 0;
         directions = new Vector3[4];
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             float angle = UnityEngine.Random.Range(0f, 360f);
             directions[i] = Quaternion.Euler(0, angle, 0) * Vector3.forward;

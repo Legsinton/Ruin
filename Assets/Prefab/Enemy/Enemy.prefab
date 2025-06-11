@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91782d9fc3302254db8e4c5d963aaa2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 5
+  radius: 10
   angle: 80
   targetMask:
     serializedVersion: 2
@@ -229,6 +229,7 @@ MonoBehaviour:
   - rid: 2920248458600776419
   - rid: 2920248483948790176
   - rid: 2920248598274244909
+  - rid: 7920206924038275291
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
@@ -305,6 +306,14 @@ MonoBehaviour:
           m_Value1: 7429198151731938329
         Name: Agent
         m_Value: {fileID: 8017602805268497981}
+    - rid: 7920206924038275291
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17671031597776712447
+          m_Value1: 17857475857598787118
+        Name: CharacterRig
+        m_Value: {fileID: 6573394307093700602}
 --- !u!114 &5203765626930831352
 MonoBehaviour:
   m_ObjectHideFlags: 0

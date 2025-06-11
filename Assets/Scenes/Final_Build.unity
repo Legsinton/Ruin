@@ -15378,7 +15378,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 94bca8fa46a71ec40bc83249373f8880, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 06b45d13fad0b844bb9c3ee5dd4edec5, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &452108278
 Transform:
@@ -20969,6 +20969,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &609419309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6573394307093700602, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+  m_PrefabInstance: {fileID: 1840698639}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &609587819
 Mesh:
   m_ObjectHideFlags: 0
@@ -66764,6 +66769,35 @@ PrefabInstance:
     - target: {fileID: 1211353837809389822, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: 'managedReferences[7920206924038275291]'
+      value: 'Unity.Behavior Unity.Behavior.BlackboardVariable`1[[UnityEngine.GameObject,
+        UnityEngine.CoreModule]]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: managedReferences[7920206924038275291].Name
+      value: CharacterRig
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: m_BlackboardVariableOverridesList.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: managedReferences[7920206924038275291].m_Value
+      value: 
+      objectReference: {fileID: 609419309}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: 'm_BlackboardVariableOverridesList.Array.data[8]'
+      value: 7920206924038275291
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: managedReferences[7920206924038275291].GUID.m_Value0
+      value: 17671031597776712447
+      objectReference: {fileID: 0}
+    - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
+      propertyPath: managedReferences[7920206924038275291].GUID.m_Value1
+      value: 17857475857598787118
       objectReference: {fileID: 0}
     - target: {fileID: 1603630384269118064, guid: 27c2e8017f39ccb499fe87fc15247ecb, type: 3}
       propertyPath: 'managedReferences[2920248435990069937].m_Value.Array.data[0]'
