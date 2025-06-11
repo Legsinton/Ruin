@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Break : MonoBehaviour,IInteracting
@@ -63,6 +64,14 @@ public class Break : MonoBehaviour,IInteracting
     void DestroyObject()
     {
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isBroken = true; 
+        }
     }
 
     IEnumerator FadeOut(float duration)
