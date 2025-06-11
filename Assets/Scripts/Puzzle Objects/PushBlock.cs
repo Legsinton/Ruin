@@ -93,12 +93,7 @@ public class PushBlock : MonoBehaviour, IInteracting
             }
             else if (isAttached)
             {
-                cameraFollow.DisableLockCamera();
-                playerMovement.PushBlock = null;
-                movedPlayerToTargetPos = false;
-                isAttached = false;
-                buttonPromptSelect.SetActive(true);
-                buttonPromptMove.SetActive(false);
+                DetachPlayer();
             }
         }
 
@@ -117,6 +112,16 @@ public class PushBlock : MonoBehaviour, IInteracting
                 }
             }
         }
+    }
+
+    void DetachPlayer()
+    {
+        cameraFollow.DisableLockCamera();
+        playerMovement.PushBlock = null;
+        movedPlayerToTargetPos = false;
+        isAttached = false;
+        buttonPromptSelect.SetActive(true);
+        buttonPromptMove.SetActive(false);
     }
 
     void CheckIfPlayerInRange()
@@ -200,6 +205,7 @@ public class PushBlock : MonoBehaviour, IInteracting
     public void ReleaseInteract() 
     {
         moveBlock = false;
+        DetachPlayer();
     }
 
     public void InteractInRange()
