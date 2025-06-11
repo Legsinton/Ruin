@@ -39,7 +39,8 @@ public class MainMenuScript : MonoBehaviour
         playerInput.SwitchCurrentActionMap("UI");
         isGamepad = playerInput.currentControlScheme == "Gamepad";
         currentMenu = mainMenu;
-        isGamepad = true;
+        Debug.Log("Am awake");
+        //isGamepad = true;
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { mainMenu, defaultStartButton },
@@ -56,6 +57,7 @@ public class MainMenuScript : MonoBehaviour
             cameFromPauseMenu = false;
             blockInput = false;
         }
+        Debug.Log("Am start");
 
         StartCoroutine(SetSelect(defaultStartButton));
     }
@@ -194,6 +196,7 @@ public class MainMenuScript : MonoBehaviour
             {
                 EventSystem.current.SetSelectedGameObject(menuDefaultButtons[currentMenu]);
             }
+            Debug.Log("IS gamepad");
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked; // optional: lock cursor center for gamepad
         }
@@ -226,9 +229,22 @@ public class MainMenuScript : MonoBehaviour
         yield return null; // Let one frame pass
 
         justPaused = false;
+        Debug.Log("Set Seleft");
+        if (isGamepad)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(gameObject);
 
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(gameObject);
+        }
+        else if (!isGamepad)
+        {
+            Debug.Log(EventSystem.current.firstSelectedGameObject);
+            Debug.Log("Changed Mouse Select");
+            EventSystem.current.firstSelectedGameObject = null;
+            //EventSystem.current.SetSelectedGameObject(null);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined; // free cursor
+        }
     }
 
     IEnumerator FadeMenu(GameObject menu, float duration, bool fadeIn)
@@ -313,10 +329,11 @@ public class MainMenuScript : MonoBehaviour
     public void PauseMenu()
     {
         SoundFXManager.Instance.PlayButtonSoundFX(SoundType.ButtonSelect);
+        Debug.Log("Set Pause");
 
         EventSystem.current.SetSelectedGameObject(null);
-        //Cursor.lockState = CursorLockMode.Confined;
-        //Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         playerInput.SwitchCurrentActionMap("UI");
         Time.timeScale = 0f;
         creditsText.enabled = false;
