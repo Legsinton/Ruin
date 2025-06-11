@@ -39,6 +39,7 @@ public class MainMenuScript : MonoBehaviour
         playerInput.SwitchCurrentActionMap("UI");
         isGamepad = playerInput.currentControlScheme == "Gamepad";
         currentMenu = mainMenu;
+        isGamepad = true;
         menuDefaultButtons = new Dictionary<GameObject, GameObject>
         {
             { mainMenu, defaultStartButton },
