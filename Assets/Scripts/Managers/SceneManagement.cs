@@ -78,7 +78,7 @@ public class SceneManagement : MonoBehaviour
         MusicManager.Instance.PlayMusic(music, fadeDuration);
 
         yield return null;
-
+        yield return new WaitForSeconds(1);
         yield return StartCoroutine(FadeOut(2));
         playerMovement.enabled = true;
 
